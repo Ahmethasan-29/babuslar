@@ -22,31 +22,55 @@ const LANES = [
   { id: "UTILITY", slug: "destek", label: "Destek" },
 ];
 
+const CLIENT_DATA = `${CDRAGON}/plugins/rcp-be-lol-game-data/global`;
+
 let versionPromise;
+let runeRecsPromise;
 let lanesPromise;
 
-// Riot'un istemcide her şampiyon için önerdiği koridorlar: Map("103" => ["MIDDLE"], ...)
+function fetchJson(url) {
+  return fetch(url).then((r) => {
+    if (!r.ok) throw new Error(`Veri alınamadı: ${url}`);
+    return r.json();
+  });
+}
+
+// Riot'un istemcide önerdiği rünler ve sihirdar büyüleri (koridora göre):
+// Map("103" => [{ position: "MIDDLE", perkIds: [...], summonerSpellIds: [...] }, ...])
+function getRuneRecommendations() {
+  if (!runeRecsPromise) {
+    runeRecsPromise = fetchJson(`${CLIENT_DATA}/default/v1/champion-rune-recommendations.json`).then((list) => {
+      const map = new Map();
+      for (const entry of list) {
+        map.set(
+          String(entry.championId),
+          (entry.runeRecommendations || []).filter((rec) => rec.mapId === 11 && rec.position && rec.position !== "NONE")
+        );
+      }
+      return map;
+    });
+  }
+  return runeRecsPromise;
+}
+
+// Her şampiyonun sık oynandığı koridorlar: Map("103" => ["MIDDLE"], ...)
 function getChampionLanes() {
   if (!lanesPromise) {
-    lanesPromise = fetch(`${CDRAGON}/plugins/rcp-be-lol-game-data/global/default/v1/champion-rune-recommendations.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error("Koridor verisi alınamadı");
-        return r.json();
-      })
-      .then((list) => {
-        const map = new Map();
-        for (const entry of list) {
-          const found = new Set(
-            (entry.runeRecommendations || [])
-              .filter((rec) => rec.mapId === 11 && rec.position && rec.position !== "NONE")
-              .map((rec) => rec.position)
-          );
-          map.set(String(entry.championId), LANES.map((l) => l.id).filter((id) => found.has(id)));
-        }
-        return map;
-      });
+    lanesPromise = getRuneRecommendations().then((recs) => {
+      const map = new Map();
+      for (const [championId, list] of recs) {
+        const found = new Set(list.map((rec) => rec.position));
+        map.set(championId, LANES.map((l) => l.id).filter((id) => found.has(id)));
+      }
+      return map;
+    });
   }
   return lanesPromise;
+}
+
+// İstemci ikon yolunu ("/lol-game-data/assets/v1/perk-images/...") indirilebilir adrese çevirir.
+function clientAsset(path) {
+  return `${CLIENT_DATA}/default/${String(path || "").replace(/^\/lol-game-data\/assets\//i, "").toLowerCase()}`;
 }
 
 // En güncel yama numarasını getirir (ör. "15.19.1").

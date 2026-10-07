@@ -61,9 +61,9 @@ function render(version, c) {
   const builds = el(
     "section",
     { class: "section", id: "dizilim" },
-    el("h2", {}, "Eşya dizilimi"),
-    el("p", { class: "page-sub" }, "Koridorunu seç; alınacak eşyaları sırasıyla gör."),
-    el("div", { class: "build-root" }, el("p", { class: "notice" }, "Eşya dizilimi yükleniyor…"))
+    el("h2", {}, "Rünler ve eşya dizilimi"),
+    el("p", { class: "page-sub" }, "Koridorunu seç; rünleri, sihirdar büyülerini ve alınacak eşyaları sırasıyla gör."),
+    el("div", { class: "build-root" }, el("p", { class: "notice" }, "Dizilim yükleniyor…"))
   );
 
   const passive = abilityCard({
@@ -124,12 +124,13 @@ const LANE_STARTERS = {
 async function loadBuilds(version, c, container) {
   const slug = c.id.toLowerCase();
   try {
-    const [bin, items, lanes] = await Promise.all([
+    const [bin, items, lanes, runes] = await Promise.all([
       fetch(`${CDRAGON}/game/data/characters/${slug}/${slug}.bin.json`)
         .then((r) => (r.ok ? r.json() : {}))
         .catch(() => ({})),
       ddData("item.json").then(({ data }) => data.data),
       getChampionLanes().catch(() => new Map()),
+      loadRuneData(c).catch(() => null),
     ]);
 
     // Önce Riot'un oyun içi önerisi; yoksa Babuşlar editör dizilimi.
@@ -155,7 +156,7 @@ async function loadBuilds(version, c, container) {
     const requested = LANES.find((l) => l.slug === new URLSearchParams(location.search).get("koridor"));
     const initial = requested?.id || popular[0] || "MIDDLE";
 
-    renderBuilds({ version, c, container, byPosition, items, popular, source, lane: initial });
+    renderBuilds({ version, c, container, byPosition, items, popular, source, runes, lane: initial, runeIndex: 0 });
   } catch {
     showNotice(container, "Eşya dizilimi şu an yüklenemedi. Sayfayı daha sonra yenilemeyi dene.");
   }
@@ -201,7 +202,7 @@ function renderBuilds(state) {
             const url = new URL(location.href);
             url.searchParams.set("koridor", l.slug);
             history.replaceState(null, "", url);
-            renderBuilds({ ...state, lane: l.id });
+            renderBuilds({ ...state, lane: l.id, runeIndex: 0 });
           },
         },
         l.label,
@@ -257,6 +258,7 @@ function renderBuilds(state) {
     ...[
       tabs,
       note,
+      runeCard(state),
       el(
         "div",
         { class: "build-card" },
@@ -353,5 +355,169 @@ function abilityCard({ key, icon, name, description, meta = [] }) {
       metaItems.length ? el("div", { class: "meta" }, metaItems.map((m) => el("span", {}, m))) : null,
       el("p", { class: "desc" }, plainText(description))
     )
+  );
+}
+
+// --- Rünler ve sihirdar büyüleri ---
+
+let runeAssetsPromise;
+
+// Türkçe rün isimleri/açıklamaları, rün ağaçları ve sihirdar büyüleri (bir kez yüklenir).
+function getRuneAssets() {
+  if (!runeAssetsPromise) {
+    runeAssetsPromise = Promise.all([
+      fetchJson(`${CLIENT_DATA}/tr_tr/v1/perks.json`),
+      fetchJson(`${CLIENT_DATA}/tr_tr/v1/perkstyles.json`),
+      ddData("summoner.json").then(({ data }) => data.data),
+    ]).then(([perks, styles, spells]) => ({
+      perks: new Map(perks.map((p) => [p.id, p])),
+      styles: new Map(styles.styles.map((s) => [s.id, s])),
+      spells: new Map(Object.values(spells).map((s) => [Number(s.key), s])),
+    }));
+  }
+  return runeAssetsPromise;
+}
+
+async function loadRuneData(c) {
+  const [recs, assets] = await Promise.all([getRuneRecommendations(), getRuneAssets()]);
+  return { list: recs.get(String(c.key)) || [], ...assets };
+}
+
+const SMITE = 11;
+const FLASH = 4;
+const IGNITE = 14;
+
+function runeCard(state) {
+  const { runes, lane, version } = state;
+  if (!runes || !runes.list.length) return null;
+
+  // Seçilen koridorun önerisi yoksa şampiyonun en sık oynandığı koridorun rünleri gösterilir.
+  let options = runes.list.filter((rec) => rec.position === lane);
+  const fallback = !options.length;
+  if (fallback) options = runes.list.filter((rec) => rec.position === runes.list[0].position);
+
+  const index = Math.min(state.runeIndex || 0, options.length - 1);
+  const rec = options[index];
+
+  // Ormana uygun olmayan büyüleri koridora göre düzelt: ormanda Çarp şart, diğer koridorlarda gereksiz.
+  let spellIds = [...(rec.summonerSpellIds || [])];
+  if (fallback && lane === "JUNGLE") spellIds = [FLASH, SMITE];
+  else if (fallback) spellIds = spellIds.map((id) => (id === SMITE ? IGNITE : id));
+
+  const perk = (id) => runes.perks.get(id);
+  const [keystoneId, ...rest] = rec.perkIds || [];
+  const laneLabel = LANES.find((l) => l.id === lane).label;
+
+  const treeHead = (style) =>
+    style
+      ? el(
+          "div",
+          { class: "tree-head" },
+          el("img", { src: clientAsset(style.iconPath), alt: "", width: 28, height: 28, loading: "lazy" }),
+          el("span", {}, style.name)
+        )
+      : null;
+
+  const runeRow = (id, keystone = false) => {
+    const p = perk(id);
+    if (!p) return null;
+    return el(
+      "div",
+      { class: `rune${keystone ? " keystone" : ""}` },
+      el("img", { src: clientAsset(p.iconPath), alt: "", width: keystone ? 56 : 40, height: keystone ? 56 : 40, loading: "lazy" }),
+      el("div", {}, el("strong", {}, p.name), p.shortDesc ? el("p", { class: "rune-desc" }, plainText(p.shortDesc)) : null)
+    );
+  };
+
+  const shards = rest.slice(5, 8).map(perk).filter(Boolean);
+  const spells = spellIds.map((id) => runes.spells.get(id)).filter(Boolean);
+
+  const variants =
+    options.length > 1
+      ? el(
+          "div",
+          { class: "chips rune-variants", role: "group", "aria-label": "Rün seçeneği" },
+          options.map((option, i) => {
+            const key = perk(option.perkIds?.[0]);
+            return el(
+              "button",
+              {
+                class: "chip",
+                type: "button",
+                "aria-pressed": String(i === index),
+                onclick: () => renderBuilds({ ...state, runeIndex: i }),
+              },
+              key ? el("img", { src: clientAsset(key.iconPath), alt: "", width: 20, height: 20 }) : null,
+              key ? `${i + 1}. ${key.name}` : `Seçenek ${i + 1}`
+            );
+          })
+        )
+      : null;
+
+  return el(
+    "div",
+    { class: "build-card" },
+    el("div", { class: "build-head" }, el("h3", {}, `${laneLabel} · Rünler`), el("span", { class: "badge" }, "Riot önerisi")),
+    fallback
+      ? el(
+          "p",
+          { class: "tile-sub", style: "margin:0 0 12px" },
+          `${laneLabel} koridoru için ayrı rün önerisi yok; bu şampiyonun en sık oynandığı koridorun rünleri gösteriliyor.`
+        )
+      : null,
+    variants,
+    el(
+      "div",
+      { class: "rune-grid" },
+      el(
+        "div",
+        { class: "rune-tree" },
+        el("h4", {}, "Ana ağaç"),
+        treeHead(runes.styles.get(rec.primaryPerkStyleId)),
+        runeRow(keystoneId, true),
+        rest.slice(0, 3).map((id) => runeRow(id))
+      ),
+      el(
+        "div",
+        { class: "rune-tree" },
+        el("h4", {}, "İkincil ağaç"),
+        treeHead(runes.styles.get(rec.secondaryPerkStyleId)),
+        rest.slice(3, 5).map((id) => runeRow(id)),
+        shards.length ? el("h4", { class: "shard-title" }, "İstatistik parçaları") : null,
+        shards.length
+          ? el(
+              "div",
+              { class: "shards" },
+              shards.map((s) =>
+                el(
+                  "span",
+                  { class: "shard", title: plainText(s.shortDesc || s.name) },
+                  el("img", { src: clientAsset(s.iconPath), alt: "", width: 22, height: 22 }),
+                  s.name
+                )
+              )
+            )
+          : null
+      )
+    ),
+    spells.length
+      ? el(
+          "div",
+          { class: "spells" },
+          el("h4", {}, "Sihirdar büyüleri"),
+          el(
+            "div",
+            { class: "spell-list" },
+            spells.map((s) =>
+              el(
+                "span",
+                { class: "spell", title: plainText(s.description) },
+                el("img", { src: ddImg(version, "spell", s.image.full), alt: "", width: 36, height: 36 }),
+                s.name
+              )
+            )
+          )
+        )
+      : null
   );
 }
