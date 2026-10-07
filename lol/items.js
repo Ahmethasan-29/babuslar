@@ -57,6 +57,7 @@ ddData("item.json")
     validIds = new Set(items.map((item) => item.id));
     buildCategoryChips();
     render();
+    openFromHash();
   })
   .catch(() => {
     patch.textContent = "Bağlantı hatası";
@@ -159,6 +160,13 @@ function openItem(itemId) {
   dialogBody.scrollTop = 0;
 }
 
+// Şampiyon sayfasındaki dizilimden gelen bağlantılar (esyalar.html#3089) eşyayı doğrudan açar.
+function openFromHash() {
+  const itemId = location.hash.slice(1);
+  if (/^\d+$/.test(itemId) && allItems[itemId]) openItem(itemId);
+}
+
+window.addEventListener("hashchange", openFromHash);
 search.addEventListener("input", render);
 document.getElementById("item-close").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", (event) => {

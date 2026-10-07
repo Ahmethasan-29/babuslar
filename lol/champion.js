@@ -58,6 +58,14 @@ function render(version, c) {
     )
   );
 
+  const builds = el(
+    "section",
+    { class: "section", id: "dizilim" },
+    el("h2", {}, "Eşya dizilimi"),
+    el("p", { class: "page-sub" }, "Koridorunu seç; Riot'un oyun içinde önerdiği eşyaları sırasıyla gör."),
+    el("div", { class: "build-root" }, el("p", { class: "notice" }, "Eşya dizilimi yükleniyor…"))
+  );
+
   const passive = abilityCard({
     key: "Pasif",
     icon: ddImg(version, "passive", c.passive.image.full),
@@ -99,7 +107,213 @@ function render(version, c) {
     ? el("section", { class: "section" }, el("h2", {}, "Hikâyesi"), el("p", { class: "lore" }, plainText(c.lore)))
     : null;
 
-  root.replaceChildren(hero, stats, abilities, tips || "", lore || "");
+  root.replaceChildren(hero, stats, builds, abilities, tips || "", lore || "");
+  loadBuilds(version, c, builds.querySelector(".build-root"));
+}
+
+// --- Eşya dizilimi ---
+
+const BIN_POSITION = { TOP: "top", JUNGLE: "jungle", MIDDLE: "middle", BOTTOM: "bottom", UTILITY: "utility" };
+
+// Riot'un genel dizilimi bu koridorlara uygun başlangıç eşyası içermediğinde kullanılır.
+const LANE_STARTERS = {
+  JUNGLE: [["1101", "2003"], ["1102", "2003"], ["1103", "2003"]],
+  UTILITY: [["3865", "2003", "2003"]],
+};
+
+async function loadBuilds(version, c, container) {
+  const slug = c.id.toLowerCase();
+  try {
+    const [bin, items, lanes] = await Promise.all([
+      fetch(`${CDRAGON}/game/data/characters/${slug}/${slug}.bin.json`).then((r) => {
+        if (!r.ok) throw new Error("Dizilim verisi alınamadı");
+        return r.json();
+      }),
+      ddData("item.json").then(({ data }) => data.data),
+      getChampionLanes().catch(() => new Map()),
+    ]);
+
+    const byPosition = summonersRiftBuilds(bin);
+    if (!Object.keys(byPosition).length) {
+      showNotice(container, "Riot, bu şampiyon için oyun dosyalarında hazır bir Sihirdar Vadisi dizilimi yayınlamıyor.");
+      return;
+    }
+
+    const popular = lanes.get(String(c.key)) || [];
+    const requested = LANES.find((l) => l.slug === new URLSearchParams(location.search).get("koridor"));
+    const initial = requested?.id || popular[0] || "MIDDLE";
+
+    renderBuilds({ version, c, container, byPosition, items, popular, lane: initial });
+  } catch {
+    showNotice(container, "Eşya dizilimi şu an yüklenemedi. Sayfayı daha sonra yenilemeyi dene.");
+  }
+}
+
+// Oyun dosyasındaki önerileri Sihirdar Vadisi için koridora göre ayırır: { default, utility, ... }
+function summonersRiftBuilds(bin) {
+  const result = {};
+  for (const entry of Object.values(bin)) {
+    if (entry?.__type !== "ItemRecommendationOverrideSet") continue;
+    for (const override of entry.mOverrides || []) {
+      for (const ctx of override.mOverrideContexts || []) {
+        if (ctx.mMapID !== 11 || ctx.mModeNameStringId !== "CLASSIC") continue;
+        const key = ctx.mPosition || "default";
+        if (!result[key]) result[key] = override;
+      }
+    }
+  }
+  return result;
+}
+
+function itemIds(list) {
+  return (list || []).map((ref) => String(ref).split("/").pop());
+}
+
+function renderBuilds(state) {
+  const { version, c, container, byPosition, items, popular, lane } = state;
+  const specific = byPosition[BIN_POSITION[lane]];
+  const build = specific || byPosition.default || Object.values(byPosition)[0];
+  const known = (ids) => ids.filter((id) => items[id]);
+
+  const tabs = el(
+    "div",
+    { class: "chips lane-tabs", role: "group", "aria-label": "Koridor seç" },
+    LANES.map((l) =>
+      el(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          "aria-pressed": String(l.id === lane),
+          onclick: () => {
+            const url = new URL(location.href);
+            url.searchParams.set("koridor", l.slug);
+            history.replaceState(null, "", url);
+            renderBuilds({ ...state, lane: l.id });
+          },
+        },
+        l.label,
+        popular.includes(l.id) ? el("span", { class: "pop", title: "Bu şampiyonun sık oynandığı koridor" }, "★") : null
+      )
+    )
+  );
+
+  const laneLabel = LANES.find((l) => l.id === lane).label;
+  const popularLabels = popular.map((id) => LANES.find((l) => l.id === id).label);
+  const note =
+    popular.length && !popular.includes(lane)
+      ? el(
+          "p",
+          { class: "build-note" },
+          `${c.name} genelde ${popularLabels.join(" ve ")} koridorunda oynanır. ${laneLabel} koridoru için aşağıdaki genel dizilimi kullanabilirsin.`
+        )
+      : null;
+
+  // Başlangıç eşyaları
+  const starterSets =
+    !specific && LANE_STARTERS[lane]
+      ? LANE_STARTERS[lane]
+      : (build.StartingItemBundles || []).map((bundle) => itemIds(bundle.items));
+  const starters = starterSets.map(known).filter((set) => set.length);
+
+  // Eşya basamakları: son geniş liste "duruma göre" alınacak eşyalardır.
+  const ranges = (build.mRecItemRanges || []).map((range) => known(itemIds(range.items))).filter((r) => r.length);
+  const situationalIndex = ranges.length > 2 ? ranges.length - 1 : -1;
+
+  const quick = [];
+  ranges.forEach((range, i) => {
+    if (i === situationalIndex) return;
+    const pick = range.find((id) => !quick.includes(id));
+    if (pick) quick.push(pick);
+  });
+
+  let coreNo = 0;
+  const rows = ranges.map((range, i) => {
+    let label;
+    if (i === situationalIndex) label = "Duruma göre";
+    else if (range.every((id) => items[id].tags?.includes("Boots"))) label = "Bot";
+    else label = `${++coreNo}. eşya`;
+    return el(
+      "div",
+      { class: "build-row" },
+      el("span", { class: "build-label" }, label),
+      el("div", { class: "build-items" }, range.map((id, n) => itemChip(version, items, id, n === 0 && i !== situationalIndex)))
+    );
+  });
+
+  container.replaceChildren(
+    ...[
+      tabs,
+      note,
+      el(
+        "div",
+        { class: "build-card" },
+        el(
+          "div",
+          { class: "build-head" },
+          el("h3", {}, `${laneLabel} · Önerilen sıra`),
+          specific ? el("span", { class: "badge" }, "Bu koridora özel") : null
+        ),
+        el(
+          "ol",
+          { class: "sequence" },
+          quick.map((id) =>
+            el(
+              "li",
+              {},
+              el(
+                "a",
+                { href: `esyalar.html#${id}`, title: items[id].name },
+                el("img", { src: ddImg(version, "item", items[id].image.full), alt: "", width: 56, height: 56, loading: "lazy" }),
+                el("span", {}, items[id].name)
+              )
+            )
+          )
+        )
+      ),
+      starters.length
+        ? el(
+            "div",
+            { class: "build-card" },
+            el("h3", {}, "Başlangıç eşyaları"),
+            el(
+              "div",
+              { class: "starter-sets" },
+              starters.map((set, i) =>
+                el(
+                  "div",
+                  { class: "starter-set" },
+                  el("span", { class: "build-label" }, starters.length > 1 ? `Seçenek ${i + 1}` : "Başlangıç"),
+                  el(
+                    "div",
+                    { class: "build-items" },
+                    [...new Set(set)].map((id) => itemChip(version, items, id, false, set.filter((x) => x === id).length))
+                  )
+                )
+              )
+            )
+          )
+        : null,
+      el(
+        "div",
+        { class: "build-card" },
+        el("h3", {}, "Seçenekler"),
+        el("p", { class: "tile-sub", style: "margin:0 0 12px" }, "Her basamakta ilk eşya en çok önerilendir; rakiplerine göre diğerlerini seçebilirsin."),
+        rows
+      ),
+      el("p", { class: "tile-sub" }, "Kaynak: League of Legends istemcisindeki önerilen eşyalar (Community Dragon)."),
+    ].filter(Boolean)
+  );
+}
+
+function itemChip(version, items, id, highlight = false, amount = 1) {
+  const item = items[id];
+  return el(
+    "a",
+    { class: `item-chip${highlight ? " top" : ""}`, href: `esyalar.html#${id}`, title: plainText(item.plaintext || item.name) },
+    el("img", { src: ddImg(version, "item", item.image.full), alt: "", width: 32, height: 32, loading: "lazy" }),
+    el("span", {}, amount > 1 ? `${item.name} ×${amount}` : item.name)
+  );
 }
 
 function abilityCard({ key, icon, name, description, meta = [] }) {

@@ -11,7 +11,43 @@ const ROLES = {
   Tank: "Tank",
 };
 
+// Community Dragon: oyunun kendi dosyalarından çıkarılan veriler (önerilen eşyalar, koridorlar).
+const CDRAGON = "https://raw.communitydragon.org/latest";
+
+const LANES = [
+  { id: "TOP", slug: "ust", label: "Üst" },
+  { id: "JUNGLE", slug: "orman", label: "Orman" },
+  { id: "MIDDLE", slug: "orta", label: "Orta" },
+  { id: "BOTTOM", slug: "alt", label: "Alt" },
+  { id: "UTILITY", slug: "destek", label: "Destek" },
+];
+
 let versionPromise;
+let lanesPromise;
+
+// Riot'un istemcide her şampiyon için önerdiği koridorlar: Map("103" => ["MIDDLE"], ...)
+function getChampionLanes() {
+  if (!lanesPromise) {
+    lanesPromise = fetch(`${CDRAGON}/plugins/rcp-be-lol-game-data/global/default/v1/champion-rune-recommendations.json`)
+      .then((r) => {
+        if (!r.ok) throw new Error("Koridor verisi alınamadı");
+        return r.json();
+      })
+      .then((list) => {
+        const map = new Map();
+        for (const entry of list) {
+          const found = new Set(
+            (entry.runeRecommendations || [])
+              .filter((rec) => rec.mapId === 11 && rec.position && rec.position !== "NONE")
+              .map((rec) => rec.position)
+          );
+          map.set(String(entry.championId), LANES.map((l) => l.id).filter((id) => found.has(id)));
+        }
+        return map;
+      });
+  }
+  return lanesPromise;
+}
 
 // En güncel yama numarasını getirir (ör. "15.19.1").
 function getVersion() {
