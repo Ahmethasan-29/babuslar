@@ -255,7 +255,7 @@ a.game-card:hover::before { opacity: 0.6; }
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
-  min-height: 340px;
+  min-height: 230px;
   display: flex;
   align-items: flex-end;
   background: var(--card) center 20% / cover no-repeat;
@@ -280,22 +280,6 @@ a.game-card:hover::before { opacity: 0.6; }
 .section { margin-top: 32px; }
 
 .section h2 { font-size: 1.4rem; margin: 0 0 14px; }
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px 24px;
-  padding: 18px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-.stat-label { display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--muted); margin-bottom: 6px; }
-
-.bar { height: 8px; background: var(--bg-elev); border-radius: 999px; overflow: hidden; }
-
-.bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; }
 
 .abilities { display: grid; gap: 14px; }
 
@@ -392,7 +376,7 @@ a.game-card:hover::before { opacity: 0.6; }
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  width: 96px;
+  width: 84px;
   padding: 10px 6px;
   text-align: center;
   font-size: 0.82rem;
@@ -422,20 +406,18 @@ a.game-card:hover::before { opacity: 0.6; }
   border-radius: 50%;
 }
 
-.sequence img { width: 56px; height: 56px; border-radius: 8px; }
+.sequence img { width: 48px; height: 48px; border-radius: 8px; }
 
-.build-row,
-.starter-set {
+.build-rows { margin-top: 14px; }
+
+.build-row {
   display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 12px;
+  grid-template-columns: 92px 1fr;
+  gap: 10px;
   align-items: center;
-  padding: 10px 0;
+  padding: 8px 0;
   border-top: 1px solid var(--border);
 }
-
-.build-row:first-of-type,
-.starter-set:first-child { border-top: none; }
 
 .build-label { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
 
@@ -469,78 +451,88 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .rune-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
 }
 
 .rune-tree {
-  padding: 14px;
+  padding: 10px 12px;
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 12px;
 }
 
-.build-card h4 {
-  margin: 0 0 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.tree-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-weight: 700; }
 
-.tree-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-weight: 700; }
+.tree-head img { width: 24px; height: 24px; }
 
 .rune {
   display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 12px;
-  align-items: start;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  cursor: help;
 }
 
-.rune img { width: 40px; height: 40px; border-radius: 50%; background: rgba(0, 0, 0, 0.35); }
+.rune img { width: 30px; height: 30px; border-radius: 50%; background: rgba(0, 0, 0, 0.35); }
 
-.rune.keystone { grid-template-columns: 56px 1fr; }
+.rune.keystone { grid-template-columns: 44px 1fr; font-weight: 700; }
 
-.rune.keystone img { width: 56px; height: 56px; box-shadow: 0 0 0 2px var(--accent); }
+.rune.keystone img { width: 44px; height: 44px; box-shadow: 0 0 0 2px var(--accent); }
 
-.rune strong { display: block; line-height: 1.3; }
+.shards, .spell-list { display: flex; flex-wrap: wrap; gap: 6px; }
 
-.rune-desc { margin: 3px 0 0; font-size: 0.82rem; line-height: 1.45; color: var(--muted); }
-
-.shard-title { margin-top: 14px !important; }
-
-.shards, .spell-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.shards { margin-top: 8px; }
 
 .shard {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px 4px 4px;
-  font-size: 0.82rem;
+  gap: 5px;
+  padding: 3px 8px 3px 3px;
+  font-size: 0.78rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 999px;
+  cursor: help;
 }
 
-.shard img { width: 22px; height: 22px; }
+.shard img { width: 20px; height: 20px; }
 
-.spells { margin-top: 16px; }
+.build-head .spell-list { margin-left: auto; }
 
 .spell {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 6px;
+  gap: 6px;
+  padding: 3px 10px 3px 3px;
+  font-size: 0.85rem;
   font-weight: 600;
   background: var(--bg-elev);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
+  cursor: help;
 }
 
-.spell img { width: 36px; height: 36px; border-radius: 8px; }
+.spell img { width: 28px; height: 28px; border-radius: 6px; }
+
+/* Rünler ve eşyalar yan yana; dar ekranda alt alta */
+.build-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.build-grid .build-card { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .build-grid { grid-template-columns: 1fr; }
+}
+
+.difficulty .dots { letter-spacing: 1px; }
 
 /* Eşya penceresi */
 dialog {
@@ -626,9 +618,9 @@ dialog::backdrop { background: rgba(5, 2, 8, 0.7); backdrop-filter: blur(3px); }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
   .tile img { width: 60px; height: 60px; }
   .ability { grid-template-columns: 1fr; }
-  .build-row, .starter-set { grid-template-columns: 1fr; gap: 6px; }
-  .sequence a { width: 84px; }
-  .champ-hero { min-height: 260px; }
+  .build-row { grid-template-columns: 1fr; gap: 6px; }
+  .sequence a { width: 76px; }
+  .champ-hero { min-height: 190px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
