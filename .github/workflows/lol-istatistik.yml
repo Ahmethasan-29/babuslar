@@ -1,0 +1,54 @@
+name: LoL maç istatistikleri
+
+# Her gece Riot API'den üst seviye dereceli maçları toplar ve sonuçları
+# "istatistik" dalına yazar. Site bu dalı doğrudan okur; ana dal değişmez.
+on:
+  schedule:
+    - cron: "0 1 * * *" # her gün 04:00 (Türkiye saati)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lol-istatistik
+  cancel-in-progress: false
+
+jobs:
+  topla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Önceki istatistikleri al
+        run: |
+          mkdir -p veri
+          if git ls-remote --exit-code --heads origin istatistik > /dev/null; then
+            git fetch --depth=1 origin istatistik
+            git archive origin/istatistik | tar -x -C veri
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Maçları topla
+        env:
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+          STATE_DIR: veri
+          PLATFORMS: tr1,euw1
+          TIME_BUDGET_MIN: 120
+        run: node scripts/collect.mjs
+
+      - name: İstatistik dalına kaydet
+        run: |
+          [ -f veri/stats.json ] || { echo "Kaydedilecek veri yok."; exit 0; }
+          cd veri
+          git init -q -b istatistik
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "İstatistikler: $(date -u +%F)"
+          # Tek commit'lik dal: geçmiş birikmez, depo büyümez.
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" istatistik
