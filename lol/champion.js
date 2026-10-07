@@ -24,7 +24,7 @@ function render(version, c) {
     return;
   }
 
-  document.title = `${c.name} · League of Legends · Babuslar`;
+  document.title = `${c.name} · League of Legends · Babuşlar`;
 
   const hero = el(
     "section",

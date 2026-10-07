@@ -1,4 +1,4 @@
-# Babuslar
+# Babuşlar
 
 Oyunlardaki karakterlerin, yeteneklerin ve eşyaların ne işe yaradığını anlatan Türkçe rehber sitesi.
 
@@ -30,6 +30,6 @@ Klasörü herhangi bir statik sunucuyla açmak yeterlidir.
 
 ---
 
-Babuslar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın
+Babuşlar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın
 yapımında veya yönetiminde resmi olarak yer alan kişilerin görüşlerini yansıtmaz.
 League of Legends ve Riot Games, Riot Games, Inc.'in ticari markaları veya tescilli ticari markalarıdır.
