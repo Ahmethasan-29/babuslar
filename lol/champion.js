@@ -1,13 +1,6 @@
 const root = document.getElementById("champion");
 const id = new URLSearchParams(location.search).get("id");
 
-const STATS = [
-  ["attack", "Saldırı"],
-  ["defense", "Savunma"],
-  ["magic", "Büyü"],
-  ["difficulty", "Zorluk"],
-];
-
 const SPELL_KEYS = ["Q", "W", "E", "R"];
 
 if (!id || !/^[A-Za-z0-9]+$/.test(id)) {
@@ -34,35 +27,19 @@ function render(version, c) {
       { class: "champ-hero-body" },
       el("h1", {}, c.name),
       el("p", { class: "title" }, c.title),
-      el("div", { class: "tags" }, c.tags.map((t) => el("span", { class: "badge" }, ROLES[t] || t)))
+      el(
+        "div",
+        { class: "tags" },
+        c.tags.map((t) => el("span", { class: "badge" }, ROLES[t] || t)),
+        difficultyBadge(c.info?.difficulty ?? 0)
+      )
     )
   );
   hero.style.backgroundImage = `url("${DD}/cdn/img/champion/splash/${c.id}_0.jpg")`;
 
-  const stats = el(
-    "section",
-    { class: "section" },
-    el("h2", {}, "Genel bakış"),
-    el(
-      "div",
-      { class: "stats" },
-      STATS.map(([key, label]) => {
-        const value = c.info?.[key] ?? 0;
-        return el(
-          "div",
-          {},
-          el("div", { class: "stat-label" }, el("span", {}, label), el("span", {}, `${value}/10`)),
-          el("div", { class: "bar" }, el("span", { style: `width:${value * 10}%` }))
-        );
-      })
-    )
-  );
-
   const builds = el(
     "section",
     { class: "section", id: "dizilim" },
-    el("h2", {}, "Rünler ve eşya dizilimi"),
-    el("p", { class: "page-sub" }, "Koridorunu seç; rünleri, sihirdar büyülerini ve alınacak eşyaları sırasıyla gör."),
     el("div", { class: "build-root" }, el("p", { class: "notice" }, "Dizilim yükleniyor…"))
   );
 
@@ -107,7 +84,7 @@ function render(version, c) {
     ? el("section", { class: "section" }, el("h2", {}, "Hikâyesi"), el("p", { class: "lore" }, plainText(c.lore)))
     : null;
 
-  root.replaceChildren(hero, stats, builds, abilities, tips || "", lore || "");
+  root.replaceChildren(hero, builds, abilities, tips || "", lore || "");
   loadBuilds(version, c, builds.querySelector(".build-root"));
 }
 
@@ -211,15 +188,10 @@ function renderBuilds(state) {
     )
   );
 
-  const laneLabel = LANES.find((l) => l.id === lane).label;
   const popularLabels = popular.map((id) => LANES.find((l) => l.id === id).label);
   const note =
     popular.length && !popular.includes(lane)
-      ? el(
-          "p",
-          { class: "build-note" },
-          `${c.name} genelde ${popularLabels.join(" ve ")} koridorunda oynanır. ${laneLabel} koridoru için aşağıdaki genel dizilimi kullanabilirsin.`
-        )
+      ? el("p", { class: "build-note" }, `${c.name} genelde ${popularLabels.join(" ve ")} koridorunda oynanır.`)
       : null;
 
   // Başlangıç eşyaları
@@ -254,76 +226,50 @@ function renderBuilds(state) {
     );
   });
 
-  container.replaceChildren(
-    ...[
-      tabs,
-      note,
-      runeCard(state),
+  const starterRows = starters.map((set, i) =>
+    el(
+      "div",
+      { class: "build-row" },
+      el("span", { class: "build-label" }, starters.length > 1 ? `Başlangıç ${i + 1}` : "Başlangıç"),
       el(
         "div",
-        { class: "build-card" },
+        { class: "build-items" },
+        [...new Set(set)].map((id) => itemChip(version, items, id, false, set.filter((x) => x === id).length))
+      )
+    )
+  );
+
+  const itemsCard = el(
+    "div",
+    { class: "build-card" },
+    el(
+      "div",
+      { class: "build-head" },
+      el("h3", {}, "Eşyalar"),
+      specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
+      el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
+    ),
+    el(
+      "ol",
+      { class: "sequence" },
+      quick.map((id) =>
         el(
-          "div",
-          { class: "build-head" },
-          el("h3", {}, `${laneLabel} · Önerilen sıra`),
-          specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
-          el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
-        ),
-        el(
-          "ol",
-          { class: "sequence" },
-          quick.map((id) =>
-            el(
-              "li",
-              {},
-              el(
-                "a",
-                { href: `esyalar.html#${id}`, title: items[id].name },
-                el("img", { src: ddImg(version, "item", items[id].image.full), alt: "", width: 56, height: 56, loading: "lazy" }),
-                el("span", {}, items[id].name)
-              )
-            )
+          "li",
+          {},
+          el(
+            "a",
+            { href: `esyalar.html#${id}`, title: items[id].name },
+            el("img", { src: ddImg(version, "item", items[id].image.full), alt: "", width: 48, height: 48, loading: "lazy" }),
+            el("span", {}, items[id].name)
           )
         )
-      ),
-      starters.length
-        ? el(
-            "div",
-            { class: "build-card" },
-            el("h3", {}, "Başlangıç eşyaları"),
-            el(
-              "div",
-              { class: "starter-sets" },
-              starters.map((set, i) =>
-                el(
-                  "div",
-                  { class: "starter-set" },
-                  el("span", { class: "build-label" }, starters.length > 1 ? `Seçenek ${i + 1}` : "Başlangıç"),
-                  el(
-                    "div",
-                    { class: "build-items" },
-                    [...new Set(set)].map((id) => itemChip(version, items, id, false, set.filter((x) => x === id).length))
-                  )
-                )
-              )
-            )
-          )
-        : null,
-      el(
-        "div",
-        { class: "build-card" },
-        el("h3", {}, "Seçenekler"),
-        el("p", { class: "tile-sub", style: "margin:0 0 12px" }, "Her basamakta ilk eşya en çok önerilendir; rakiplerine göre diğerlerini seçebilirsin."),
-        rows
-      ),
-      el(
-        "p",
-        { class: "tile-sub" },
-        source === "editor"
-          ? "Kaynak: Babuşlar editör dizilimi. Riot bu şampiyon için oyun dosyalarında hazır öneri yayınlamıyor."
-          : "Kaynak: League of Legends istemcisindeki önerilen eşyalar (Community Dragon)."
-      ),
-    ].filter(Boolean)
+      )
+    ),
+    el("div", { class: "build-rows" }, starterRows, rows)
+  );
+
+  container.replaceChildren(
+    ...[tabs, note, el("div", { class: "build-grid" }, ...[runeCard(state), itemsCard].filter(Boolean))].filter(Boolean)
   );
 }
 
@@ -334,6 +280,18 @@ function itemChip(version, items, id, highlight = false, amount = 1) {
     { class: `item-chip${highlight ? " top" : ""}`, href: `esyalar.html#${id}`, title: plainText(item.plaintext || item.name) },
     el("img", { src: ddImg(version, "item", item.image.full), alt: "", width: 32, height: 32, loading: "lazy" }),
     el("span", {}, amount > 1 ? `${item.name} ×${amount}` : item.name)
+  );
+}
+
+// Zorluk: 10 üzerinden puan ve küçük bir gösterge (ör. "Zorluk ●●●○○ 6/10")
+function difficultyBadge(value) {
+  const filled = Math.round(value / 2);
+  return el(
+    "span",
+    { class: "badge difficulty", title: `Zorluk: ${value}/10` },
+    "Zorluk ",
+    el("span", { class: "dots", "aria-hidden": "true" }, "●".repeat(filled) + "○".repeat(5 - filled)),
+    ` ${value}/10`
   );
 }
 
@@ -406,7 +364,6 @@ function runeCard(state) {
 
   const perk = (id) => runes.perks.get(id);
   const [keystoneId, ...rest] = rec.perkIds || [];
-  const laneLabel = LANES.find((l) => l.id === lane).label;
 
   const treeHead = (style) =>
     style
@@ -421,11 +378,12 @@ function runeCard(state) {
   const runeRow = (id, keystone = false) => {
     const p = perk(id);
     if (!p) return null;
+    // Açıklama yalnızca üzerine gelince (title) görünür.
     return el(
       "div",
-      { class: `rune${keystone ? " keystone" : ""}` },
-      el("img", { src: clientAsset(p.iconPath), alt: "", width: keystone ? 56 : 40, height: keystone ? 56 : 40, loading: "lazy" }),
-      el("div", {}, el("strong", {}, p.name), p.shortDesc ? el("p", { class: "rune-desc" }, plainText(p.shortDesc)) : null)
+      { class: `rune${keystone ? " keystone" : ""}`, title: plainText(p.shortDesc || p.name) },
+      el("img", { src: clientAsset(p.iconPath), alt: "", width: keystone ? 44 : 30, height: keystone ? 44 : 30, loading: "lazy" }),
+      el("span", {}, p.name)
     );
   };
 
@@ -457,14 +415,23 @@ function runeCard(state) {
   return el(
     "div",
     { class: "build-card" },
-    el("div", { class: "build-head" }, el("h3", {}, `${laneLabel} · Rünler`), el("span", { class: "badge" }, "Riot önerisi")),
-    fallback
-      ? el(
-          "p",
-          { class: "tile-sub", style: "margin:0 0 12px" },
-          `${laneLabel} koridoru için ayrı rün önerisi yok; bu şampiyonun en sık oynandığı koridorun rünleri gösteriliyor.`
+    el(
+      "div",
+      { class: "build-head" },
+      el("h3", {}, "Rünler"),
+      el(
+        "div",
+        { class: "spell-list" },
+        spells.map((s) =>
+          el(
+            "span",
+            { class: "spell", title: `${s.name}: ${plainText(s.description)}` },
+            el("img", { src: ddImg(version, "spell", s.image.full), alt: s.name, width: 28, height: 28 }),
+            s.name
+          )
         )
-      : null,
+      )
+    ),
     variants,
     el(
       "div",
@@ -472,7 +439,6 @@ function runeCard(state) {
       el(
         "div",
         { class: "rune-tree" },
-        el("h4", {}, "Ana ağaç"),
         treeHead(runes.styles.get(rec.primaryPerkStyleId)),
         runeRow(keystoneId, true),
         rest.slice(0, 3).map((id) => runeRow(id))
@@ -480,10 +446,8 @@ function runeCard(state) {
       el(
         "div",
         { class: "rune-tree" },
-        el("h4", {}, "İkincil ağaç"),
         treeHead(runes.styles.get(rec.secondaryPerkStyleId)),
         rest.slice(3, 5).map((id) => runeRow(id)),
-        shards.length ? el("h4", { class: "shard-title" }, "İstatistik parçaları") : null,
         shards.length
           ? el(
               "div",
@@ -492,32 +456,13 @@ function runeCard(state) {
                 el(
                   "span",
                   { class: "shard", title: plainText(s.shortDesc || s.name) },
-                  el("img", { src: clientAsset(s.iconPath), alt: "", width: 22, height: 22 }),
+                  el("img", { src: clientAsset(s.iconPath), alt: "", width: 20, height: 20 }),
                   s.name
                 )
               )
             )
           : null
       )
-    ),
-    spells.length
-      ? el(
-          "div",
-          { class: "spells" },
-          el("h4", {}, "Sihirdar büyüleri"),
-          el(
-            "div",
-            { class: "spell-list" },
-            spells.map((s) =>
-              el(
-                "span",
-                { class: "spell", title: plainText(s.description) },
-                el("img", { src: ddImg(version, "spell", s.image.full), alt: "", width: 36, height: 36 }),
-                s.name
-              )
-            )
-          )
-        )
-      : null
+    )
   );
 }
