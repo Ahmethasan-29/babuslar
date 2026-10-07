@@ -11,7 +11,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { addMatch, buildOutput, itemInfo, prune, sortPatches } from "./aggregate.mjs";
 
-const KEY = process.env.RIOT_API_KEY;
+// Kopyalarken karışan boşluk / satır sonu anahtarı geçersiz kılmasın.
+const KEY = (process.env.RIOT_API_KEY || "").trim();
 const STATE_DIR = process.env.STATE_DIR || "veri";
 const PLATFORMS = (process.env.PLATFORMS || "tr1,euw1").split(",").map((p) => p.trim().toLowerCase());
 const BUDGET_MS = Number(process.env.TIME_BUDGET_MIN || 100) * 60_000;
