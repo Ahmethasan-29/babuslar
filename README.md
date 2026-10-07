@@ -1,11 +1,22 @@
-# Oyun Rehberi
+# Babuşlar
 
-Oyunlardaki karakterlerin, yeteneklerin ve eşyaların ne işe yaradığını anlatan rehber sitesi.
+Oyunlardaki karakterlerin, yeteneklerin ve eşyaların ne işe yaradığını anlatan Türkçe rehber sitesi.
 
 ## Oyunlar
 
 - **League of Legends:** şampiyonlar, pasif ve Q/W/E/R yetenekleri, eşyalar.
   Veriler Riot Games'in Data Dragon servisinden Türkçe olarak çekilir; oyuna yama geldiğinde site kendiliğinden güncellenir.
+
+## Klasör yapısı
+
+```
+index.html          Ana sayfa (oyun kartları)
+assets/style.css    Ortak tasarım (koyu, pembe tema)
+assets/common.js    Ortak yardımcılar (Data Dragon, metin temizleme)
+lol/index.html      Şampiyon listesi
+lol/sampiyon.html   Şampiyon ayrıntısı (pasif, Q/W/E/R)
+lol/esyalar.html    Eşya listesi
+```
 
 ## Yerelde çalıştırma
 
@@ -19,6 +30,6 @@ Klasörü herhangi bir statik sunucuyla açmak yeterlidir.
 
 ---
 
-Oyun Rehberi, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın
+Babuşlar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın
 yapımında veya yönetiminde resmi olarak yer alan kişilerin görüşlerini yansıtmaz.
 League of Legends ve Riot Games, Riot Games, Inc.'in ticari markaları veya tescilli ticari markalarıdır.

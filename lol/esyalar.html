@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eşyalar · League of Legends · Babuşlar</title>
+  <meta name="description" content="League of Legends eşyaları: ne işe yaradıkları, fiyatları ve yapımları.">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Şampiyonlar</a>
+        <a href="esyalar.html" aria-current="page">Eşyalar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Eşyalar</h1>
+      <p class="page-sub">Sihirdar Vadisi'nde satın alınabilen eşyalar. Ayrıntılar için bir eşyaya tıkla. <span class="badge" id="patch">Yükleniyor…</span></p>
+
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Eşya ara…" aria-label="Eşya ara" autocomplete="off">
+        <div class="chips" id="categories" role="group" aria-label="Kategoriye göre filtrele"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+      </div>
+
+      <div class="grid" id="grid">
+        <p class="notice">Eşyalar yükleniyor…</p>
+      </div>
+    </div>
+  </main>
+
+  <dialog id="item-dialog" aria-labelledby="item-title">
+    <button class="close" type="button" id="item-close" aria-label="Kapat">×</button>
+    <div class="dialog-body" id="item-body"></div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın yapımında veya yönetiminde resmi olarak yer alan kişilerin görüşlerini yansıtmaz.</p>
+      <p>League of Legends ve Riot Games, Riot Games, Inc.'in ticari markaları veya tescilli ticari markalarıdır.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/common.js"></script>
+  <script src="items.js"></script>
+</body>
+</html>
