@@ -18,10 +18,26 @@ lol/sampiyon.html   Şampiyon ayrıntısı (pasif, Q/W/E/R)
 lol/esyalar.html    Eşya listesi
 ```
 
+## Maç istatistikleri
+
+Rün ve eşya dizilimleri, Riot API'den toplanan gerçek maçlardan hesaplanır:
+
+- `.github/workflows/lol-istatistik.yml` her gece çalışır; Türkiye ve Batı Avrupa sunucularındaki
+  Usta ve üstü oyuncuların dereceli maçlarını toplar (`scripts/collect.mjs`).
+- Her şampiyon / koridor / temel rün için en sık rün sayfası, büyüler, başlangıç eşyaları ve
+  gerçek satın alma sırasına göre 6 eşya, maç sayısı ve kazanma oranıyla hesaplanır (`scripts/aggregate.mjs`).
+- Sonuç `istatistik` dalına yazılır (`stats.json`); site bu dosyayı okur. Yeterli veri olmayan
+  koridorlarda Riot'un oyun içi önerisi gösterilir.
+
+Kurulum: https://developer.riotgames.com adresinden alınan **Personal API Key**, depo ayarlarında
+*Settings → Secrets and variables → Actions* altına `RIOT_API_KEY` adıyla eklenir.
+Görev, *Actions → LoL maç istatistikleri → Run workflow* ile elle de başlatılabilir.
+
 ## Yerelde çalıştırma
 
 Site sade HTML, CSS ve JavaScript'ten oluşur, kurulum gerektirmez.
 Klasörü herhangi bir statik sunucuyla açmak yeterlidir.
+Yerelde (`localhost`) site, istatistikleri depo kökündeki `stats.local.json` dosyasından okur (git'e eklenmez).
 
 ## Yeni oyun ekleme
 

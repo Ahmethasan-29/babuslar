@@ -205,3 +205,20 @@ function openItemDialog(version, items, itemId) {
   if (!itemDialog.open) itemDialog.showModal();
   body.scrollTop = 0;
 }
+// Gece toplanan maç istatistikleri ("istatistik" dalı). Henüz yoksa null döner ve site Riot önerilerini kullanır.
+// Yerelde denerken depo kökündeki stats.local.json okunur (git'e eklenmez).
+const STATS_URL =
+  location.hostname === "localhost"
+    ? new URL("../stats.local.json", document.currentScript?.src || location.href).href
+    : "https://raw.githubusercontent.com/Ahmethasan-29/babuslar/istatistik/stats.json";
+
+let statsPromise;
+
+function getStats() {
+  if (!statsPromise) statsPromise = fetchJson(STATS_URL).catch(() => null);
+  return statsPromise;
+}
+
+function formatPercent(part, total) {
+  return `%${((part / total) * 100).toLocaleString("tr-TR", { maximumFractionDigits: 1, minimumFractionDigits: 1 })}`;
+}

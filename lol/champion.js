@@ -126,14 +126,17 @@ const LANE_STARTERS = {
 async function loadBuilds(version, c, container) {
   const slug = c.id.toLowerCase();
   try {
-    const [bin, items, lanes, runes] = await Promise.all([
+    const [bin, items, lanes, runes, allStats] = await Promise.all([
       fetch(`${CDRAGON}/game/data/characters/${slug}/${slug}.bin.json`)
         .then((r) => (r.ok ? r.json() : {}))
         .catch(() => ({})),
       ddData("item.json").then(({ data }) => data.data),
       getChampionLanes().catch(() => new Map()),
       loadRuneData(c).catch(() => null),
+      getStats(),
     ]);
+    // Bu şampiyonun maç istatistikleri: { MIDDLE: { g, w, keystones: [...] }, ... }
+    const stats = allStats?.champions?.[c.key] || null;
 
     // Önce Riot'un oyun içi önerisi; yoksa Babuşlar editör dizilimi.
     // Riot'un bazı eski önerileri kaldırılmış eşyalardan oluşur; 4'ten az geçerli eşyası kalanlar kullanılmaz.
@@ -161,11 +164,18 @@ async function loadBuilds(version, c, container) {
       source = "editor";
     }
 
-    const popular = lanes.get(String(c.key)) || [];
+    // Sık oynanan koridorlar: istatistik varsa maçların en az %10'unun oynandığı koridorlar, yoksa Riot'un listesi.
+    const statGames = stats ? Object.values(stats).reduce((sum, lane) => sum + lane.g, 0) : 0;
+    const popular = stats
+      ? Object.entries(stats)
+          .filter(([, lane]) => lane.g / statGames >= 0.1)
+          .sort((a, b) => b[1].g - a[1].g)
+          .map(([lane]) => lane)
+      : lanes.get(String(c.key)) || [];
     const requested = LANES.find((l) => l.slug === new URLSearchParams(location.search).get("koridor"));
     const initial = requested?.id || popular[0] || "MIDDLE";
 
-    renderBuilds({ version, c, container, byPosition, items, popular, source, runes, lane: initial, runeIndex: 0 });
+    renderBuilds({ version, c, container, byPosition, items, popular, source, runes, stats, lane: initial, runeIndex: 0 });
   } catch {
     showNotice(container, "Eşya dizilimi şu an yüklenemedi. Sayfayı daha sonra yenilemeyi dene.");
   }
@@ -258,17 +268,32 @@ function renderBuilds(state) {
     if (!sequence.includes(id)) sequence.push(id);
   }
 
+  // Maç istatistiği varsa: bu temel rünü alan oyuncuların gerçekten aldığı başlangıç ve eşya sırası.
+  const stat = selectedRune(state)?.rec.stat;
+  const statItems = stat ? valid(stat.items.map(String)) : [];
+  const fromStats = statItems.length >= 3;
+  if (fromStats) {
+    const statStarter = valid(stat.starter.map(String));
+    if (statStarter.length) starter.splice(0, starter.length, ...statStarter);
+    sequence.splice(0, sequence.length, ...statItems);
+  }
+
+  const badges = fromStats
+    ? [
+        el("span", { class: "badge" }, `${keystoneName} ile`),
+        el("span", { class: "badge" }, `${stat.g.toLocaleString("tr-TR")} maç`),
+        el("span", { class: "badge" }, `${formatPercent(stat.w, stat.g)} kazanma`),
+      ]
+    : [
+        keystoneName && profile.length ? el("span", { class: "badge" }, `${keystoneName} için`) : null,
+        specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
+        el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi"),
+      ];
+
   const itemsCard = el(
     "div",
     { class: "build-card" },
-    el(
-      "div",
-      { class: "build-head" },
-      el("h3", {}, "Eşyalar"),
-      keystoneName && profile.length ? el("span", { class: "badge" }, `${keystoneName} için`) : null,
-      specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
-      el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
-    ),
+    el("div", { class: "build-head" }, el("h3", {}, "Eşyalar"), badges),
     el(
       "div",
       { class: "build-row starter-row" },
@@ -377,7 +402,23 @@ const IGNITE = 14;
 // Seçili koridor ve rün seçeneğine göre rün sayfası. Koridorun önerisi yoksa
 // şampiyonun en sık oynandığı koridorun rünleri kullanılır.
 function selectedRune(state) {
-  const { runes, lane } = state;
+  const { runes, lane, stats } = state;
+
+  // Önce maç istatistiği: bu koridorda en çok oynanan temel rünler, her birinin rün sayfası ve büyüleriyle.
+  const laneStats = stats?.[lane];
+  if (runes && laneStats?.keystones?.length) {
+    const options = laneStats.keystones.map((k) => ({
+      primaryPerkStyleId: k.primary,
+      secondaryPerkStyleId: k.secondary,
+      perkIds: k.perkIds,
+      summonerSpellIds: k.spells,
+      stat: k,
+      laneGames: laneStats.g,
+    }));
+    const index = Math.min(state.runeIndex || 0, options.length - 1);
+    return { options, fallback: false, index, rec: options[index] };
+  }
+
   if (!runes || !runes.list.length) return null;
   let options = runes.list.filter((rec) => rec.position === lane);
   const fallback = !options.length;
@@ -426,22 +467,26 @@ function runeCard(state) {
   const spells = spellIds.map((id) => runes.spells.get(id)).filter(Boolean);
 
   const variants =
-    options.length > 1
+    options.length > 1 || options[0]?.stat
       ? el(
           "div",
           { class: "chips rune-variants", role: "group", "aria-label": "Rün seçeneği" },
           options.map((option, i) => {
             const key = perk(option.perkIds?.[0]);
+            const name = key ? key.name : `Seçenek ${i + 1}`;
+            // İstatistikte: kazanma oranı etikette, maç sayısı ve tercih oranı üzerine gelince.
+            const { stat } = option;
             return el(
               "button",
               {
                 class: "chip",
                 type: "button",
                 "aria-pressed": String(i === index),
+                title: stat ? `${stat.g.toLocaleString("tr-TR")} maç · ${formatPercent(stat.g, option.laneGames)} tercih` : null,
                 onclick: () => renderBuilds({ ...state, runeIndex: i }),
               },
               key ? el("img", { src: clientAsset(key.iconPath), alt: "", width: 20, height: 20 }) : null,
-              key ? `${i + 1}. ${key.name}` : `Seçenek ${i + 1}`
+              stat ? `${name} · ${formatPercent(stat.w, stat.g)}` : `${i + 1}. ${name}`
             );
           })
         )
