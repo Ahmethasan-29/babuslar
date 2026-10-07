@@ -3,8 +3,6 @@ const search = document.getElementById("search");
 const categories = document.getElementById("categories");
 const count = document.getElementById("count");
 const patch = document.getElementById("patch");
-const dialog = document.getElementById("item-dialog");
-const dialogBody = document.getElementById("item-body");
 
 const CATEGORIES = [
   ["all", "Tümü"],
@@ -20,11 +18,8 @@ const CATEGORIES = [
   ["Boots", "Botlar"],
 ];
 
-const SUMMONERS_RIFT = "11";
-
 let items = [];
 let allItems = {};
-let validIds = new Set();
 let version = "";
 let activeCategory = "all";
 
@@ -37,16 +32,8 @@ ddData("item.json")
     // Sihirdar Vadisi'nde satın alınabilen eşyaları al, aynı isimli kopyaları ele.
     const seen = new Set();
     items = Object.entries(data.data)
+      .filter(([itemId, item]) => isRiftItem(itemId, item))
       .map(([itemId, item]) => ({ id: itemId, ...item }))
-      .filter(
-        (item) =>
-          item.maps?.[SUMMONERS_RIFT] &&
-          item.gold?.purchasable &&
-          item.inStore !== false &&
-          !item.hideFromAll &&
-          !item.requiredChampion &&
-          !item.requiredAlly
-      )
       .filter((item) => {
         if (seen.has(item.name)) return false;
         seen.add(item.name);
@@ -54,7 +41,6 @@ ddData("item.json")
       })
       .sort((a, b) => a.gold.total - b.gold.total || a.name.localeCompare(b.name, "tr"));
 
-    validIds = new Set(items.map((item) => item.id));
     buildCategoryChips();
     render();
     openFromHash();
@@ -107,7 +93,7 @@ function render() {
     ...list.map((item) =>
       el(
         "button",
-        { class: "tile", type: "button", onclick: () => openItem(item.id) },
+        { class: "tile", type: "button", onclick: () => openItemDialog(version, allItems, item.id) },
         el("img", { src: ddImg(version, "item", item.image.full), alt: "", loading: "lazy", width: 72, height: 72 }),
         el("span", { class: "tile-name" }, item.name),
         el("span", { class: "tile-sub gold" }, `${item.gold.total} altın`)
@@ -116,59 +102,11 @@ function render() {
   );
 }
 
-function itemButton(itemId) {
-  const item = allItems[itemId];
-  if (!item) return null;
-  return el(
-    "button",
-    { type: "button", onclick: () => openItem(itemId) },
-    el("img", { src: ddImg(version, "item", item.image.full), alt: "" }),
-    el("span", {}, item.name)
-  );
-}
-
-function openItem(itemId) {
-  const item = allItems[itemId];
-  if (!item) return;
-
-  const from = (item.from || []).map(itemButton).filter(Boolean);
-  const into = (item.into || []).filter((x) => validIds.has(x)).map(itemButton).filter(Boolean);
-
-  const sections = [
-    el(
-      "div",
-      { class: "dialog-head" },
-      el("img", { src: ddImg(version, "item", item.image.full), alt: "", width: 64, height: 64 }),
-      el(
-        "div",
-        {},
-        el("h2", { id: "item-title" }, item.name),
-        el("span", { class: "gold" }, `${item.gold.total} altın`),
-        item.gold.sell ? el("span", { class: "tile-sub" }, ` · Satış: ${item.gold.sell} altın`) : null
-      )
-    ),
-    item.plaintext ? el("p", { class: "page-sub", style: "margin-bottom:12px" }, item.plaintext) : null,
-    el("p", { class: "desc" }, plainText(item.description)),
-    from.length ? el("h3", {}, "Yapımı") : null,
-    from.length ? el("div", { class: "recipe" }, from) : null,
-    into.length ? el("h3", {}, "Dönüştüğü eşyalar") : null,
-    into.length ? el("div", { class: "recipe" }, into) : null,
-  ];
-  dialogBody.replaceChildren(...sections.filter(Boolean));
-
-  if (!dialog.open) dialog.showModal();
-  dialogBody.scrollTop = 0;
-}
-
-// Şampiyon sayfasındaki dizilimden gelen bağlantılar (esyalar.html#3089) eşyayı doğrudan açar.
+// esyalar.html#3089 gibi bağlantılar eşyayı doğrudan açar.
 function openFromHash() {
   const itemId = location.hash.slice(1);
-  if (/^\d+$/.test(itemId) && allItems[itemId]) openItem(itemId);
+  if (/^\d+$/.test(itemId)) openItemDialog(version, allItems, itemId);
 }
 
 window.addEventListener("hashchange", openFromHash);
 search.addEventListener("input", render);
-document.getElementById("item-close").addEventListener("click", () => dialog.close());
-dialog.addEventListener("click", (event) => {
-  if (event.target === dialog) dialog.close();
-});

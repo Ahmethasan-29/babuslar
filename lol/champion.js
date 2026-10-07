@@ -93,6 +93,10 @@ function render(version, c) {
 const BIN_POSITION = { TOP: "top", JUNGLE: "jungle", MIDDLE: "middle", BOTTOM: "bottom", UTILITY: "utility" };
 
 // Riot'un genel dizilimi bu koridorlara uygun başlangıç eşyası içermediğinde kullanılır.
+const BUILD_SIZE = 6;
+
+const DORAN_BY_ROLE = { Marksman: "1055", Fighter: "1055", Assassin: "1055", Mage: "1056", Support: "1056", Tank: "1054" };
+
 const LANE_STARTERS = {
   JUNGLE: [["1101", "2003"], ["1102", "2003"], ["1103", "2003"]],
   UTILITY: [["3865", "2003", "2003"]],
@@ -111,7 +115,14 @@ async function loadBuilds(version, c, container) {
     ]);
 
     // Önce Riot'un oyun içi önerisi; yoksa Babuşlar editör dizilimi.
-    let byPosition = summonersRiftBuilds(bin);
+    // Riot'un bazı eski önerileri kaldırılmış eşyalardan oluşur; 4'ten az geçerli eşyası kalanlar kullanılmaz.
+    let byPosition = Object.fromEntries(
+      Object.entries(summonersRiftBuilds(bin)).filter(
+        ([, build]) =>
+          new Set((build.mRecItemRanges || []).flatMap((range) => itemIds(range.items)).filter((id) => isRiftItem(id, items[id])))
+            .size >= 4
+      )
+    );
     let source = "riot";
     if (!Object.keys(byPosition).length) {
       const editor = await fetch("editor-builds.json").then((r) => (r.ok ? r.json() : {}));
@@ -147,7 +158,7 @@ function summonersRiftBuilds(bin) {
     for (const override of entry.mOverrides || []) {
       for (const ctx of override.mOverrideContexts || []) {
         if (ctx.mMapID !== 11 || ctx.mModeNameStringId !== "CLASSIC") continue;
-        const key = ctx.mPosition || "default";
+        const key = (ctx.mPosition || "default").toLowerCase();
         if (!result[key]) result[key] = override;
       }
     }
@@ -163,7 +174,6 @@ function renderBuilds(state) {
   const { version, c, container, byPosition, items, popular, source, lane } = state;
   const specific = byPosition[BIN_POSITION[lane]];
   const build = specific || byPosition.default || Object.values(byPosition)[0];
-  const known = (ids) => ids.filter((id) => items[id]);
 
   const tabs = el(
     "div",
@@ -194,50 +204,30 @@ function renderBuilds(state) {
       ? el("p", { class: "build-note" }, `${c.name} genelde ${popularLabels.join(" ve ")} koridorunda oynanır.`)
       : null;
 
-  // Başlangıç eşyaları
+  // Yalnızca Sihirdar Vadisi'nde satın alınabilen eşyalar (Riot'un eski önerilerindeki kaldırılmış eşyalar elenir).
+  const valid = (ids) => ids.filter((id) => isRiftItem(id, items[id]));
+
+  // Başlangıç: tek bir set. Koridora uygun değilse ya da geçersizse role göre Doran eşyası.
   const starterSets =
     !specific && LANE_STARTERS[lane]
       ? LANE_STARTERS[lane]
       : (build.StartingItemBundles || []).map((bundle) => itemIds(bundle.items));
-  const starters = starterSets.map(known).filter((set) => set.length);
+  const starter =
+    starterSets.map(valid).find((set) => set.length) || [DORAN_BY_ROLE[c.tags[0]] || "1055", "2003"];
 
-  // Eşya basamakları: son geniş liste "duruma göre" alınacak eşyalardır.
-  const ranges = (build.mRecItemRanges || []).map((range) => known(itemIds(range.items))).filter((r) => r.length);
+  // Eşya sırası: her basamaktan ilk geçerli eşya; 6'ya tamamlamak için "duruma göre" listesinden eklenir.
+  const ranges = (build.mRecItemRanges || []).map((range) => valid(itemIds(range.items))).filter((r) => r.length);
   const situationalIndex = ranges.length > 2 ? ranges.length - 1 : -1;
-
-  const quick = [];
+  const sequence = [];
   ranges.forEach((range, i) => {
     if (i === situationalIndex) return;
-    const pick = range.find((id) => !quick.includes(id));
-    if (pick) quick.push(pick);
+    const pick = range.find((id) => !sequence.includes(id));
+    if (pick) sequence.push(pick);
   });
-
-  let coreNo = 0;
-  const rows = ranges.map((range, i) => {
-    let label;
-    if (i === situationalIndex) label = "Duruma göre";
-    else if (range.every((id) => items[id].tags?.includes("Boots"))) label = "Bot";
-    else label = `${++coreNo}. eşya`;
-    return el(
-      "div",
-      { class: "build-row" },
-      el("span", { class: "build-label" }, label),
-      el("div", { class: "build-items" }, range.map((id, n) => itemChip(version, items, id, n === 0 && i !== situationalIndex)))
-    );
-  });
-
-  const starterRows = starters.map((set, i) =>
-    el(
-      "div",
-      { class: "build-row" },
-      el("span", { class: "build-label" }, starters.length > 1 ? `Başlangıç ${i + 1}` : "Başlangıç"),
-      el(
-        "div",
-        { class: "build-items" },
-        [...new Set(set)].map((id) => itemChip(version, items, id, false, set.filter((x) => x === id).length))
-      )
-    )
-  );
+  for (const id of ranges[situationalIndex] || []) {
+    if (sequence.length >= BUILD_SIZE) break;
+    if (!sequence.includes(id)) sequence.push(id);
+  }
 
   const itemsCard = el(
     "div",
@@ -250,22 +240,31 @@ function renderBuilds(state) {
       el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
     ),
     el(
+      "div",
+      { class: "build-row starter-row" },
+      el("span", { class: "build-label" }, "Başlangıç"),
+      el(
+        "div",
+        { class: "build-items" },
+        [...new Set(starter)].map((id) => itemChip(version, items, id, starter.filter((x) => x === id).length))
+      )
+    ),
+    el(
       "ol",
       { class: "sequence" },
-      quick.map((id) =>
+      sequence.slice(0, BUILD_SIZE).map((id) =>
         el(
           "li",
           {},
           el(
-            "a",
-            { href: `esyalar.html#${id}`, title: items[id].name },
+            "button",
+            { type: "button", title: items[id].name, onclick: () => openItemDialog(version, items, id) },
             el("img", { src: ddImg(version, "item", items[id].image.full), alt: "", width: 48, height: 48, loading: "lazy" }),
             el("span", {}, items[id].name)
           )
         )
       )
-    ),
-    el("div", { class: "build-rows" }, starterRows, rows)
+    )
   );
 
   container.replaceChildren(
@@ -273,16 +272,16 @@ function renderBuilds(state) {
   );
 }
 
-function itemChip(version, items, id, highlight = false, amount = 1) {
+// Eşyaya tıklayınca sayfadan ayrılmadan ayrıntı penceresi açılır.
+function itemChip(version, items, id, amount = 1) {
   const item = items[id];
   return el(
-    "a",
-    { class: `item-chip${highlight ? " top" : ""}`, href: `esyalar.html#${id}`, title: plainText(item.plaintext || item.name) },
+    "button",
+    { class: "item-chip", type: "button", title: item.name, onclick: () => openItemDialog(version, items, id) },
     el("img", { src: ddImg(version, "item", item.image.full), alt: "", width: 32, height: 32, loading: "lazy" }),
     el("span", {}, amount > 1 ? `${item.name} ×${amount}` : item.name)
   );
 }
-
 // Zorluk: 10 üzerinden puan ve küçük bir gösterge (ör. "Zorluk ●●●○○ 6/10")
 function difficultyBadge(value) {
   const filled = Math.round(value / 2);
