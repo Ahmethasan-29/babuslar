@@ -130,3 +130,78 @@ function showNotice(container, message) {
 function normalize(text) {
   return String(text || "").toLocaleLowerCase("tr");
 }
+
+// Sihirdar Vadisi'nde gerçekten satın alınabilen eşya mı? 6 haneli kimlikler (Arena vb.) ve kaldırılmış eşyalar elenir.
+function isRiftItem(itemId, item) {
+  return (
+    Number(itemId) < 10000 &&
+    !!item &&
+    !!item.maps?.["11"] &&
+    !!item.gold?.purchasable &&
+    item.inStore !== false &&
+    !item.hideFromAll &&
+    !item.requiredChampion &&
+    !item.requiredAlly
+  );
+}
+
+// Eşya ayrıntı penceresi: Eşyalar ve şampiyon sayfalarında ortak, sayfadan ayrılmadan açılır.
+let itemDialog;
+
+function openItemDialog(version, items, itemId) {
+  const item = items[itemId];
+  if (!item) return;
+
+  if (!itemDialog) {
+    itemDialog = el(
+      "dialog",
+      { "aria-labelledby": "item-title" },
+      el("button", { class: "close", type: "button", "aria-label": "Kapat", onclick: () => itemDialog.close() }, "×"),
+      el("div", { class: "dialog-body" })
+    );
+    itemDialog.addEventListener("click", (event) => {
+      if (event.target === itemDialog) itemDialog.close();
+    });
+    document.body.append(itemDialog);
+  }
+
+  const link = (id) =>
+    isRiftItem(id, items[id])
+      ? el(
+          "button",
+          { type: "button", onclick: () => openItemDialog(version, items, id) },
+          el("img", { src: ddImg(version, "item", items[id].image.full), alt: "" }),
+          el("span", {}, items[id].name)
+        )
+      : null;
+
+  const from = (item.from || []).map(link).filter(Boolean);
+  const into = (item.into || []).map(link).filter(Boolean);
+  const body = itemDialog.querySelector(".dialog-body");
+
+  body.replaceChildren(
+    ...[
+      el(
+        "div",
+        { class: "dialog-head" },
+        el("img", { src: ddImg(version, "item", item.image.full), alt: "", width: 64, height: 64 }),
+        el(
+          "div",
+          {},
+          el("h2", { id: "item-title" }, item.name),
+          el("span", { class: "gold" }, `${item.gold.total} altın`),
+          item.gold.sell ? el("span", { class: "tile-sub" }, ` · Satış: ${item.gold.sell} altın`) : null
+        )
+      ),
+      item.plaintext ? el("p", { class: "page-sub", style: "margin-bottom:12px" }, item.plaintext) : null,
+      el("p", { class: "desc" }, plainText(item.description)),
+      from.length ? el("h3", {}, "Yapımı") : null,
+      from.length ? el("div", { class: "recipe" }, from) : null,
+      into.length ? el("h3", {}, "Dönüştüğü eşyalar") : null,
+      into.length ? el("div", { class: "recipe" }, into) : null,
+    ].filter(Boolean)
+  );
+
+  if (!itemDialog.open) itemDialog.showModal();
+  body.scrollTop = 0;
+}

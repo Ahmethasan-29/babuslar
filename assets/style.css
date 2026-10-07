@@ -370,8 +370,11 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .sequence li { counter-increment: step; }
 
-.sequence a {
+.sequence button {
   position: relative;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -388,9 +391,9 @@ a.game-card:hover::before { opacity: 0.6; }
   transition: border-color 0.15s, transform 0.15s;
 }
 
-.sequence a:hover { border-color: var(--accent); transform: translateY(-2px); }
+.sequence button:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-.sequence a::before {
+.sequence button::before {
   content: counter(step);
   position: absolute;
   top: -8px;
@@ -408,7 +411,7 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .sequence img { width: 48px; height: 48px; border-radius: 8px; }
 
-.build-rows { margin-top: 14px; }
+.starter-row { border-top: none; padding-top: 0; margin-bottom: 12px; }
 
 .build-row {
   display: grid;
@@ -424,6 +427,9 @@ a.game-card:hover::before { opacity: 0.6; }
 .build-items { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .item-chip {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -437,8 +443,6 @@ a.game-card:hover::before { opacity: 0.6; }
 }
 
 .item-chip:hover { border-color: var(--accent); }
-
-.item-chip.top { border-color: rgba(255, 79, 163, 0.6); box-shadow: 0 0 0 1px rgba(255, 79, 163, 0.25) inset; }
 
 .item-chip img { width: 32px; height: 32px; border-radius: 6px; }
 
@@ -619,7 +623,7 @@ dialog::backdrop { background: rgba(5, 2, 8, 0.7); backdrop-filter: blur(3px); }
   .tile img { width: 60px; height: 60px; }
   .ability { grid-template-columns: 1fr; }
   .build-row { grid-template-columns: 1fr; gap: 6px; }
-  .sequence a { width: 76px; }
+  .sequence button { width: 76px; }
   .champ-hero { min-height: 190px; }
 }
 
