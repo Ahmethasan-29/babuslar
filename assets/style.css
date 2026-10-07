@@ -344,6 +344,122 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .back:hover { color: var(--accent); }
 
+/* Eşya dizilimi */
+.lane-tabs { margin-bottom: 14px; }
+
+.chip .pop { margin-left: 6px; color: #f3c969; }
+
+.chip[aria-pressed="true"] .pop { color: #fff; }
+
+.build-note {
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  color: #f3dbe9;
+  background: var(--accent-soft);
+  border: 1px solid rgba(255, 79, 163, 0.35);
+  border-radius: var(--radius);
+}
+
+.build-card {
+  padding: 18px;
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.build-card h3 { margin: 0 0 12px; font-size: 1.1rem; }
+
+.build-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+
+.build-head h3 { margin: 0; }
+
+.sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.sequence li { counter-increment: step; }
+
+.sequence a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 96px;
+  padding: 10px 6px;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  text-decoration: none;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.sequence a:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.sequence a::before {
+  content: counter(step);
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.sequence img { width: 56px; height: 56px; border-radius: 8px; }
+
+.build-row,
+.starter-set {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.build-row:first-of-type,
+.starter-set:first-child { border-top: none; }
+
+.build-label { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
+
+.build-items { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.item-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 5px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.15s;
+}
+
+.item-chip:hover { border-color: var(--accent); }
+
+.item-chip.top { border-color: rgba(255, 79, 163, 0.6); box-shadow: 0 0 0 1px rgba(255, 79, 163, 0.25) inset; }
+
+.item-chip img { width: 32px; height: 32px; border-radius: 6px; }
+
 /* Eşya penceresi */
 dialog {
   width: min(560px, calc(100vw - 32px));
@@ -428,6 +544,8 @@ dialog::backdrop { background: rgba(5, 2, 8, 0.7); backdrop-filter: blur(3px); }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
   .tile img { width: 60px; height: 60px; }
   .ability { grid-template-columns: 1fr; }
+  .build-row, .starter-set { grid-template-columns: 1fr; gap: 6px; }
+  .sequence a { width: 84px; }
   .champ-hero { min-height: 260px; }
 }
 
