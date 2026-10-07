@@ -62,7 +62,7 @@ function render(version, c) {
     "section",
     { class: "section", id: "dizilim" },
     el("h2", {}, "Eşya dizilimi"),
-    el("p", { class: "page-sub" }, "Koridorunu seç; Riot'un oyun içinde önerdiği eşyaları sırasıyla gör."),
+    el("p", { class: "page-sub" }, "Koridorunu seç; alınacak eşyaları sırasıyla gör."),
     el("div", { class: "build-root" }, el("p", { class: "notice" }, "Eşya dizilimi yükleniyor…"))
   );
 
@@ -125,25 +125,37 @@ async function loadBuilds(version, c, container) {
   const slug = c.id.toLowerCase();
   try {
     const [bin, items, lanes] = await Promise.all([
-      fetch(`${CDRAGON}/game/data/characters/${slug}/${slug}.bin.json`).then((r) => {
-        if (!r.ok) throw new Error("Dizilim verisi alınamadı");
-        return r.json();
-      }),
+      fetch(`${CDRAGON}/game/data/characters/${slug}/${slug}.bin.json`)
+        .then((r) => (r.ok ? r.json() : {}))
+        .catch(() => ({})),
       ddData("item.json").then(({ data }) => data.data),
       getChampionLanes().catch(() => new Map()),
     ]);
 
-    const byPosition = summonersRiftBuilds(bin);
+    // Önce Riot'un oyun içi önerisi; yoksa Babuşlar editör dizilimi.
+    let byPosition = summonersRiftBuilds(bin);
+    let source = "riot";
     if (!Object.keys(byPosition).length) {
-      showNotice(container, "Riot, bu şampiyon için oyun dosyalarında hazır bir Sihirdar Vadisi dizilimi yayınlamıyor.");
-      return;
+      const editor = await fetch("editor-builds.json").then((r) => (r.ok ? r.json() : {}));
+      const entry = editor[c.id];
+      if (!entry) {
+        showNotice(container, "Bu şampiyon için henüz eşya dizilimi yok.");
+        return;
+      }
+      byPosition = {
+        default: {
+          StartingItemBundles: entry.start.map((items) => ({ items })),
+          mRecItemRanges: entry.ranges.map((items) => ({ items })),
+        },
+      };
+      source = "editor";
     }
 
     const popular = lanes.get(String(c.key)) || [];
     const requested = LANES.find((l) => l.slug === new URLSearchParams(location.search).get("koridor"));
     const initial = requested?.id || popular[0] || "MIDDLE";
 
-    renderBuilds({ version, c, container, byPosition, items, popular, lane: initial });
+    renderBuilds({ version, c, container, byPosition, items, popular, source, lane: initial });
   } catch {
     showNotice(container, "Eşya dizilimi şu an yüklenemedi. Sayfayı daha sonra yenilemeyi dene.");
   }
@@ -170,7 +182,7 @@ function itemIds(list) {
 }
 
 function renderBuilds(state) {
-  const { version, c, container, byPosition, items, popular, lane } = state;
+  const { version, c, container, byPosition, items, popular, source, lane } = state;
   const specific = byPosition[BIN_POSITION[lane]];
   const build = specific || byPosition.default || Object.values(byPosition)[0];
   const known = (ids) => ids.filter((id) => items[id]);
@@ -252,7 +264,8 @@ function renderBuilds(state) {
           "div",
           { class: "build-head" },
           el("h3", {}, `${laneLabel} · Önerilen sıra`),
-          specific ? el("span", { class: "badge" }, "Bu koridora özel") : null
+          specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
+          el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
         ),
         el(
           "ol",
@@ -301,7 +314,13 @@ function renderBuilds(state) {
         el("p", { class: "tile-sub", style: "margin:0 0 12px" }, "Her basamakta ilk eşya en çok önerilendir; rakiplerine göre diğerlerini seçebilirsin."),
         rows
       ),
-      el("p", { class: "tile-sub" }, "Kaynak: League of Legends istemcisindeki önerilen eşyalar (Community Dragon)."),
+      el(
+        "p",
+        { class: "tile-sub" },
+        source === "editor"
+          ? "Kaynak: Babuşlar editör dizilimi. Riot bu şampiyon için oyun dosyalarında hazır öneri yayınlamıyor."
+          : "Kaynak: League of Legends istemcisindeki önerilen eşyalar (Community Dragon)."
+      ),
     ].filter(Boolean)
   );
 }
