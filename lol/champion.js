@@ -95,6 +95,27 @@ const BIN_POSITION = { TOP: "top", JUNGLE: "jungle", MIDDLE: "middle", BOTTOM: "
 // Riot'un genel dizilimi bu koridorlara uygun başlangıç eşyası içermediğinde kullanılır.
 const BUILD_SIZE = 6;
 
+// Temel rün → uyduğu eşya özellikleri (Data Dragon eşya etiketleri).
+const KEYSTONE_PROFILES = {
+  8005: ["CriticalStrike", "AttackSpeed", "ArmorPenetration", "Damage"], // Saldırıya Devam
+  8008: ["AttackSpeed", "OnHit", "LifeSteal"], // Ölümcül Tempo
+  8021: ["CriticalStrike", "LifeSteal", "NonbootsMovement", "Health"], // Ayağı Çabuk
+  8010: ["Health", "LifeSteal", "SpellVamp", "AbilityHaste", "CooldownReduction"], // Yenilmez
+  8112: ["MagicPenetration", "ArmorPenetration", "SpellDamage", "Damage"], // Elektrik Ver
+  8128: ["MagicPenetration", "ArmorPenetration", "SpellDamage", "Damage"], // Kara Hasat
+  9923: ["AttackSpeed", "ArmorPenetration", "OnHit"], // Keskin Sağanak
+  8369: ["MagicPenetration", "ArmorPenetration", "CriticalStrike"], // İlk Vuruş
+  8214: ["Mana", "ManaRegen", "AbilityHaste", "CooldownReduction", "Aura"], // Aery'yi Çağır
+  8229: ["Mana", "AbilityHaste", "CooldownReduction", "SpellDamage"], // Sihirli Yıldız
+  8230: ["AbilityHaste", "CooldownReduction", "NonbootsMovement", "Health"], // Yıldırım Yağmacısı'nın Cinneti
+  8992: ["SpellDamage", "MagicPenetration", "Health"], // Ölümateşi Dokunuşu
+  8437: ["Health", "HealthRegen", "Armor", "SpellBlock"], // Hortlağın Pençesi
+  8439: ["Armor", "SpellBlock", "MagicResist", "Health", "Tenacity"], // Artçı Şok
+  8351: ["Aura", "Active", "Slow", "Health", "ManaRegen"], // Buzul Takviyesi
+  8465: ["Aura", "ManaRegen", "Health", "Armor"], // Muhafız
+  8360: ["AbilityHaste", "CooldownReduction", "Mana"], // Dizginsiz Büyü Kitabı
+};
+
 const DORAN_BY_ROLE = { Marksman: "1055", Fighter: "1055", Assassin: "1055", Mage: "1056", Support: "1056", Tank: "1054" };
 
 const LANE_STARTERS = {
@@ -215,16 +236,24 @@ function renderBuilds(state) {
   const starter =
     starterSets.map(valid).find((set) => set.length) || [DORAN_BY_ROLE[c.tags[0]] || "1055", "2003"];
 
-  // Eşya sırası: her basamaktan ilk geçerli eşya; 6'ya tamamlamak için "duruma göre" listesinden eklenir.
+  // Seçili temel rüne uyan eşya özellikleri; her basamakta Riot'un alternatiflerinden en uygunu seçilir.
+  const keystone = selectedRune(state)?.rec.perkIds?.[0];
+  const keystoneName = state.runes?.perks.get(keystone)?.name;
+  const profile = KEYSTONE_PROFILES[keystone] || [];
+  const score = (id) => profile.filter((tag) => items[id].tags?.includes(tag)).length;
+  // Eşit puanda Riot'un sırası korunur (sort kararlıdır).
+  const byFit = (range) => [...range].sort((a, b) => score(b) - score(a));
+
+  // Eşya sırası: her basamaktan rüne en uygun eşya; 6'ya tamamlamak için "duruma göre" listesinden eklenir.
   const ranges = (build.mRecItemRanges || []).map((range) => valid(itemIds(range.items))).filter((r) => r.length);
   const situationalIndex = ranges.length > 2 ? ranges.length - 1 : -1;
   const sequence = [];
   ranges.forEach((range, i) => {
     if (i === situationalIndex) return;
-    const pick = range.find((id) => !sequence.includes(id));
+    const pick = byFit(range).find((id) => !sequence.includes(id));
     if (pick) sequence.push(pick);
   });
-  for (const id of ranges[situationalIndex] || []) {
+  for (const id of byFit(ranges[situationalIndex] || [])) {
     if (sequence.length >= BUILD_SIZE) break;
     if (!sequence.includes(id)) sequence.push(id);
   }
@@ -236,6 +265,7 @@ function renderBuilds(state) {
       "div",
       { class: "build-head" },
       el("h3", {}, "Eşyalar"),
+      keystoneName && profile.length ? el("span", { class: "badge" }, `${keystoneName} için`) : null,
       specific ? el("span", { class: "badge" }, "Bu koridora özel") : null,
       el("span", { class: "badge" }, source === "editor" ? "Editör önerisi" : "Riot önerisi")
     ),
@@ -344,17 +374,23 @@ const SMITE = 11;
 const FLASH = 4;
 const IGNITE = 14;
 
-function runeCard(state) {
-  const { runes, lane, version } = state;
+// Seçili koridor ve rün seçeneğine göre rün sayfası. Koridorun önerisi yoksa
+// şampiyonun en sık oynandığı koridorun rünleri kullanılır.
+function selectedRune(state) {
+  const { runes, lane } = state;
   if (!runes || !runes.list.length) return null;
-
-  // Seçilen koridorun önerisi yoksa şampiyonun en sık oynandığı koridorun rünleri gösterilir.
   let options = runes.list.filter((rec) => rec.position === lane);
   const fallback = !options.length;
   if (fallback) options = runes.list.filter((rec) => rec.position === runes.list[0].position);
-
   const index = Math.min(state.runeIndex || 0, options.length - 1);
-  const rec = options[index];
+  return { options, fallback, index, rec: options[index] };
+}
+
+function runeCard(state) {
+  const { runes, lane, version } = state;
+  const selected = selectedRune(state);
+  if (!selected) return null;
+  const { options, fallback, index, rec } = selected;
 
   // Ormana uygun olmayan büyüleri koridora göre düzelt: ormanda Çarp şart, diğer koridorlarda gereksiz.
   let spellIds = [...(rec.summonerSpellIds || [])];
