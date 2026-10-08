@@ -42,6 +42,8 @@ jobs:
         run: node scripts/collect.mjs
 
       - name: İstatistik dalına kaydet
+        # Toplama yarıda kalsa da o ana kadar kaydedilen maçlar korunur.
+        if: always()
         run: |
           [ -f veri/stats.json ] || { echo "Kaydedilecek veri yok."; exit 0; }
           cd veri

@@ -35,7 +35,16 @@ async function riot(url) {
     if (wait > 0) await sleep(wait);
     lastRequest = Date.now();
 
-    const r = await fetch(url, { headers: { "X-Riot-Token": KEY } });
+    let r;
+    try {
+      r = await fetch(url, { headers: { "X-Riot-Token": KEY } });
+      if (r.ok) return await r.json();
+    } catch (error) {
+      // Bağlantı kopması ("terminated", zaman aşımı vb.): bekleyip tekrar dene.
+      console.log(`Bağlantı hatası (${error.message}), tekrar denenecek.`);
+      await sleep(5000 * (attempt + 1));
+      continue;
+    }
     if (r.status === 429) {
       await sleep(Number(r.headers.get("retry-after") || 10) * 1000);
       continue;
@@ -48,9 +57,9 @@ async function riot(url) {
     if (r.status === 401 || r.status === 403) {
       throw new Error("Riot anahtarı geçersiz ya da süresi dolmuş (HTTP " + r.status + "). GitHub Secrets'taki RIOT_API_KEY'i yenileyin.");
     }
-    if (!r.ok) throw new Error(`HTTP ${r.status}: ${url}`);
-    return r.json();
+    throw new Error(`HTTP ${r.status}: ${url}`);
   }
+  // 5 denemede de alınamadıysa bu isteği atla; görev durmasın.
   return null;
 }
 
@@ -97,6 +106,39 @@ async function save(statePath, state, info) {
   await writeFile(join(STATE_DIR, "stats.json"), JSON.stringify(buildOutput(state.agg, { boots: info.boots })));
 }
 
+// Oyuncuların son maçlarını toplar; süre dolunca ya da oyuncular bitince durur.
+async function collectMatches({ queue, state, seen, info, statePath, progress }) {
+  const since = Math.floor(Date.now() / 1000) - LOOKBACK_SECONDS;
+
+  for (const { platform, puuid } of queue) {
+    if (timeLeft() <= 0) return;
+    const region = ROUTING[platform] || "europe";
+    const ids =
+      (await riot(
+        `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=420&type=ranked&startTime=${since}&count=${MATCHES_PER_PLAYER}`
+      )) || [];
+
+    for (const id of ids) {
+      if (timeLeft() <= 0) return;
+      if (seen.has(id)) continue;
+      seen.add(id);
+
+      const match = await riot(`https://${region}.api.riotgames.com/lol/match/v5/matches/${id}`);
+      const timeline = match && (await riot(`https://${region}.api.riotgames.com/lol/match/v5/matches/${id}/timeline`));
+      if (!match || !timeline) continue;
+
+      const patch = addMatch(state.agg, match, timeline, info);
+      if (!patch) continue;
+      (state.seen[patch] ??= []).push(id);
+      progress.added++;
+      if (progress.added % SAVE_EVERY === 0) {
+        await save(statePath, state, info);
+        console.log(`${progress.added} maç eklendi, kaydedildi.`);
+      }
+    }
+  }
+}
+
 async function main() {
   if (!KEY) {
     console.log("::warning::RIOT_API_KEY tanımlı değil; maç toplanmadı. Anahtarı GitHub Secrets'a ekleyin.");
@@ -112,42 +154,16 @@ async function main() {
   const queue = await players();
   console.log(`${queue.length} oyuncu bulundu (${PLATFORMS.join(", ")}).`);
 
-  const since = Math.floor(Date.now() / 1000) - LOOKBACK_SECONDS;
-  let added = 0;
-
-  for (const { platform, puuid } of queue) {
-    if (timeLeft() <= 0) break;
-    const region = ROUTING[platform] || "europe";
-    const ids =
-      (await riot(
-        `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=420&type=ranked&startTime=${since}&count=${MATCHES_PER_PLAYER}`
-      )) || [];
-
-    for (const id of ids) {
-      if (timeLeft() <= 0) break;
-      if (seen.has(id)) continue;
-      seen.add(id);
-
-      const match = await riot(`https://${region}.api.riotgames.com/lol/match/v5/matches/${id}`);
-      const timeline = match && (await riot(`https://${region}.api.riotgames.com/lol/match/v5/matches/${id}/timeline`));
-      if (!match || !timeline) continue;
-
-      const patch = addMatch(state.agg, match, timeline, info);
-      if (!patch) continue;
-      (state.seen[patch] ??= []).push(id);
-      added++;
-      if (added % SAVE_EVERY === 0) {
-        await save(statePath, state, info);
-        console.log(`${added} maç eklendi, kaydedildi.`);
-      }
-    }
+  // Beklenmedik bir hatada da o ana kadar toplanan maçlar kaydedilir.
+  const progress = { added: 0 };
+  try {
+    await collectMatches({ queue, state, seen, info, statePath, progress });
+  } finally {
+    await save(statePath, state, info);
+    const total = Object.values(state.agg.patches).reduce((sum, node) => sum + node.matches, 0);
+    console.log(`Kaydedildi: bu çalışmada ${progress.added} maç eklendi, toplam ${total} maç.`);
   }
-
-  await save(statePath, state, info);
-  const total = Object.values(state.agg.patches).reduce((sum, node) => sum + node.matches, 0);
-  console.log(`Bitti: bu çalışmada ${added} maç eklendi, toplam ${total} maç.`);
 }
-
 main().catch((error) => {
   console.error(error.message || error);
   process.exit(1);
