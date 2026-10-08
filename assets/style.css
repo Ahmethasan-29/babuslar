@@ -677,6 +677,22 @@ a.game-card:hover > .card-img { opacity: 0.55; }
   border-radius: 6px;
 }
 
+.type-chips { margin: -4px 0 20px; }
+
+.type-chips .chip { display: inline-flex; align-items: center; gap: 6px; }
+
+.type-chips .chip:disabled { opacity: 0.4; cursor: default; }
+
+.chip-count {
+  min-width: 20px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
 .lineup-section { margin-bottom: 28px; }
 
 .lineup-title { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 1.25rem; }
