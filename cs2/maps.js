@@ -1,6 +1,10 @@
-// CS2 haritaları: infolar (callout) ve bölgelere göre smoke / molotof / flash videoları (YouTube).
+// CS2 haritaları: infolar (callout) ve bölgelere göre smoke / flash / molotof atışları (lineup).
 // Konumlar radar görüntüsü üzerinde 0–1 arası oran olarak (x: soldan, y: üstten).
 // Doğuş ve bomba bölgesi konumları oyunun radar dosyalarından alınmıştır.
+//
+// Atışlar (lineups): site "A" | "B" | "Mid", type "smoke" | "flash" | "molly".
+//   yt:   [YouTube video kimliği, başlangıç sn, bitiş sn] — videonun yalnızca o kısmı oynar.
+//   clip: "clips/dosya.mp4" — kendi kaydımız (reklamsız). Varsa yt yerine bu kullanılır.
 
 const CS2_MAPS = [
   {
@@ -30,17 +34,24 @@ const CS2_MAPS = [
       { name: "Van", at: [0.17, 0.22], desc: "B bölgesindeki minibüs; Apps çıkışını kontrol eder." },
       { name: "Market", at: [0.25, 0.45], desc: "B ile CT arasındaki dükkân." },
     ],
-    videos: {
-      A: [
-        { id: "38OceXLNmb4", title: "A smoke'ları tek noktadan: CT, Jungle, Stairs", channel: "ERORE" },
-        { id: "7P-Y_SSDFKI", title: "A bölgesi molotofları", channel: "CS Tactics" },
-      ],
-      B: [{ id: "Su7RXe5XrXw", title: "B smoke'ları tek noktadan", channel: "ERORE" }],
-      all: [
-        { id: "-X75b3ek7Fk", title: "Mirage smoke taktikleri (2026)", channel: "waxer", tr: true },
-        { id: "u4iqihJis2k", title: "Herkesin bilmesi gereken 5 kolay flash", channel: "CS Tactics" },
-      ],
-    },  },
+    lineups: [
+      { site: "A", type: "smoke", name: "CT (Ticket) smoke", yt: ["AKuqMLnB07U", 63, 77], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "Stairs smoke", yt: ["AKuqMLnB07U", 77, 85], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "Jungle / Connector smoke", yt: ["AKuqMLnB07U", 85, 97], by: "CS Tactics" },
+      { site: "A", type: "flash", name: "A bölgesi flash'ı", yt: ["u4iqihJis2k", 52, 99], by: "CS Tactics" },
+      { site: "A", type: "flash", name: "A Ramp flash'ı", yt: ["u4iqihJis2k", 99, 154], by: "CS Tactics" },
+      { site: "A", type: "molly", name: "Sandwich molotofu", yt: ["7P-Y_SSDFKI", 34, 46], by: "CS Tactics" },
+      { site: "A", type: "molly", name: "Jungle molotofu", yt: ["7P-Y_SSDFKI", 46, 60], by: "CS Tactics" },
+      { site: "A", type: "molly", name: "Dark molotofu (Palace'tan)", yt: ["7P-Y_SSDFKI", 6, 23], by: "CS Tactics" },
+      { site: "B", type: "smoke", name: "B smoke'ları tek noktadan", yt: ["Su7RXe5XrXw", 0, 25], by: "ERORE" },
+      { site: "B", type: "flash", name: "B bölgesi flash'ı", yt: ["u4iqihJis2k", 154, 215], by: "CS Tactics" },
+      { site: "B", type: "flash", name: "B Apps flash'ı", yt: ["u4iqihJis2k", 215, 253], by: "CS Tactics" },
+      { site: "Mid", type: "smoke", name: "Window smoke", yt: ["AKuqMLnB07U", 4, 25], by: "CS Tactics" },
+      { site: "Mid", type: "smoke", name: "Connector smoke", yt: ["AKuqMLnB07U", 25, 45], by: "CS Tactics" },
+      { site: "Mid", type: "smoke", name: "Top Mid'den Window, Short, Jungle, CT", yt: ["AKuqMLnB07U", 45, 63], by: "CS Tactics" },
+      { site: "Mid", type: "flash", name: "Mid'e kendi flash'ın", yt: ["u4iqihJis2k", 253, 302], by: "CS Tactics" },
+    ],
+  },
   {
     id: "dust2",
     name: "Dust 2",
@@ -68,17 +79,26 @@ const CS2_MAPS = [
       { name: "Window", at: [0.27, 0.12], desc: "B bölgesine CT tarafından bakan pencere." },
       { name: "Back Plat", at: [0.11, 0.05], desc: "B bölgesinin en arkası." },
     ],
-    videos: {
-      A: [{ id: "Bc0WFG-fU4w", title: "T tarafı smoke'ları (Long, CT, Cross dahil)", channel: "CS Tactics" }],
-      B: [
-        { id: "4Pz6lUtuqvo", title: "B bölgesi smoke'ları", channel: "CS Tactics" },
-        { id: "h1JV0BIJsj8", title: "B girişi tek noktadan: smoke + flash", channel: "Nemesis.YT.Gaming" },
-      ],
-      all: [
-        { id: "ZM07bC_q3aU", title: "Dust 2 smoke, flash ve taktikleri", channel: "waxer", tr: true },
-        { id: "rKWeOfcTN44", title: "Bilinmesi gereken tüm smoke, molotof ve flash'lar", channel: "CS Tactics" },
-      ],
-    },  },
+    lineups: [
+      { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "Long Cross smoke", yt: ["rKWeOfcTN44", 265, 299], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "Long Corner smoke", yt: ["rKWeOfcTN44", 231, 265], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "Short smoke'ları", yt: ["Bc0WFG-fU4w", 74, 132], by: "CS Tactics" },
+      { site: "A", type: "flash", name: "Long flash'ları", yt: ["rKWeOfcTN44", 546, 641], by: "CS Tactics" },
+      { site: "A", type: "flash", name: "Short (Cat) flash'ları", yt: ["rKWeOfcTN44", 641, 728], by: "CS Tactics" },
+      { site: "A", type: "molly", name: "Car molotofu", yt: ["rKWeOfcTN44", 800, 819], by: "CS Tactics" },
+      { site: "A", type: "molly", name: "A bölgesi molotofu", yt: ["rKWeOfcTN44", 819, 851], by: "CS Tactics" },
+      { site: "B", type: "smoke", name: "B Doors smoke", yt: ["Bc0WFG-fU4w", 163, 200], by: "CS Tactics" },
+      { site: "B", type: "smoke", name: "Window smoke", yt: ["Bc0WFG-fU4w", 155, 163], by: "CS Tactics" },
+      { site: "B", type: "smoke", name: "B girişi smoke'ları", yt: ["rKWeOfcTN44", 439, 470], by: "CS Tactics" },
+      { site: "B", type: "flash", name: "B flash'ları", yt: ["rKWeOfcTN44", 742, 800], by: "CS Tactics" },
+      { site: "B", type: "molly", name: "Back Plat molotofu", yt: ["rKWeOfcTN44", 851, 863], by: "CS Tactics" },
+      { site: "B", type: "molly", name: "B bölgesi molotofu", yt: ["rKWeOfcTN44", 863, 881], by: "CS Tactics" },
+      { site: "Mid", type: "smoke", name: "Xbox smoke", yt: ["Bc0WFG-fU4w", 7, 22], by: "CS Tactics" },
+      { site: "Mid", type: "smoke", name: "Mid to B smoke", yt: ["Bc0WFG-fU4w", 132, 155], by: "CS Tactics" },
+      { site: "Mid", type: "flash", name: "Mid flash'ı", yt: ["rKWeOfcTN44", 728, 742], by: "CS Tactics" },
+    ],
+  },
   {
     id: "inferno",
     name: "Inferno",
@@ -106,15 +126,19 @@ const CS2_MAPS = [
       { name: "Coffins", at: [0.57, 0.22], desc: "B'nin CT tarafındaki tabutlar." },
       { name: "CT", at: [0.7, 0.22], desc: "B'yi CT doğuşuna bağlayan yol." },
     ],
-    videos: {
-      A: [
-        { id: "KvXBIAQhCjs", title: "Arch ve Library smoke'ları", channel: "NadesOutHere" },
-        { id: "VbrMUj-qVGE", title: "A için en iyi atış noktası", channel: "CS Tactics" },
-      ],
-      B: [{ id: "tNwysW_wVY4", title: "B: CT ve Coffins smoke'ları + flash", channel: "Flake CS2 Nade Archive" }],
-      all: [
-        { id: "dBaUKjNsaGQ", title: "Inferno smoke, flash ve molotofları", channel: "waxer", tr: true },
-        { id: "mIjkB4Zt2sA", title: "T tarafı tüm smoke'lar (5 dakikada)", channel: "CS Tactics" },
-      ],
-    },  },
+    lineups: [
+      { site: "A", type: "smoke", name: "Arch smoke", yt: ["bCuck5TrjyU", 313, 330], by: "Tigerr" },
+      { site: "A", type: "smoke", name: "Library smoke", yt: ["bCuck5TrjyU", 330, 361], by: "Tigerr" },
+      { site: "A", type: "smoke", name: "Moto smoke", yt: ["bCuck5TrjyU", 361, 391], by: "Tigerr" },
+      { site: "A", type: "smoke", name: "Arch + Library tek noktadan", yt: ["xBVKvESvv2U", 63, 93], by: "GettClutch" },
+      { site: "A", type: "flash", name: "A bölgesi flash'ı", yt: ["bCuck5TrjyU", 391, 449], by: "Tigerr" },
+      { site: "A", type: "flash", name: "Apartments flash'ı", yt: ["bCuck5TrjyU", 449, 466], by: "Tigerr" },
+      { site: "B", type: "smoke", name: "CT smoke", yt: ["bCuck5TrjyU", 50, 81], by: "Tigerr" },
+      { site: "B", type: "smoke", name: "Coffins smoke", yt: ["bCuck5TrjyU", 81, 106], by: "Tigerr" },
+      { site: "B", type: "flash", name: "Banana flash'ı", yt: ["bCuck5TrjyU", 13, 50], by: "Tigerr" },
+      { site: "B", type: "flash", name: "B bölgesi flash'ı", yt: ["bCuck5TrjyU", 147, 159], by: "Tigerr" },
+      { site: "B", type: "molly", name: "B kutularına molotof", yt: ["bCuck5TrjyU", 106, 147], by: "Tigerr" },
+      { site: "Mid", type: "smoke", name: "Top Mid smoke", yt: ["bCuck5TrjyU", 274, 313], by: "Tigerr" },
+    ],
+  },
 ];

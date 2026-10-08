@@ -21,8 +21,16 @@ const TABS = [
   { id: "info", label: "İnfolar" },
   { id: "A", label: "A bölgesi" },
   { id: "B", label: "B bölgesi" },
-  { id: "all", label: "Tüm harita" },
+  { id: "Mid", label: "Orta" },
 ];
+
+const TYPES = [
+  { id: "smoke", label: "Smoke" },
+  { id: "flash", label: "Flash" },
+  { id: "molly", label: "Molotof" },
+];
+
+const duration = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
 if (!map) {
   showNotice(root, "Harita bulunamadı. Listeden bir harita seç.");
@@ -58,7 +66,7 @@ function render(tab) {
   const content =
     tab === "info"
       ? el("div", { class: "map-layout" }, radar(), calloutPanel())
-      : videoGrid(map.videos[tab] || []);
+      : lineupSections(map.lineups.filter((l) => l.site === tab));
 
   root.replaceChildren(el("h1", { class: "page-title" }, map.name), el("p", { class: "page-sub" }, map.summary), tabs, content);
 }
@@ -122,48 +130,73 @@ function highlight(name, on) {
   root.querySelector(`.callout[data-name="${CSS.escape(name)}"]`)?.classList.toggle("active", on);
 }
 
-// Smoke / molotof / flash videoları. Video tıklanınca yüklenir; o zamana kadar YouTube'a bağlanılmaz.
-function videoGrid(videos) {
-  if (!videos.length) return el("p", { class: "notice" }, "Bu bölüm için henüz video eklenmedi.");
+// Bölgedeki atışlar türüne göre gruplanır: Smoke, Flash, Molotof.
+function lineupSections(lineups) {
+  if (!lineups.length) return el("p", { class: "notice" }, "Bu bölüm için henüz atış eklenmedi.");
   return el(
     "div",
-    { class: "video-grid" },
-    videos.map((v) => {
-      const frame = el(
-        "button",
-        { class: "video-thumb", type: "button", "aria-label": `${v.title} videosunu oynat` },
-        el("img", { src: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, alt: "", loading: "lazy" }),
-        el("span", { class: "play", "aria-hidden": "true" }, "▶")
-      );
-      frame.addEventListener("click", () =>
-        frame.replaceWith(
-          el("iframe", {
-            class: "video-frame",
-            src: `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`,
-            title: v.title,
-            allow: "autoplay; encrypted-media; picture-in-picture; fullscreen",
-            allowfullscreen: "",
-          })
-        )
-      );
+    {},
+    TYPES.map((type) => {
+      const list = lineups.filter((l) => l.type === type.id);
+      if (!list.length) return null;
       return el(
-        "article",
-        { class: "build-card video-card" },
-        frame,
-        el(
-          "div",
-          { class: "video-info" },
-          el("h3", {}, v.title),
-          el(
-            "p",
-            { class: "tile-sub" },
-            v.channel,
-            v.tr ? el("span", { class: "badge" }, "Türkçe") : null,
-            " · ",
-            el("a", { href: `https://www.youtube.com/watch?v=${v.id}`, target: "_blank", rel: "noopener" }, "YouTube'da aç")
-          )
-        )
+        "section",
+        { class: "lineup-section" },
+        el("h2", { class: "lineup-title" }, el("i", { class: `dot ${type.id}` }), type.label),
+        el("div", { class: "video-grid" }, list.map(lineupCard))
       );
     })
+  );
+}
+
+// Atış kartı. Video tıklanınca yüklenir; YouTube'da yalnızca atışın olduğu kısım oynar.
+function lineupCard(l) {
+  const [videoId, start, end] = l.yt || [];
+  const poster = l.clip
+    ? null
+    : el("img", { src: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`, alt: "", loading: "lazy" });
+
+  const frame = el(
+    "button",
+    { class: "video-thumb", type: "button", "aria-label": `${l.name} videosunu oynat` },
+    poster,
+    el("span", { class: `video-name ${l.type}` }, l.name),
+    el("span", { class: "play", "aria-hidden": "true" }, "▶"),
+    l.yt ? el("span", { class: "video-time" }, duration(end - start)) : null
+  );
+
+  frame.addEventListener("click", () => {
+    const player = l.clip
+      ? el("video", { class: "video-frame", src: l.clip, controls: "", autoplay: "", playsinline: "" })
+      : el("iframe", {
+          class: "video-frame",
+          src: `https://www.youtube-nocookie.com/embed/${videoId}?start=${start}&end=${end}&autoplay=1&rel=0&modestbranding=1`,
+          title: l.name,
+          allow: "autoplay; encrypted-media; picture-in-picture; fullscreen",
+          allowfullscreen: "",
+        });
+    frame.replaceWith(player);
+  });
+
+  return el(
+    "article",
+    { class: "build-card video-card" },
+    frame,
+    el(
+      "div",
+      { class: "video-info" },
+      el("h3", {}, l.name),
+      el(
+        "p",
+        { class: "tile-sub" },
+        l.clip
+          ? el("span", { class: "badge" }, "Reklamsız")
+          : [
+              l.by,
+              " · ",
+              el("a", { href: `https://www.youtube.com/watch?v=${videoId}&t=${start}s`, target: "_blank", rel: "noopener" }, "YouTube'da aç"),
+            ]
+      )
+    )
   );
 }
