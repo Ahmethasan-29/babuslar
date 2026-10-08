@@ -28,12 +28,18 @@ const TYPES = [
   { id: "smoke", label: "Smoke" },
   { id: "flash", label: "Flash" },
   { id: "molly", label: "Molotof" },
+  { id: "he", label: "El bombası" },
 ];
 
 const duration = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
-// Seçili atış türü: "all" | "smoke" | "flash" | "molly" (adres çubuğunda ?tur=…)
+// Seçili atış türü: "all" | "smoke" | "flash" | "molly" | "he" (adres çubuğunda ?tur=…)
 let activeType = TYPES.some((type) => type.id === params.get("tur")) ? params.get("tur") : "all";
+
+// Çok katlı haritalarda (Nuke, Vertigo) gösterilen kat: "upper" | "lower" (adres çubuğunda ?kat=alt)
+let activeLevel = params.get("kat") === "alt" ? "lower" : "upper";
+const levelOf = (item) => item.level || "upper";
+const onLevel = (item) => !map.levels || levelOf(item) === activeLevel;
 
 if (!map) {
   showNotice(root, "Harita bulunamadı. Listeden bir harita seç.");
@@ -68,7 +74,9 @@ function render(tab) {
 
   const siteLineups = map.lineups.filter((l) => l.site === tab);
   const content =
-    tab === "info" ? el("div", { class: "map-layout" }, radar(), calloutPanel()) : lineupSections(siteLineups, activeType);
+    tab === "info"
+      ? el("div", {}, levelChips(tab), el("div", { class: "map-layout" }, radar(), calloutPanel()))
+      : lineupSections(siteLineups, activeType);
 
   // Başlık, haritanın oyun içi fotoğrafının üzerinde (şampiyon sayfalarındaki gibi).
   const hero = el(
@@ -120,34 +128,66 @@ function typeChips(tab, lineups) {
   );
 }
 
+// Kat seçimi (yalnızca iki katlı haritalarda).
+function levelChips(tab) {
+  if (!map.levels) return null;
+  return el(
+    "div",
+    { class: "chips type-chips", role: "group", "aria-label": "Kat seç" },
+    map.levels.map((level) =>
+      el(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          "aria-pressed": String(level.id === activeLevel),
+          onclick: () => {
+            activeLevel = level.id;
+            const url = new URL(location.href);
+            if (level.id === "lower") url.searchParams.set("kat", "alt");
+            else url.searchParams.delete("kat");
+            history.replaceState(null, "", url);
+            render(tab);
+          },
+        },
+        level.label
+      )
+    )
+  );
+}
+
 function radar() {
   const layer = svg("svg", { class: "radar-layer", viewBox: "0 0 100 100", "aria-hidden": "true" });
+  const image = map.levels?.find((l) => l.id === activeLevel)?.radar || map.radar;
 
   // Önce bölge ve doğuş işaretleri, sonra infolar: info yazıları işaretlerin altında kalmasın.
+  // Bölge konumu: [x, y] ya da alt kattaysa [x, y, "lower"]. Doğuşlar üst kattadır.
   for (const [site, at] of Object.entries(map.sites)) {
+    if (!onLevel({ level: at[2] })) continue;
     const [x, y] = pct(at);
     layer.append(svg("g", { class: "site" }, svg("circle", { cx: x, cy: y, r: 3 }), svg("text", { x, y: y + 1.2 }, site)));
   }
   for (const [side, at] of Object.entries(map.spawns)) {
+    if (!onLevel({})) continue;
     const [x, y] = pct(at);
     layer.append(
       svg("g", { class: `spawn ${side.toLowerCase()}` }, svg("rect", { x: x - 3, y: y - 1.8, width: 6, height: 3.6, rx: 1 }), svg("text", { x, y: y + 0.9 }, side))
     );
   }
-  for (const c of map.callouts) {
+  for (const c of map.callouts.filter(onLevel)) {
     const [x, y] = pct(c.at);
     layer.append(
       svg(
         "g",
         { class: "callout", "data-name": c.name },
-        svg("title", {}, `${c.name}: ${c.desc}`),
+        svg("title", {}, c.name),
         svg("circle", { cx: x, cy: y, r: 0.7 }),
         svg("text", { x, y: y - 1.4 }, c.name)
       )
     );
   }
 
-  return el("div", { class: "radar" }, el("img", { src: map.radar, alt: `${map.name} radar haritası`, width: 1024, height: 1024 }), layer);
+  return el("div", { class: "radar" }, el("img", { src: image, alt: `${map.name} radar haritası`, width: 1024, height: 1024 }), layer);
 }
 
 function calloutPanel() {
@@ -158,7 +198,7 @@ function calloutPanel() {
     el(
       "ul",
       { class: "callout-list" },
-      map.callouts.map((c) =>
+      map.callouts.filter(onLevel).map((c) =>
         el(
           "li",
           {
@@ -168,8 +208,7 @@ function calloutPanel() {
             onfocus: () => highlight(c.name, true),
             onblur: () => highlight(c.name, false),
           },
-          el("strong", {}, c.name),
-          el("span", {}, c.desc)
+          c.name
         )
       )
     )

@@ -18,7 +18,7 @@ lol/sampiyon.html   Şampiyon ayrıntısı (pasif, Q/W/E/R)
 lol/esyalar.html    Eşya listesi
 ```
 
-- **Counter-Strike 2:** Mirage, Dust 2 ve Inferno için radar üzerinde infolar (callout'lar) ve A / B / Orta için
+- **Counter-Strike 2:** Mirage, Dust 2, Inferno, Nuke, Ancient, Anubis, Train, Overpass ve Vertigo için radar üzerinde infolar (callout'lar) ve A / B / Orta için
   atış atış smoke, flash ve molotof videoları. YouTube videolarının yalnızca ilgili bölümü oynar (bölüm zaman damgalarından);
   kendi kayıtlarımız `cs2/clips/` klasörüne eklendikçe reklamsız olarak onların yerini alır. Veriler `cs2/maps.js` dosyasındadır; konumlar radarın 0–1 oranıdır.
   Radar görüntüleri oyun dosyalarından çıkarılmıştır ([2mlml/cs2-radar-images](https://github.com/2mlml/cs2-radar-images)) ve Valve Corporation'a aittir.
