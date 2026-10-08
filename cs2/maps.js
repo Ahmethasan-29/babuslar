@@ -1,4 +1,4 @@
-// CS2 haritaları: infolar (callout) ve bomba taktikleri.
+// CS2 haritaları: infolar (callout) ve bölgelere göre smoke / molotof / flash videoları (YouTube).
 // Konumlar radar görüntüsü üzerinde 0–1 arası oran olarak (x: soldan, y: üstten).
 // Doğuş ve bomba bölgesi konumları oyunun radar dosyalarından alınmıştır.
 
@@ -30,46 +30,17 @@ const CS2_MAPS = [
       { name: "Van", at: [0.17, 0.22], desc: "B bölgesindeki minibüs; Apps çıkışını kontrol eder." },
       { name: "Market", at: [0.25, 0.45], desc: "B ile CT arasındaki dükkân." },
     ],
-    tactics: [
-      {
-        site: "A",
-        title: "A girişi (Ramp + Palace)",
-        steps: [
-          "Ramp'ten CT, Jungle ve Stairs smoke'ları atılır; A'nın CT tarafı kapanır.",
-          "Palace'tan Firebox'a molotof, A'nın üstüne flash atılır.",
-          "Ramp ve Palace grupları aynı anda girer; bir oyuncu Connector'ı tutar.",
-          "Bomba Default'a kurulur; Palace, Ramp ve Connector'dan korunur.",
-        ],
-        smokes: [[0.4, 0.76], [0.43, 0.6], [0.48, 0.67]],
-        mollies: [[0.47, 0.81]],
-        flashes: [[0.55, 0.72]],
-        routes: [
-          [[0.86, 0.5], [0.84, 0.58], [0.78, 0.62], [0.71, 0.66], [0.59, 0.72]],
-          [[0.88, 0.58], [0.83, 0.68], [0.78, 0.75], [0.64, 0.76], [0.57, 0.79]],
-          [[0.82, 0.38], [0.68, 0.43], [0.55, 0.5], [0.51, 0.56]],
-        ],
-        plant: [0.53, 0.76],
-      },
-      {
-        site: "B",
-        title: "B girişi (Apps + Short)",
-        steps: [
-          "Market penceresi ve Market kapısına smoke atılır; CT'den gelen destek gecikir.",
-          "Van ve Bench'e molotof, Apps çıkışından B'ye flash atılır.",
-          "Apps grubu çıkarken bir oyuncu Short'tan girer.",
-          "Bomba B'nin ortasına kurulur; Apps, Short ve Market'e bakılır.",
-        ],
-        smokes: [[0.24, 0.39], [0.28, 0.44]],
-        mollies: [[0.18, 0.22], [0.2, 0.34]],
-        flashes: [[0.26, 0.24]],
-        routes: [
-          [[0.58, 0.2], [0.45, 0.18], [0.33, 0.19], [0.26, 0.25]],
-          [[0.82, 0.38], [0.66, 0.36], [0.55, 0.25], [0.4, 0.26], [0.3, 0.28]],
-        ],
-        plant: [0.23, 0.28],
-      },
-    ],
-  },
+    videos: {
+      A: [
+        { id: "38OceXLNmb4", title: "A smoke'ları tek noktadan: CT, Jungle, Stairs", channel: "ERORE" },
+        { id: "7P-Y_SSDFKI", title: "A bölgesi molotofları", channel: "CS Tactics" },
+      ],
+      B: [{ id: "Su7RXe5XrXw", title: "B smoke'ları tek noktadan", channel: "ERORE" }],
+      all: [
+        { id: "-X75b3ek7Fk", title: "Mirage smoke taktikleri (2026)", channel: "waxer", tr: true },
+        { id: "u4iqihJis2k", title: "Herkesin bilmesi gereken 5 kolay flash", channel: "CS Tactics" },
+      ],
+    },  },
   {
     id: "dust2",
     name: "Dust 2",
@@ -97,42 +68,17 @@ const CS2_MAPS = [
       { name: "Window", at: [0.27, 0.12], desc: "B bölgesine CT tarafından bakan pencere." },
       { name: "Back Plat", at: [0.11, 0.05], desc: "B bölgesinin en arkası." },
     ],
-    tactics: [
-      {
-        site: "A",
-        title: "A girişi (Long + Short)",
-        steps: [
-          "CT ve Cross smoke'ları atılır; CT'den Long'a bakış kapanır.",
-          "Long köşesine flash atılıp Long A'dan ilerlenir.",
-          "Bir-iki oyuncu Xbox üzerinden Short'tan aynı anda girer.",
-          "Bomba A'nın ortasına kurulur; Long, Short ve CT'ye bakılır.",
-        ],
-        smokes: [[0.7, 0.18], [0.85, 0.27]],
-        mollies: [[0.84, 0.1]],
-        flashes: [[0.88, 0.36]],
-        routes: [
-          [[0.42, 0.88], [0.58, 0.8], [0.66, 0.68], [0.75, 0.58], [0.88, 0.5], [0.88, 0.32], [0.82, 0.2]],
-          [[0.42, 0.85], [0.46, 0.65], [0.49, 0.46], [0.58, 0.39], [0.64, 0.28], [0.75, 0.2]],
-        ],
-        plant: [0.79, 0.16],
-      },
-      {
-        site: "B",
-        title: "B girişi (Tunnels)",
-        steps: [
-          "B Doors ve Window'a smoke atılır; CT'den gelen destek ve görüş kapanır.",
-          "Back Plat'a molotof, tünel çıkışından B'ye flash atılır.",
-          "Takım Upper Tunnels'tan hızlıca çıkıp B'ye yayılır.",
-          "Bomba B'nin ortasına kurulur; Doors, Window ve Tunnels'a bakılır.",
-        ],
-        smokes: [[0.25, 0.22], [0.27, 0.12]],
-        mollies: [[0.12, 0.06]],
-        flashes: [[0.15, 0.2]],
-        routes: [[[0.36, 0.88], [0.18, 0.78], [0.15, 0.6], [0.15, 0.45], [0.11, 0.32], [0.18, 0.16]]],
-        plant: [0.2, 0.12],
-      },
-    ],
-  },
+    videos: {
+      A: [{ id: "Bc0WFG-fU4w", title: "T tarafı smoke'ları (Long, CT, Cross dahil)", channel: "CS Tactics" }],
+      B: [
+        { id: "4Pz6lUtuqvo", title: "B bölgesi smoke'ları", channel: "CS Tactics" },
+        { id: "h1JV0BIJsj8", title: "B girişi tek noktadan: smoke + flash", channel: "Nemesis.YT.Gaming" },
+      ],
+      all: [
+        { id: "ZM07bC_q3aU", title: "Dust 2 smoke, flash ve taktikleri", channel: "waxer", tr: true },
+        { id: "rKWeOfcTN44", title: "Bilinmesi gereken tüm smoke, molotof ve flash'lar", channel: "CS Tactics" },
+      ],
+    },  },
   {
     id: "inferno",
     name: "Inferno",
@@ -160,40 +106,15 @@ const CS2_MAPS = [
       { name: "Coffins", at: [0.57, 0.22], desc: "B'nin CT tarafındaki tabutlar." },
       { name: "CT", at: [0.7, 0.22], desc: "B'yi CT doğuşuna bağlayan yol." },
     ],
-    tactics: [
-      {
-        site: "A",
-        title: "A girişi (Apartments + Short)",
-        steps: [
-          "Arch ve Library'ye smoke atılır; CT'den A'ya gelen destek kapanır.",
-          "Pit'e molotof, Balcony'den A'ya flash atılır.",
-          "Apartments grubu Balcony'den, bir-iki oyuncu Short'tan aynı anda girer.",
-          "Bomba A'nın ortasına kurulur; Arch, Library ve Pit'e bakılır.",
-        ],
-        smokes: [[0.87, 0.55], [0.92, 0.68]],
-        mollies: [[0.9, 0.82]],
-        flashes: [[0.8, 0.73]],
-        routes: [
-          [[0.15, 0.7], [0.3, 0.75], [0.45, 0.76], [0.6, 0.79], [0.72, 0.8], [0.79, 0.72]],
-          [[0.15, 0.66], [0.35, 0.65], [0.55, 0.66], [0.7, 0.68], [0.78, 0.68]],
-        ],
-        plant: [0.81, 0.69],
-      },
-      {
-        site: "B",
-        title: "B girişi (Banana)",
-        steps: [
-          "CT ve Coffins'e smoke atılır; CT'den B'ye bakış kapanır.",
-          "Dark'a molotof, Car'ın üstünden B'ye flash atılır.",
-          "Takım Banana'dan Car'a kadar ilerleyip B'ye birlikte girer.",
-          "Bomba B'nin ortasına kurulur; Banana, CT ve Dark'a bakılır.",
-        ],
-        smokes: [[0.66, 0.22], [0.57, 0.2]],
-        mollies: [[0.44, 0.12]],
-        flashes: [[0.5, 0.28]],
-        routes: [[[0.15, 0.66], [0.3, 0.64], [0.43, 0.6], [0.46, 0.48], [0.5, 0.38], [0.5, 0.26]]],
-        plant: [0.49, 0.22],
-      },
-    ],
-  },
+    videos: {
+      A: [
+        { id: "KvXBIAQhCjs", title: "Arch ve Library smoke'ları", channel: "NadesOutHere" },
+        { id: "VbrMUj-qVGE", title: "A için en iyi atış noktası", channel: "CS Tactics" },
+      ],
+      B: [{ id: "tNwysW_wVY4", title: "B: CT ve Coffins smoke'ları + flash", channel: "Flake CS2 Nade Archive" }],
+      all: [
+        { id: "dBaUKjNsaGQ", title: "Inferno smoke, flash ve molotofları", channel: "waxer", tr: true },
+        { id: "mIjkB4Zt2sA", title: "T tarafı tüm smoke'lar (5 dakikada)", channel: "CS Tactics" },
+      ],
+    },  },
 ];

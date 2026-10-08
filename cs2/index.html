@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Haritalar · CS2 · Babuşlar</title>
-  <meta name="description" content="CS2 haritaları: infolar (callout'lar) ve bomba taktikleri.">
+  <meta name="description" content="CS2 haritaları: infolar (callout'lar) ve smoke, molotof, flash videoları.">
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
   <main>
     <div class="container">
       <h1 class="page-title">CS2 haritaları</h1>
-      <p class="page-sub">Bir harita seç; infoları ve bomba taktiklerini radar üzerinde gör.</p>
+      <p class="page-sub">Bir harita seç; infoları radar üzerinde, smoke, molotof ve flash atışlarını videolu gör.</p>
       <div class="games" id="maps"></div>
     </div>
   </main>
@@ -42,7 +42,7 @@
           "a",
           { class: "game-card", href: `harita.html?id=${map.id}` },
           el("img", { class: "card-img", src: map.radar, alt: "" }),
-          el("span", { class: "badge" }, "İnfolar · A ve B taktikleri"),
+          el("span", { class: "badge" }, "İnfolar · Smoke ve flash videoları"),
           el("h2", {}, map.name),
           el("p", {}, map.summary)
         )
