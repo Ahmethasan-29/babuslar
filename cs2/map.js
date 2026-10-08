@@ -32,6 +32,9 @@ const TYPES = [
 
 const duration = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
+// Seçili atış türü: "all" | "smoke" | "flash" | "molly" (adres çubuğunda ?tur=…)
+let activeType = TYPES.some((type) => type.id === params.get("tur")) ? params.get("tur") : "all";
+
 if (!map) {
   showNotice(root, "Harita bulunamadı. Listeden bir harita seç.");
 } else {
@@ -63,12 +66,51 @@ function render(tab) {
     )
   );
 
+  const siteLineups = map.lineups.filter((l) => l.site === tab);
   const content =
-    tab === "info"
-      ? el("div", { class: "map-layout" }, radar(), calloutPanel())
-      : lineupSections(map.lineups.filter((l) => l.site === tab));
+    tab === "info" ? el("div", { class: "map-layout" }, radar(), calloutPanel()) : lineupSections(siteLineups, activeType);
 
-  root.replaceChildren(el("h1", { class: "page-title" }, map.name), el("p", { class: "page-sub" }, map.summary), tabs, content);
+  root.replaceChildren(
+    ...[
+      el("h1", { class: "page-title" }, map.name),
+      el("p", { class: "page-sub" }, map.summary),
+      tabs,
+      tab === "info" ? null : typeChips(tab, siteLineups),
+      content,
+    ].filter(Boolean)
+  );
+}
+
+// Sekmelerin altında tür seçimi: seçilen tür kaydırmadan hemen görünür. Seçim bölgeler arasında korunur.
+function typeChips(tab, lineups) {
+  const options = [{ id: "all", label: "Tümü" }, ...TYPES];
+  return el(
+    "div",
+    { class: "chips type-chips", role: "group", "aria-label": "Atış türü seç" },
+    options.map((type) => {
+      const count = type.id === "all" ? lineups.length : lineups.filter((l) => l.type === type.id).length;
+      return el(
+        "button",
+        {
+          class: "chip",
+          type: "button",
+          "aria-pressed": String(type.id === activeType),
+          disabled: count ? null : "",
+          onclick: () => {
+            activeType = type.id;
+            const url = new URL(location.href);
+            if (type.id === "all") url.searchParams.delete("tur");
+            else url.searchParams.set("tur", type.id);
+            history.replaceState(null, "", url);
+            render(tab);
+          },
+        },
+        type.id === "all" ? null : el("i", { class: `dot ${type.id}` }),
+        `${type.label} `,
+        el("span", { class: "chip-count" }, count)
+      );
+    })
+  );
 }
 
 function radar() {
@@ -130,13 +172,17 @@ function highlight(name, on) {
   root.querySelector(`.callout[data-name="${CSS.escape(name)}"]`)?.classList.toggle("active", on);
 }
 
-// Bölgedeki atışlar türüne göre gruplanır: Smoke, Flash, Molotof.
-function lineupSections(lineups) {
+// Bölgedeki atışlar türüne göre gruplanır: Smoke, Flash, Molotof. Bir tür seçiliyse yalnızca o gösterilir.
+function lineupSections(lineups, onlyType = "all") {
+  const types = TYPES.filter((type) => onlyType === "all" || type.id === onlyType);
   if (!lineups.length) return el("p", { class: "notice" }, "Bu bölüm için henüz atış eklenmedi.");
+  if (!lineups.some((l) => types.some((type) => type.id === l.type))) {
+    return el("p", { class: "notice" }, `Bu bölgede henüz ${types[0].label.toLocaleLowerCase("tr")} atışı yok. Diğer türler için "Tümü"ne bak.`);
+  }
   return el(
     "div",
     {},
-    TYPES.map((type) => {
+    types.map((type) => {
       const list = lineups.filter((l) => l.type === type.id);
       if (!list.length) return null;
       return el(
