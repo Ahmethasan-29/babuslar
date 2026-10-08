@@ -16,7 +16,8 @@ const CS2_MAPS = [
     summary: "Fas temalı klasik harita. Orta (Mid) kontrolü iki bölgeyi de açar.",
     spawns: { T: [0.87, 0.36], CT: [0.28, 0.7] },
     sites: { A: [0.54, 0.76], B: [0.23, 0.28] },
-    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Tetris, Ninja ve Firebox radardaki nesnelerden.
+    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Tetris, Firebox ve Ticket ayrıntılı bölge verisinden (pr1malator/pr1maly),
+    // Ninja radardaki nesnelerden.
     callouts: [
       { name: "Ramp", at: [0.67, 0.64], desc: "T tarafından A bölgesine açılan rampa (T Ramp)." },
       { name: "Palace", at: [0.81, 0.73], desc: "A'ya güneydoğudan açılan bina." },
@@ -24,7 +25,8 @@ const CS2_MAPS = [
       { name: "Balcony", at: [0.64, 0.72], desc: "Palace'ın A'ya açılan balkonu (Scaffolding)." },
       { name: "Tetris", at: [0.6, 0.63], desc: "Ramp'in sonundaki kutular; A'ya girişte ilk saklanma yeri." },
       { name: "Ninja", at: [0.59, 0.8], desc: "A bölgesinin Palace tarafındaki gizli köşe." },
-      { name: "Firebox", at: [0.46, 0.82], desc: "A bölgesinin CT tarafındaki kutu." },
+      { name: "Firebox", at: [0.5, 0.77], desc: "A bölgesinin CT tarafındaki kutu." },
+      { name: "Ticket", at: [0.46, 0.82], desc: "CT ile A arasındaki bilet gişesi (Ticket Booth)." },
       { name: "Stairs", at: [0.5, 0.62], desc: "A'dan Connector'a çıkan merdiven." },
       { name: "Jungle", at: [0.42, 0.61], desc: "A'nın kuzeybatısındaki oda; CT'lerin A savunma yeri." },
       { name: "Connector", at: [0.5, 0.54], desc: "Mid'i Jungle ve A'ya bağlayan koridor." },
