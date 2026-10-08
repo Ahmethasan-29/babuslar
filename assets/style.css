@@ -538,6 +538,115 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .difficulty .dots { letter-spacing: 1px; }
 
+/* CS2 haritaları */
+.game-card > .card-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+a.game-card:hover > .card-img { opacity: 0.55; }
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .map-layout { grid-template-columns: 1fr; }
+}
+
+.radar {
+  position: relative;
+  aspect-ratio: 1;
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.radar img, .radar-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.radar-layer text {
+  font: 700 2.1px "Outfit", system-ui, sans-serif;
+  text-anchor: middle;
+  fill: #fff;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.85);
+  stroke-width: 0.6px;
+}
+
+.callout circle { fill: var(--accent); }
+
+.callout.dim { opacity: 0.4; }
+
+.callout.dim text { font-size: 1.7px; }
+
+.callout.active circle { r: 1.3; fill: #fff; }
+
+.callout.active text { fill: var(--accent); font-size: 2.6px; }
+
+.site circle { fill: rgba(230, 60, 60, 0.85); stroke: #fff; stroke-width: 0.3; }
+
+.site text { font-size: 3.2px; }
+
+.spawn rect { stroke: #fff; stroke-width: 0.25; }
+
+.spawn.t rect { fill: rgba(220, 150, 40, 0.9); }
+
+.spawn.ct rect { fill: rgba(60, 130, 230, 0.9); }
+
+.spawn text { font-size: 2.4px; }
+
+.plant rect { fill: #e53935; stroke: #fff; stroke-width: 0.25; }
+
+.plant text { font-size: 2px; }
+
+.smoke { fill: rgba(225, 225, 235, 0.55); stroke: #fff; stroke-width: 0.3; }
+
+.molly { fill: rgba(255, 120, 30, 0.55); stroke: #ffb26b; stroke-width: 0.3; }
+
+.flash { fill: #ffe95c; stroke: #fff; stroke-width: 0.3; }
+
+.route { fill: none; stroke: var(--accent); stroke-width: 0.7; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1.6 1; }
+
+.route-head { fill: var(--accent); }
+
+.map-panel { position: sticky; top: 80px; }
+
+.callout-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; max-height: 70vh; overflow: auto; }
+
+.callout-list li { display: grid; gap: 1px; padding: 7px 10px; border-radius: 8px; cursor: default; outline: none; }
+
+.callout-list li:hover, .callout-list li:focus { background: var(--bg-elev); }
+
+.callout-list strong { color: var(--accent); font-size: 0.95rem; }
+
+.callout-list span { color: var(--muted); font-size: 0.85rem; line-height: 1.35; }
+
+.tactic-steps { margin: 0 0 14px; padding-left: 20px; display: grid; gap: 8px; line-height: 1.45; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: var(--muted); }
+
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+.key { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
+
+.key.smoke { background: rgba(225, 225, 235, 0.7); border: 1px solid #fff; }
+
+.key.molly { background: rgba(255, 120, 30, 0.7); border: 1px solid #ffb26b; }
+
+.key.flash { width: 9px; height: 9px; background: #ffe95c; }
+
+.key.route { width: 18px; height: 0; border-radius: 0; border-top: 2px dashed var(--accent); }
+
 /* Eşya penceresi */
 dialog {
   width: min(560px, calc(100vw - 32px));

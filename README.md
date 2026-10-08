@@ -18,6 +18,10 @@ lol/sampiyon.html   Şampiyon ayrıntısı (pasif, Q/W/E/R)
 lol/esyalar.html    Eşya listesi
 ```
 
+- **Counter-Strike 2:** Mirage, Dust 2 ve Inferno için radar üzerinde infolar (callout'lar) ve A/B bomba taktikleri
+  (smoke, molotof, flash, giriş yolları, bomba yeri). Veriler `cs2/maps.js` dosyasındadır; konumlar radarın 0–1 oranıdır.
+  Radar görüntüleri oyun dosyalarından çıkarılmıştır ([2mlml/cs2-radar-images](https://github.com/2mlml/cs2-radar-images)) ve Valve Corporation'a aittir.
+
 ## Maç istatistikleri
 
 Rün ve eşya dizilimleri, Riot API'den toplanan gerçek maçlardan hesaplanır:
