@@ -116,6 +116,17 @@ function typeChips(tab, lineups) {
 function radar() {
   const layer = svg("svg", { class: "radar-layer", viewBox: "0 0 100 100", "aria-hidden": "true" });
 
+  // Önce bölge ve doğuş işaretleri, sonra infolar: info yazıları işaretlerin altında kalmasın.
+  for (const [site, at] of Object.entries(map.sites)) {
+    const [x, y] = pct(at);
+    layer.append(svg("g", { class: "site" }, svg("circle", { cx: x, cy: y, r: 3 }), svg("text", { x, y: y + 1.2 }, site)));
+  }
+  for (const [side, at] of Object.entries(map.spawns)) {
+    const [x, y] = pct(at);
+    layer.append(
+      svg("g", { class: `spawn ${side.toLowerCase()}` }, svg("rect", { x: x - 3, y: y - 1.8, width: 6, height: 3.6, rx: 1 }), svg("text", { x, y: y + 0.9 }, side))
+    );
+  }
   for (const c of map.callouts) {
     const [x, y] = pct(c.at);
     layer.append(
@@ -126,16 +137,6 @@ function radar() {
         svg("circle", { cx: x, cy: y, r: 0.7 }),
         svg("text", { x, y: y - 1.4 }, c.name)
       )
-    );
-  }
-  for (const [site, at] of Object.entries(map.sites)) {
-    const [x, y] = pct(at);
-    layer.append(svg("g", { class: "site" }, svg("circle", { cx: x, cy: y, r: 3 }), svg("text", { x, y: y + 1.2 }, site)));
-  }
-  for (const [side, at] of Object.entries(map.spawns)) {
-    const [x, y] = pct(at);
-    layer.append(
-      svg("g", { class: `spawn ${side.toLowerCase()}` }, svg("rect", { x: x - 3, y: y - 1.8, width: 6, height: 3.6, rx: 1 }), svg("text", { x, y: y + 0.9 }, side))
     );
   }
 
