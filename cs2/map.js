@@ -70,10 +70,17 @@ function render(tab) {
   const content =
     tab === "info" ? el("div", { class: "map-layout" }, radar(), calloutPanel()) : lineupSections(siteLineups, activeType);
 
+  // Başlık, haritanın oyun içi fotoğrafının üzerinde (şampiyon sayfalarındaki gibi).
+  const hero = el(
+    "section",
+    { class: "champ-hero map-hero" },
+    el("div", { class: "champ-hero-body" }, el("h1", {}, map.name), el("p", { class: "map-summary" }, map.summary))
+  );
+  hero.style.backgroundImage = `url("${map.photo}")`;
+
   root.replaceChildren(
     ...[
-      el("h1", { class: "page-title" }, map.name),
-      el("p", { class: "page-sub" }, map.summary),
+      hero,
       tabs,
       tab === "info" ? null : typeChips(tab, siteLineups),
       content,

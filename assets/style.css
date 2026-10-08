@@ -552,6 +552,18 @@ a.game-card:hover::before { opacity: 0.6; }
 
 a.game-card:hover > .card-img { opacity: 0.55; }
 
+/* Koyu renkli resmi logo, koyu temada görünsün diye beyaza çevrilir. */
+.game-card > .game-logo {
+  width: 62%;
+  max-width: 240px;
+  margin-bottom: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.map-hero { min-height: 220px; margin-bottom: 16px; }
+
+.map-summary { margin: 6px 0 0; max-width: 640px; color: #eadfe8; }
+
 .map-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);

@@ -22,6 +22,7 @@ lol/esyalar.html    Eşya listesi
   atış atış smoke, flash ve molotof videoları. YouTube videolarının yalnızca ilgili bölümü oynar (bölüm zaman damgalarından);
   kendi kayıtlarımız `cs2/clips/` klasörüne eklendikçe reklamsız olarak onların yerini alır. Veriler `cs2/maps.js` dosyasındadır; konumlar radarın 0–1 oranıdır.
   Radar görüntüleri oyun dosyalarından çıkarılmıştır ([2mlml/cs2-radar-images](https://github.com/2mlml/cs2-radar-images)) ve Valve Corporation'a aittir.
+  Harita fotoğrafları [ghostcap-gaming/cs2-map-images](https://github.com/ghostcap-gaming/cs2-map-images)'tan, CS2 logosu ve kapak görseli Steam mağaza sayfasından alınmıştır.
 
 ## Maç istatistikleri
 

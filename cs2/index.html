@@ -41,7 +41,7 @@
         el(
           "a",
           { class: "game-card", href: `harita.html?id=${map.id}` },
-          el("img", { class: "card-img", src: map.radar, alt: "" }),
+          el("img", { class: "card-img", src: map.photo, alt: "", loading: "lazy" }),
           el("span", { class: "badge" }, "İnfolar · Smoke ve flash videoları"),
           el("h2", {}, map.name),
           el("p", {}, map.summary)
