@@ -19,8 +19,9 @@ const pct = ([x, y]) => [x * 100, y * 100];
 
 const TABS = [
   { id: "info", label: "İnfolar" },
-  { id: "A", label: "A taktiği" },
-  { id: "B", label: "B taktiği" },
+  { id: "A", label: "A bölgesi" },
+  { id: "B", label: "B bölgesi" },
+  { id: "all", label: "Tüm harita" },
 ];
 
 if (!map) {
@@ -32,8 +33,6 @@ if (!map) {
 }
 
 function render(tab) {
-  const tactic = map.tactics.find((t) => t.site === tab);
-
   const tabs = el(
     "div",
     { class: "chips lane-tabs", role: "group", "aria-label": "Bölüm seç" },
@@ -56,73 +55,41 @@ function render(tab) {
     )
   );
 
-  root.replaceChildren(
-    el("h1", { class: "page-title" }, map.name),
-    el("p", { class: "page-sub" }, map.summary),
-    tabs,
-    el("div", { class: "map-layout" }, radar(tactic), tactic ? tacticPanel(tactic) : calloutPanel())
-  );
+  const content =
+    tab === "info"
+      ? el("div", { class: "map-layout" }, radar(), calloutPanel())
+      : videoGrid(map.videos[tab] || []);
+
+  root.replaceChildren(el("h1", { class: "page-title" }, map.name), el("p", { class: "page-sub" }, map.summary), tabs, content);
 }
 
-function radar(tactic) {
+function radar() {
   const layer = svg("svg", { class: "radar-layer", viewBox: "0 0 100 100", "aria-hidden": "true" });
 
-  // Ok uçları için işaretçi
-  layer.append(
-    svg(
-      "defs",
-      {},
-      svg(
-        "marker",
-        { id: "ok", viewBox: "0 0 10 10", refX: 6, refY: 5, markerWidth: 4, markerHeight: 4, orient: "auto-start-reverse" },
-        svg("path", { d: "M0,0 L10,5 L0,10 z", class: "route-head" })
-      )
-    )
-  );
-
-  if (tactic) {
-    for (const route of tactic.routes) {
-      layer.append(svg("polyline", { class: "route", points: route.map(pct).join(" "), "marker-end": "url(#ok)" }));
-    }
-    for (const at of tactic.smokes) layer.append(svg("circle", { class: "smoke", cx: pct(at)[0], cy: pct(at)[1], r: 3.2 }));
-    for (const at of tactic.mollies) layer.append(svg("circle", { class: "molly", cx: pct(at)[0], cy: pct(at)[1], r: 2.4 }));
-    for (const at of tactic.flashes) layer.append(svg("circle", { class: "flash", cx: pct(at)[0], cy: pct(at)[1], r: 1.4 }));
-  }
-
-  // İnfolar: taktik görünümünde soluk gösterilir.
   for (const c of map.callouts) {
     const [x, y] = pct(c.at);
     layer.append(
       svg(
         "g",
-        { class: `callout${tactic ? " dim" : ""}`, "data-name": c.name },
+        { class: "callout", "data-name": c.name },
         svg("title", {}, `${c.name}: ${c.desc}`),
         svg("circle", { cx: x, cy: y, r: 0.7 }),
         svg("text", { x, y: y - 1.4 }, c.name)
       )
     );
   }
-
   for (const [site, at] of Object.entries(map.sites)) {
     const [x, y] = pct(at);
     layer.append(svg("g", { class: "site" }, svg("circle", { cx: x, cy: y, r: 3 }), svg("text", { x, y: y + 1.2 }, site)));
   }
   for (const [side, at] of Object.entries(map.spawns)) {
     const [x, y] = pct(at);
-    layer.append(svg("g", { class: `spawn ${side.toLowerCase()}` }, svg("rect", { x: x - 3, y: y - 1.8, width: 6, height: 3.6, rx: 1 }), svg("text", { x, y: y + 0.9 }, side)));
+    layer.append(
+      svg("g", { class: `spawn ${side.toLowerCase()}` }, svg("rect", { x: x - 3, y: y - 1.8, width: 6, height: 3.6, rx: 1 }), svg("text", { x, y: y + 0.9 }, side))
+    );
   }
 
-  if (tactic) {
-    const [x, y] = pct(tactic.plant);
-    layer.append(svg("g", { class: "plant" }, svg("rect", { x: x - 2.4, y: y + 3.4, width: 4.8, height: 2.8, rx: 0.6 }), svg("text", { x, y: y + 5.4 }, "C4")));
-  }
-
-  return el(
-    "div",
-    { class: "radar" },
-    el("img", { src: map.radar, alt: `${map.name} radar haritası`, width: 1024, height: 1024 }),
-    layer
-  );
+  return el("div", { class: "radar" }, el("img", { src: map.radar, alt: `${map.name} radar haritası`, width: 1024, height: 1024 }), layer);
 }
 
 function calloutPanel() {
@@ -155,18 +122,48 @@ function highlight(name, on) {
   root.querySelector(`.callout[data-name="${CSS.escape(name)}"]`)?.classList.toggle("active", on);
 }
 
-function tacticPanel(tactic) {
-  const legend = [
-    ["smoke", "Smoke"],
-    ["molly", "Molotof"],
-    ["flash", "Flash"],
-    ["route", "Giriş yolu"],
-  ];
+// Smoke / molotof / flash videoları. Video tıklanınca yüklenir; o zamana kadar YouTube'a bağlanılmaz.
+function videoGrid(videos) {
+  if (!videos.length) return el("p", { class: "notice" }, "Bu bölüm için henüz video eklenmedi.");
   return el(
     "div",
-    { class: "build-card map-panel" },
-    el("div", { class: "build-head" }, el("h3", {}, tactic.title)),
-    el("ol", { class: "tactic-steps" }, tactic.steps.map((s) => el("li", {}, s))),
-    el("div", { class: "legend" }, legend.map(([cls, label]) => el("span", {}, el("i", { class: `key ${cls}` }), label)))
+    { class: "video-grid" },
+    videos.map((v) => {
+      const frame = el(
+        "button",
+        { class: "video-thumb", type: "button", "aria-label": `${v.title} videosunu oynat` },
+        el("img", { src: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, alt: "", loading: "lazy" }),
+        el("span", { class: "play", "aria-hidden": "true" }, "▶")
+      );
+      frame.addEventListener("click", () =>
+        frame.replaceWith(
+          el("iframe", {
+            class: "video-frame",
+            src: `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`,
+            title: v.title,
+            allow: "autoplay; encrypted-media; picture-in-picture; fullscreen",
+            allowfullscreen: "",
+          })
+        )
+      );
+      return el(
+        "article",
+        { class: "build-card video-card" },
+        frame,
+        el(
+          "div",
+          { class: "video-info" },
+          el("h3", {}, v.title),
+          el(
+            "p",
+            { class: "tile-sub" },
+            v.channel,
+            v.tr ? el("span", { class: "badge" }, "Türkçe") : null,
+            " · ",
+            el("a", { href: `https://www.youtube.com/watch?v=${v.id}`, target: "_blank", rel: "noopener" }, "YouTube'da aç")
+          )
+        )
+      );
+    })
   );
 }
