@@ -64,7 +64,7 @@ const CS2_MAPS = [
     summary: "En bilinen harita. Uzun koridorlar ve net bölgeler; Long ve Tunnels kontrolü önemli.",
     spawns: { T: [0.39, 0.91], CT: [0.62, 0.21] },
     sites: { A: [0.8, 0.16], B: [0.21, 0.12] },
-    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Xbox ve Havuz radardaki nesnelerden (oyuncular tarafından doğrulandı).
+    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Xbox ve Pool radardaki nesnelerden (oyuncular tarafından doğrulandı).
     callouts: [
       { name: "Outside Long", at: [0.65, 0.74], desc: "T doğuşundan Long kapılarına giden açık alan." },
       { name: "Long Doors", at: [0.69, 0.6], desc: "Long'a açılan çift kapı." },
@@ -82,7 +82,7 @@ const CS2_MAPS = [
       { name: "Outside Tunnels", at: [0.18, 0.65], desc: "T doğuşundan tünellere giden yol." },
       { name: "B Doors", at: [0.33, 0.2], desc: "B'yi CT tarafına bağlayan kapı." },
       { name: "Window", at: [0.27, 0.13], desc: "B bölgesine CT tarafından bakan pencere (Hole)." },
-      { name: "Havuz", at: [0.11, 0.05], desc: "B bölgesinin en arka kısmı." },
+      { name: "Pool", at: [0.11, 0.05], desc: "B bölgesinin en arka kısmı (Havuz)." },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
