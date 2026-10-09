@@ -855,3 +855,22 @@ dialog::backdrop { background: rgba(5, 2, 8, 0.7); backdrop-filter: blur(3px); }
 @media (max-width: 900px) {
   .val-abilities { grid-template-columns: 1fr; }
 }
+
+/* Valorant kartı: ajanların tam boy görselleri, oyunun kırmızısı üzerinde. */
+.game-card > .val-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff4655 0%, #7a1f3d 55%, #0f1923 100%);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+a.game-card:hover > .val-art { opacity: 0.75; }
+
+.val-art img { flex: none; width: 80%; height: auto; margin: -6% -22% 0; align-self: flex-start; }
+
+.val-art img:only-child, .val-art img:first-child:nth-last-child(2), .val-art img:last-child:nth-child(2) { width: 90%; margin: -6% -18% 0; }
