@@ -286,6 +286,7 @@ const EN = {
   "Survivor perkleri": "Survivor perks",
   "▶ Sadece videolu": "▶ With video only",
   "▶ Oyun içi videoyu izle": "▶ Watch in-game video",
+  "⛶ Büyüt": "⛶ Enlarge",
   "Genel perk (herkes kullanabilir)": "General perk (anyone can use it)",
   "Aramana uyan perk bulunamadı.": "No perks match your search.",
   "Dead by Daylight: katiller, survivorlar, perkler ve haritalar.": "Dead by Daylight: killers, survivors, perks and maps.",

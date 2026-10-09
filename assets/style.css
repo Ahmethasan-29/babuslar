@@ -991,3 +991,16 @@ a.perk-owner:hover { text-decoration: underline; }
 a.game-card:hover > .dbd-art { opacity: 0.85; }
 
 .dbd-art img { width: 62%; margin: -2% -12% 0; }
+
+/* Perk videosu: büyütme düğmesi ve büyük video penceresi */
+.perk-video-wrap { margin-top: 10px; }
+
+.perk-video-wrap .perk-video { margin-top: 0; }
+
+.perk-zoom { margin-top: 8px; }
+
+dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
+
+.video-dialog-title { margin: 0 44px 12px 4px; font-size: 1.2rem; }
+
+.video-dialog .video-frame { border-radius: 10px; max-height: calc(100vh - 140px); }
