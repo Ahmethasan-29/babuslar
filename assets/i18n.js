@@ -269,6 +269,13 @@ const EN = {
   "Üstten şemalar": "Top-down layouts",
   "Üstten şema": "Top-down layout",
   "Şema yok": "No layout",
+  "Harita planı": "Map plan",
+  "Yüzey": "Surface",
+  "Zindan": "Dungeon",
+  "I. çeşit": "Variant I",
+  "II. çeşit": "Variant II",
+  "Bu görsel wikideki harita planıdır: kapalı haritalarda katları ve odaları, açık haritalarda yalnızca dış sınırı ve büyüklüğü gösterir. Açık haritaların içi her maçta rastgele oluşur.":
+    "This is the map plan from the wiki: for indoor maps it shows the floors and rooms, for outdoor maps only the outer boundary and size. The inside of outdoor maps is randomly generated every match.",
   "Bir harita seç; üstten şemasını ve bilgilerini gör.": "Pick a map to see its top-down layout and details.",
   "Bu haritanın üstten şeması henüz yok.": "This map doesn't have a top-down layout yet.",
   "Haritanın bir kısmı her maçta rastgele oluşur. Ana bina, çıkış kapıları ve sabit yapılar şemadaki yerlerinde kalır.":
@@ -330,6 +337,7 @@ const EN_PATTERNS = [
   [/^(.+) videosunu oynat$/, (_, name) => `Play ${translateText(name)} video`],
   [/^(.+) radar haritası$/, "$1 radar map"],
   [/^(.+) üstten şeması$/, "$1 top-down layout"],
+  [/^(.+) harita planı$/, "$1 map plan"],
   [/^Bu bölgede henüz (.+) atışı yok\. Diğer türler için "Tümü"ne bak\.$/, (_, type) =>
     `No ${translateText(type.replace(/^./, (c) => c.toLocaleUpperCase("tr"))).toLowerCase()} lineups here yet. See "All" for other types.`],
 ];

@@ -961,3 +961,7 @@ a.perk-owner:hover { text-decoration: underline; }
 .game-card > .perk-collage { position: absolute; inset: 0; z-index: 0; display: flex; justify-content: flex-end; align-items: center; gap: 4px; padding-right: 12px; opacity: 0.45; }
 
 .perk-collage img { width: 22%; max-width: 96px; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); background: linear-gradient(135deg, #4b2a5c, #1d1224); }
+
+.dbd-outline { background: #6b6b6b; }
+
+.dbd-outline figcaption { top: auto; bottom: 10px; }
