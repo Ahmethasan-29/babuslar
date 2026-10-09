@@ -881,3 +881,59 @@ a.game-card:hover > .val-art { opacity: 0.75; }
 .ability-video video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); pointer-events: none; }
 
 .ability-video:hover video { filter: none; }
+
+/* Dead by Daylight */
+.dbd-hero { min-height: 280px; background: linear-gradient(135deg, #3a0d12, #120a0e 70%); }
+
+.dbd-hero::after { background: linear-gradient(90deg, rgba(14, 9, 16, 0.95) 40%, rgba(14, 9, 16, 0.1)); }
+
+.dbd-portrait { position: absolute; right: 16px; bottom: 0; z-index: 0; height: 100%; max-width: 45%; object-fit: contain; object-position: bottom right; }
+
+.dbd-hero .champ-hero-body { max-width: 62%; }
+
+@media (max-width: 640px) {
+  .dbd-portrait { opacity: 0.3; }
+  .dbd-hero .champ-hero-body { max-width: none; }
+}
+
+.dbd-placeholder {
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--muted);
+  background: var(--bg-elev);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+}
+
+.game-card > .dbd-card-img { object-fit: contain; object-position: right bottom; }
+
+.rich ul { margin: 6px 0; padding-left: 20px; }
+
+.rich p { margin: 0 0 6px; }
+
+.desc .rich { white-space: normal; }
+
+.dbd-perks { grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
+
+.perk { grid-template-columns: 72px 1fr; }
+
+.perk-icon { width: 72px; height: 72px; }
+
+/* Perk ikonları oyundaki gibi eşkenar dörtgen çerçevede */
+.perk-icon img { width: 72px; height: 72px; background: linear-gradient(135deg, #4b2a5c, #1d1224); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+
+.perk-play { margin-top: 10px; }
+
+.perk-video { margin-top: 10px; border-radius: 10px; }
+
+.dbd-layouts { display: grid; gap: 16px; }
+
+.dbd-layout { margin: 0; }
+
+.dbd-layout figcaption { position: absolute; left: 12px; top: 10px; font-weight: 700; text-shadow: 0 2px 6px #000; }
+
+.dbd-note { margin-top: 12px; }
+
+.perk-gif { display: block; width: 160px; max-width: 100%; margin-top: 10px; border-radius: 10px; }
