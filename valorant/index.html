@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajanlar · Valorant · Babuşlar</title>
+  <meta name="description" content="Valorant ajanları: rolleri ve yetenekleri (C, Q, E, X).">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./" aria-current="page">Ajanlar</a>
+        <a href="haritalar.html">Haritalar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Ajanlar</h1>
+      <p class="page-sub">Bir ajana tıklayarak yeteneklerini gör.</p>
+
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Ajan ara…" aria-label="Ajan ara" autocomplete="off">
+        <div class="chips" id="roles" role="group" aria-label="Role göre filtrele"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+      </div>
+
+      <div class="grid" id="grid">
+        <p class="notice">Ajanlar yükleniyor…</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, Riot Games tarafından onaylanmamıştır. Valorant ve Riot Games, Riot Games, Inc.'in ticari markalarıdır. Veriler valorant-api.com'dan alınır.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/common.js"></script>
+  <script src="api.js"></script>
+  <script src="agents.js"></script>
+</body>
+</html>
