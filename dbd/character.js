@@ -47,7 +47,7 @@ function render() {
     { class: "section" },
     el("h2", {}, "Perkler"),
     c.perks.length
-      ? el("div", { class: "abilities dbd-perks" }, c.perks.map(perkCard))
+      ? el("div", { class: "abilities dbd-perks" }, c.perks.map((p) => perkCard(p)))
       : el("p", { class: "notice" }, "Bu karakterin perkleri henüz eklenmedi.")
   );
 

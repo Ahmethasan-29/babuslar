@@ -4,7 +4,9 @@
 # Yeni bölüm çıkınca: powershell -File scripts/dbd-data.ps1 -Out dbd/data.js
 param([string]$Out = "dbd/data.js")
 $ErrorActionPreference = "Stop"
-$UA = "Mozilla/5.0 (Babuslar fan sitesi)"
+# Sayılar her zaman "1.25" biçiminde yazılsın (Türkçe Windows'ta "1,25" olurdu).
+[Threading.Thread]::CurrentThread.CurrentCulture = [Globalization.CultureInfo]::InvariantCulture
+$UA ="Mozilla/5.0 (Babuslar fan sitesi)"
 $WIKI = "https://deadbydaylight.fandom.com/api.php"
 
 function Get-Json($url) {
