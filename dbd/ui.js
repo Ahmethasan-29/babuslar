@@ -37,3 +37,28 @@ function portraitImg(c, size) {
   const initials = c.name.replace(/^The /, "").split(/\s+/).map((w) => w[0]).join("").slice(0, 2);
   return el("span", { class: "dbd-placeholder", style: `width:${size}px;height:${size}px` }, initials);
 }
+
+// Perk kartı. withOwner: perkin hangi karaktere ait olduğunu da gösterir (Perkler sayfası).
+function perkCard(p, withOwner = false) {
+  const owner = !withOwner
+    ? null
+    : p.owner
+      ? el("a", { class: "perk-owner", href: `karakter.html?id=${encodeURIComponent(p.owner.id)}` }, p.owner.name)
+      : el("span", { class: "perk-owner" }, "Genel perk (herkes kullanabilir)");
+  return el(
+    "article",
+    { class: "ability perk" },
+    el("div", { class: "perk-icon" }, p.icon ? el("img", { src: p.icon, alt: "", width: 72, height: 72, loading: "lazy" }) : null),
+    el("div", {}, el("h3", {}, p.name), owner, el("div", { class: "desc" }, richText(p.description)), perkVideo(p))
+  );
+}
+
+// Perkin oyun içi videosu (wikiden). Tıklanınca yüklenir ve döngüde oynar.
+function perkVideo(p) {
+  if (!p.video) return null;
+  const button = el("button", { class: "chip perk-play", type: "button" }, "▶ Oyun içi videoyu izle");
+  button.addEventListener("click", () =>
+    button.replaceWith(el("video", { class: "video-frame perk-video", src: p.video, autoplay: "", loop: "", muted: "", playsinline: "", controls: "" }))
+  );
+  return button;
+}
