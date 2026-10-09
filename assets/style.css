@@ -814,3 +814,44 @@ dialog::backdrop { background: rgba(5, 2, 8, 0.7); backdrop-filter: blur(3px); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* Valorant */
+.agent-hero { min-height: 300px; background-size: auto 120%, cover; background-position: right center, center; }
+
+.agent-hero::after { background: linear-gradient(90deg, rgba(14, 9, 16, 0.95) 35%, rgba(14, 9, 16, 0.2)); }
+
+.agent-portrait {
+  position: absolute;
+  right: 0;
+  bottom: -10%;
+  z-index: 1;
+  height: 125%;
+  pointer-events: none;
+}
+
+.agent-hero .champ-hero-body { max-width: 60%; }
+
+.agent-desc { margin: 12px 0 0; color: #eadfe8; }
+
+@media (max-width: 640px) {
+  .agent-portrait { opacity: 0.35; }
+  .agent-hero .champ-hero-body { max-width: none; }
+}
+
+.val-panel { max-height: calc(100vh - 100px); overflow: auto; }
+
+.val-panel .callout-list { max-height: none; }
+
+.callout-group { margin: 14px 0 4px; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.callout-group:first-of-type { margin-top: 0; }
+
+.val-radar .radar-layer text { font-size: 1.7px; }
+
+.val-radar .spawn text { font-size: 2px; }
+
+.val-abilities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .val-abilities { grid-template-columns: 1fr; }
+}
