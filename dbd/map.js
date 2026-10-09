@@ -39,7 +39,7 @@ if (!map) {
         "div",
         { class: "build-card map-panel" },
         el("h3", {}, "Harita hakkında"),
-        richText(map.description),
+        richText((!IS_EN && typeof DBD_TR_MAPS !== "undefined" && DBD_TR_MAPS[map.name]) || map.description),
         el("p", { class: "tile-sub dbd-note" }, "Haritanın bir kısmı her maçta rastgele oluşur. Ana bina, çıkış kapıları ve sabit yapılar şemadaki yerlerinde kalır.")
       )
     )
