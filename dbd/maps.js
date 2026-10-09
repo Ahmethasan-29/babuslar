@@ -19,7 +19,7 @@ document.getElementById("maps").replaceChildren(
             "a",
             { class: "game-card", href: `harita.html?id=${encodeURIComponent(m.id)}` },
             m.image ? el("img", { class: "card-img", src: m.image, alt: "", loading: "lazy" }) : null,
-            el("span", { class: "badge" }, m.layouts.length ? "Üstten şema" : "Şema yok"),
+            el("span", { class: "badge" }, !m.layouts.length ? "Şema yok" : m.layoutKind === "outline" ? "Harita planı" : "Üstten şema"),
             el("h2", {}, m.name)
           )
         )
