@@ -38,6 +38,17 @@ function portraitImg(c, size) {
   return el("span", { class: "dbd-placeholder", style: `width:${size}px;height:${size}px` }, initials);
 }
 
+// Perk açıklaması site dilinde. Türkçe çeviride {0}, {1}… yerine güncel değerler (İngilizce metindeki kalın sayılar) konur.
+// Çeviri güncel değerlerle uyuşmuyorsa (ör. oyun perke yeni bir değer eklediyse) İngilizce metin gösterilir.
+function perkDescription(p) {
+  const tr = !IS_EN && typeof DBD_TR_PERKS !== "undefined" ? DBD_TR_PERKS[p.name.replace(/\s+/g, " ").trim()] : null;
+  if (!tr) return p.description;
+  const values = [...p.description.matchAll(/<b>([\d.,/]+)<\/b>/g)].map((m) => m[1]);
+  const used = new Set([...tr.matchAll(/\{(\d+)\}/g)].map((m) => Number(m[1])));
+  if (used.size !== values.length || [...used].some((i) => i >= values.length)) return p.description;
+  return tr.replace(/\{(\d+)\}/g, (_, i) => `<b>${values[i].replace(/\./g, ",")}</b>`);
+}
+
 // Perk kartı. withOwner: perkin hangi karaktere ait olduğunu da gösterir (Perkler sayfası).
 function perkCard(p, withOwner = false) {
   const owner = !withOwner
@@ -49,7 +60,7 @@ function perkCard(p, withOwner = false) {
     "article",
     { class: "ability perk" },
     el("div", { class: "perk-icon" }, p.icon ? el("img", { src: p.icon, alt: "", width: 72, height: 72, loading: "lazy" }) : null),
-    el("div", {}, el("h3", {}, p.name), owner, el("div", { class: "desc" }, richText(p.description)), perkVideo(p))
+    el("div", {}, el("h3", {}, p.name), owner, el("div", { class: "desc" }, richText(perkDescription(p))), perkVideo(p))
   );
 }
 

@@ -24,7 +24,7 @@ function render() {
       { class: "champ-hero-body" },
       el("h1", {}, c.name),
       el("div", { class: "tags" }, el("span", { class: "badge" }, c.role === "killer" ? "Katil" : "Survivor")),
-      c.bio ? el("div", { class: "agent-desc" }, richText(c.bio)) : null
+      c.bio ? el("div", { class: "agent-desc" }, richText(killerText(c, "bio") || c.bio)) : null
     )
   );
 
@@ -37,7 +37,7 @@ function render() {
           "article",
           { class: "ability" },
           el("div", { class: "ability-icon" }, c.power.icon ? el("img", { src: c.power.icon, alt: "", width: 64, height: 64 }) : null),
-          el("div", {}, el("h3", {}, c.power.name), el("div", { class: "desc" }, richText(c.power.description)))
+          el("div", {}, el("h3", {}, c.power.name), el("div", { class: "desc" }, richText(killerText(c, "power") || c.power.description)))
         )
       )
     : null;
@@ -47,10 +47,16 @@ function render() {
     { class: "section" },
     el("h2", {}, "Perkler"),
     c.perks.length
-      ? el("div", { class: "abilities dbd-perks" }, c.perks.map(perkCard))
+      ? el("div", { class: "abilities dbd-perks" }, c.perks.map((p) => perkCard(p)))
       : el("p", { class: "notice" }, "Bu karakterin perkleri henüz eklenmedi.")
   );
 
   root.replaceChildren(...[hero, power, perks].filter(Boolean));
 }
 
+
+// Katilin tanıtım yazısı ya da güç açıklaması site dilinde (Türkçe çeviri yoksa null).
+function killerText(c, field) {
+  if (IS_EN || c.role !== "killer" || typeof DBD_TR_KILLERS === "undefined") return null;
+  return DBD_TR_KILLERS[c.name]?.[field] || null;
+}
