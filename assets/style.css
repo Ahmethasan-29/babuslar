@@ -984,3 +984,10 @@ a.perk-owner:hover { text-decoration: underline; }
 }
 
 .gen-tag.sure { color: #fff; background: var(--accent); border-color: var(--accent); }
+
+/* Dead by Daylight kartı: katillerin portreleri, koyu kan kırmızısı üzerinde. */
+.game-card > .dbd-art { background: radial-gradient(ellipse at 50% 30%, #8a1020 0%, #3a0710 55%, #0e0609 100%); opacity: 0.7; }
+
+a.game-card:hover > .dbd-art { opacity: 0.85; }
+
+.dbd-art img { width: 62%; margin: -2% -12% 0; }

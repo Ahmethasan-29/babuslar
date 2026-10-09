@@ -55,7 +55,7 @@ const EN = {
   "Ajanlar · Haritalar · İnfolar": "Agents · Maps · Callouts",
   "Tüm ajanların yetenekleri ve rekabetçi haritalar: radar üzerinde infolar.": "Every agent's abilities and the competitive maps with callouts on the radar.",
   "Katiller · Survivor'lar · Perkler · Haritalar": "Killers · Survivors · Perks · Maps",
-  "Katillerin güçleri, perkler ve animasyonları; haritaların üstten şemaları.": "Killer powers, perks with in-game videos and top-down map layouts.",
+  "Katillerin güçleri, perkler ve oyun içi videoları; haritalarda jeneratör noktaları.": "Killer powers, perks with in-game videos and generator spots on every map.",
 
   // Telif notları
   "Babuşlar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın yapımında veya yönetiminde resmi olarak yer alan kişilerin görüşlerini yansıtmaz.":
