@@ -54,26 +54,3 @@ function render() {
   root.replaceChildren(...[hero, power, perks].filter(Boolean));
 }
 
-function perkCard(p) {
-  return el(
-    "article",
-    { class: "ability perk" },
-    el("div", { class: "perk-icon" }, p.icon ? el("img", { src: p.icon, alt: "", width: 72, height: 72, loading: "lazy" }) : null),
-    el("div", {}, el("h3", {}, p.name), el("div", { class: "desc" }, richText(p.description)), perkVideo(p))
-  );
-}
-
-// Perk animasyonu: oyundaki perk animasyonu (video) ya da wikideki kısa GIF. Tıklanınca yüklenir.
-function perkVideo(p) {
-  if (!p.video) return null;
-  const isGif = /\.gif(\/|$)/i.test(p.video);
-  const button = el("button", { class: "chip perk-play", type: "button" }, "▶ Animasyonu izle");
-  button.addEventListener("click", () =>
-    button.replaceWith(
-      isGif
-        ? el("img", { class: "perk-gif", src: p.video, alt: `${p.name} animasyonu` })
-        : el("video", { class: "video-frame perk-video", src: p.video, autoplay: "", loop: "", muted: "", playsinline: "", controls: "" })
-    )
-  );
-  return button;
-}

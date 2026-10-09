@@ -92,6 +92,23 @@ img { max-width: 100%; display: block; }
 
 .nav a[aria-current="page"] { color: var(--text); background: var(--accent-soft); }
 
+/* Dil düğmesi (TR / EN) */
+.lang-toggle {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.lang-toggle:hover { color: #fff; background: var(--accent); }
+
 main { flex: 1; padding: 32px 0 56px; }
 
 /* Başlıklar */
@@ -936,4 +953,11 @@ a.game-card:hover > .val-art { opacity: 0.75; }
 
 .dbd-note { margin-top: 12px; }
 
-.perk-gif { display: block; width: 160px; max-width: 100%; margin-top: 10px; border-radius: 10px; }
+
+.perk-owner { display: inline-block; margin: -2px 0 8px; font-size: 0.85rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+
+a.perk-owner:hover { text-decoration: underline; }
+
+.game-card > .perk-collage { position: absolute; inset: 0; z-index: 0; display: flex; justify-content: flex-end; align-items: center; gap: 4px; padding-right: 12px; opacity: 0.45; }
+
+.perk-collage img { width: 22%; max-width: 96px; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); background: linear-gradient(135deg, #4b2a5c, #1d1224); }

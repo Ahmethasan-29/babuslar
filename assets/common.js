@@ -1,6 +1,6 @@
 // Riot Games'in Data Dragon servisi: League of Legends verilerini Türkçe olarak sağlar.
 const DD = "https://ddragon.leagueoflegends.com";
-const LANG = "tr_TR";
+const LANG = typeof IS_EN !== "undefined" && IS_EN ? "en_US" : "tr_TR";
 
 const ROLES = {
   Assassin: "Suikastçı",
@@ -23,6 +23,8 @@ const LANES = [
 ];
 
 const CLIENT_DATA = `${CDRAGON}/plugins/rcp-be-lol-game-data/global`;
+// İstemci verisinin dili: "default" İngilizcedir.
+const CLIENT_LANG = LANG === "en_US" ? "default" : "tr_tr";
 
 let versionPromise;
 let runeRecsPromise;
@@ -219,6 +221,8 @@ function getStats() {
   return statsPromise;
 }
 
+// Türkçede "%52,3", İngilizcede "52.3%".
 function formatPercent(part, total) {
-  return `%${((part / total) * 100).toLocaleString("tr-TR", { maximumFractionDigits: 1, minimumFractionDigits: 1 })}`;
+  const value = ((part / total) * 100).toLocaleString(LANG === "en_US" ? "en-US" : "tr-TR", { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+  return LANG === "en_US" ? `${value}%` : `%${value}`;
 }

@@ -1,5 +1,5 @@
 // valorant-api.com: Valorant'ın oyun dosyalarından çıkarılan veriler (ajanlar, yetenekler, haritalar, infolar).
-// İsimler İngilizce (oyundaki gibi), açıklamalar Türkçe alınır.
+// İsimler İngilizce (oyundaki gibi); açıklamalar site dilinde (Türkçe ya da İngilizce) alınır.
 const VAPI = "https://valorant-api.com/v1";
 
 // Yetenek yuvalarının oyundaki varsayılan tuşları.
@@ -18,7 +18,7 @@ function vapi(path, lang) {
 async function getAgents() {
   const [en, tr] = await Promise.all([
     vapi("agents?isPlayableCharacter=true", "en-US"),
-    vapi("agents?isPlayableCharacter=true", "tr-TR"),
+    vapi("agents?isPlayableCharacter=true", IS_EN ? "en-US" : "tr-TR"),
   ]);
   const trById = new Map(tr.map((a) => [a.uuid, a]));
   return en

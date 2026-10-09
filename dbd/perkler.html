@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Wiki görselleri ve videoları yalnızca yönlendiren adres gönderilmezse açılır. -->
   <meta name="referrer" content="no-referrer">
-  <title>Karakterler · Dead by Daylight · Babuşlar</title>
-  <meta name="description" content="Dead by Daylight katilleri ve survivorları: güçleri ve perkleri.">
+  <title>Perkler · Dead by Daylight · Babuşlar</title>
+  <meta name="description" content="Dead by Daylight perkleri: açıklamaları ve oyun içi videoları.">
   <link rel="stylesheet" href="../assets/style.css">
   <script src="../assets/i18n.js"></script>
 </head>
@@ -17,9 +17,9 @@
       <nav class="nav" aria-label="Ana menü">
         <a href="../">Ana sayfa</a>
         <a href="./">DBD</a>
-        <a href="karakterler.html?rol=katil" aria-current="page">Katiller</a>
+        <a href="karakterler.html?rol=katil">Katiller</a>
         <a href="karakterler.html?rol=survivor">Survivor'lar</a>
-        <a href="perkler.html">Perkler</a>
+        <a href="perkler.html" aria-current="page">Perkler</a>
         <a href="haritalar.html">Haritalar</a>
       </nav>
     </div>
@@ -27,13 +27,14 @@
 
   <main>
     <div class="container">
-      <h1 class="page-title" id="title">Katiller</h1>
+      <h1 class="page-title">Perkler</h1>
       <div class="toolbar">
-        <input class="search" id="search" type="search" placeholder="Karakter ara…" aria-label="Karakter ara" autocomplete="off">
-        <div class="chips" id="roles" role="group" aria-label="Rol seç"></div>
+        <input class="search" id="search" type="search" placeholder="Perk ya da karakter ara…" aria-label="Perk ara" autocomplete="off">
+        <div class="chips" id="roles" role="group" aria-label="Perk türü"></div>
+        <div class="chips" id="filters" role="group" aria-label="Filtre"></div>
         <p class="count" id="count" aria-live="polite"></p>
       </div>
-      <div class="grid" id="grid"></div>
+      <div class="abilities dbd-perks" id="perks"></div>
     </div>
   </main>
 
@@ -46,6 +47,6 @@
   <script src="../assets/common.js"></script>
   <script src="data.js"></script>
   <script src="ui.js"></script>
-  <script src="characters.js"></script>
+  <script src="perks.js"></script>
 </body>
 </html>

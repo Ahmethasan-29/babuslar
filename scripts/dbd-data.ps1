@@ -31,12 +31,18 @@ function Resolve-WikiFiles([string[]]$names) {
   $map
 }
 
+# MediaWiki devam bilgisi: yanıttaki "continue" alanlarının tamamı bir sonraki isteğe eklenir.
+function Continue-Query($r) {
+  if (-not $r.continue) { return "" }
+  ($r.continue.PSObject.Properties | ForEach-Object { "&" + $_.Name + "=" + [uri]::EscapeDataString([string]$_.Value) }) -join ""
+}
+
 function All-WikiFiles([string]$prefix) {
   $names = @(); $cont = ""
   do {
     $r = Get-Json "$WIKI`?action=query&list=allimages&aiprefix=$prefix&ailimit=500&format=json$cont"
     $names += $r.query.allimages | ForEach-Object { $_.name -replace '_', ' ' }
-    $cont = if ($r.continue) { "&aicontinue=" + [uri]::EscapeDataString($r.continue.aicontinue) } else { "" }
+    $cont = Continue-Query $r
   } while ($cont)
   $names
 }
@@ -120,10 +126,41 @@ function PowerIcon($item) { First $powerIcons @((PathKey $item.image '^iconPower
 function MapIcon($v) { $k = PathKey $v.image '^iconMap_'; First $mapIcons @($k, ($k -replace '\d$', ''), (Key $v.name)) }
 
 $wanted = @()
-# Animasyon videosu olmayan perkler için wikideki kısa GIF: "Brutal Strength" → "BrutalStrength.gif"
-function PerkGif($p) { ($p.name -replace "[^A-Za-z0-9]", "") + ".gif" }
+# Bazı perk videoları wikide yalnızca perk adıyla durur: "Hangman's Trick" → "HangmansTrick.mp4" (oyun içi görüntü)
+function PerkMp4($p) { ($p.name -replace "[^A-Za-z0-9]", "") + ".mp4" }
 $wanted += $perkList | ForEach-Object { PerkIcon $_; PerkAnim $_ }
-$wanted += $perkList | Where-Object { -not (PerkAnim $_) } | ForEach-Object { PerkGif $_ }
+$wanted += $perkList | Where-Object { -not (PerkAnim $_) } | ForEach-Object { PerkMp4 $_ }
+
+# Hâlâ videosu olmayan perklerde, perkin wiki sayfasında kullanılan .mp4 dosyası aranır.
+function PageVideos([string[]]$titles) {
+  $found = @{}
+  $list = @($titles | Sort-Object -Unique)
+  for ($i = 0; $i -lt $list.Count; $i += 50) {
+    $batch = $list[$i..([Math]::Min($i + 49, $list.Count - 1))]
+    $q = ($batch | ForEach-Object { [uri]::EscapeDataString($_) }) -join '|'
+    $cont = ""
+    do {
+      $r = Get-Json "$WIKI`?action=query&prop=images&imlimit=500&redirects=1&format=json&titles=$q$cont"
+      $from = @{}
+      foreach ($n in @($r.query.normalized) + @($r.query.redirects)) { if ($n) { $from[$n.to] = $n.from } }
+      foreach ($page in (Values $r.query.pages)) {
+        $t = $page.title
+        for ($hop = 0; $hop -lt 3 -and $from.ContainsKey($t); $hop++) { $t = $from[$t] }
+        foreach ($img in @($page.images)) {
+          if ($img -and $img.title -match '\.mp4$') {
+            $file = $img.title.Substring(5)
+            # Sayfada birden çok video varsa adı perke en çok benzeyen seçilir.
+            if (-not $found.ContainsKey($t) -or ((Key $file) -like "*$(Key $t)*")) { $found[$t] = $file }
+          }
+        }
+      }
+      $cont = Continue-Query $r
+    } while ($cont)
+  }
+  $found
+}
+$pageVideos = PageVideos @($perkList | Where-Object { -not (PerkAnim $_) } | ForEach-Object { $_.name })
+$wanted += $pageVideos.Values
 $wanted += $charList | ForEach-Object { Portrait $_.c }
 $wanted += $powerOf.Values | ForEach-Object { PowerIcon $_ }
 $mapEntries = $maps.PSObject.Properties | Where-Object { $_.Value.name -and $_.Value.name -notmatch '^@#' }
@@ -132,13 +169,14 @@ $wanted += $layouts
 Write-Host "Adresler çözülüyor…"
 $urls = Resolve-WikiFiles $wanted
 function Url($name) { if ($name) { $urls[$name] } else { $null } }
+function FirstUrl([object[]]$list) { foreach ($u in $list) { if ($u) { return $u } }; return $null }
 
 function Perk($p) {
   [ordered]@{
     name        = $p.name
     description = Fill-Description $p.description $p.tunables
     icon        = Url (PerkIcon $p)
-    video       = if (PerkAnim $p) { Url (PerkAnim $p) } else { Url (PerkGif $p) }
+    video       = FirstUrl @((Url (PerkAnim $p)), (Url (PerkMp4 $p)), (Url $pageVideos[$p.name]))
   }
 }
 
@@ -206,7 +244,7 @@ function PageImages([string[]]$titles) {
     foreach ($page in (Values $r.query.pages)) {
       if (-not $page.original) { continue }
       $t = $page.title
-      while ($from.ContainsKey($t)) { $t = $from[$t] }
+      for ($hop = 0; $hop -lt 3 -and $from.ContainsKey($t); $hop++) { $t = $from[$t] }
       $map[$t] = $page.original.source -replace '/revision/latest.*$', ''
     }
   }
