@@ -13,9 +13,7 @@ if (!map) {
   );
   if (map.image) hero.style.backgroundImage = `url("${map.image}")`;
 
-  // DBD haritalarının bir kısmı her maçta rastgele oluşur. Üstten şema (schema) sabit binaları, çıkış kapılarını ve parça
-  // yerleşimini gösterir; harita planı (outline) kapalı haritalarda kat planı, açık haritalarda dış sınır ve büyüklüktür.
-  const outline = map.layoutKind === "outline";
+  // Üstten şema: sabit binaları, çıkış kapılarını ve parça yerleşimini gösterir (haritanın kalanı her maçta rastgele oluşur).
   const layouts = map.layouts.length
     ? el(
         "div",
@@ -23,44 +21,47 @@ if (!map) {
         map.layouts.map((src, i) =>
           el(
             "figure",
-            { class: `radar dbd-layout${outline ? " dbd-outline" : ""}` },
-            el("img", { src, alt: `${map.name} ${outline ? "harita planı" : "üstten şeması"}`, width: 688, height: 688 }),
-            map.layouts.length > 1 ? el("figcaption", {}, layoutCaption(src, i)) : null
+            { class: "radar dbd-layout" },
+            el("img", { src, alt: `${map.name} üstten şeması`, width: 688, height: 688 }),
+            map.layouts.length > 1 ? el("figcaption", {}, /_up\.png/i.test(src) ? "Üst kat" : /_down\.png/i.test(src) ? "Alt kat" : `Şema ${i + 1}`) : null
           )
         )
       )
-    : el("p", { class: "notice" }, "Bu haritanın üstten şeması henüz yok.");
+    : null;
 
-  root.replaceChildren(
-    hero,
-    el(
-      "div",
-      { class: "map-layout" },
-      layouts,
-      el(
-        "div",
-        { class: "build-card map-panel" },
-        el("h3", {}, "Harita hakkında"),
-        richText((!IS_EN && typeof DBD_TR_MAPS !== "undefined" && DBD_TR_MAPS[map.name]) || map.description),
-        el(
-          "p",
-          { class: "tile-sub dbd-note" },
-          outline
-            ? "Bu görsel wikideki harita planıdır: kapalı haritalarda katları ve odaları, açık haritalarda yalnızca dış sınırı ve büyüklüğü gösterir. Açık haritaların içi her maçta rastgele oluşur."
-            : "Haritanın bir kısmı her maçta rastgele oluşur. Ana bina, çıkış kapıları ve sabit yapılar şemadaki yerlerinde kalır."
-        )
-      )
-    )
+  const description = (!IS_EN && typeof DBD_TR_MAPS !== "undefined" && DBD_TR_MAPS[map.name]) || map.description;
+
+  const panel = el(
+    "div",
+    { class: "map-panel dbd-map-panel" },
+    generatorCard(),
+    el("div", { class: "build-card" }, el("h3", {}, "Harita hakkında"), richText(description))
   );
+
+  root.replaceChildren(hero, layouts ? el("div", { class: "map-layout" }, layouts, panel) : panel);
 }
 
-// Birden çok görseli olan haritalarda etiket: kat, bölüm ya da çeşit.
-function layoutCaption(src, i) {
-  if (/_up\.png|UpperFloor/i.test(src)) return "Üst kat";
-  if (/_down\.png|LowerFloor/i.test(src)) return "Alt kat";
-  if (/Surface/i.test(src)) return "Yüzey";
-  if (/Dungeon/i.test(src)) return "Zindan";
-  if (/IIOutline/.test(src)) return "II. çeşit";
-  if (/Outline/.test(src)) return "I. çeşit";
-  return `Şema ${i + 1}`;
+// Bilinen jeneratör noktaları (gens.js). Sabit olanlar her maç oradadır, olası olanlar bazı maçlarda.
+function generatorCard() {
+  const gens = (typeof DBD_GENS !== "undefined" && DBD_GENS[map.name]) || [];
+  const text = (g) => (IS_EN ? g.en : g.tr);
+  return el(
+    "div",
+    { class: "build-card dbd-gens" },
+    el("h3", {}, "Jeneratör noktaları"),
+    gens.length
+      ? el(
+          "ul",
+          { class: "gen-list" },
+          gens.map((g) =>
+            el("li", {}, el("span", { class: `gen-tag${g.sure ? " sure" : ""}` }, g.sure ? "Sabit" : "Olası"), el("span", {}, text(g)))
+          )
+        )
+      : el("p", { class: "tile-sub" }, "Bu harita için bilinen sabit bir jeneratör noktası yok."),
+    el(
+      "p",
+      { class: "tile-sub dbd-note" },
+      "Her maçta 7 jeneratör çıkar. Burada yazanlar dışındaki jeneratörler, haritanın her maçta değişen bölümlerinde rastgele noktalarda çıkar."
+    )
+  );
 }
