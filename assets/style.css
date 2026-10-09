@@ -874,3 +874,10 @@ a.game-card:hover > .val-art { opacity: 0.75; }
 .val-art img { flex: none; width: 80%; height: auto; margin: -6% -22% 0; align-self: flex-start; }
 
 .val-art img:only-child, .val-art img:first-child:nth-last-child(2), .val-art img:last-child:nth-child(2) { width: 90%; margin: -6% -18% 0; }
+
+/* Valorant yetenek videoları */
+.ability-video { margin-top: 12px; border-radius: 10px; overflow: hidden; }
+
+.ability-video video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); pointer-events: none; }
+
+.ability-video:hover video { filter: none; }
