@@ -378,8 +378,8 @@ let runeAssetsPromise;
 function getRuneAssets() {
   if (!runeAssetsPromise) {
     runeAssetsPromise = Promise.all([
-      fetchJson(`${CLIENT_DATA}/tr_tr/v1/perks.json`),
-      fetchJson(`${CLIENT_DATA}/tr_tr/v1/perkstyles.json`),
+      fetchJson(`${CLIENT_DATA}/${CLIENT_LANG}/v1/perks.json`),
+      fetchJson(`${CLIENT_DATA}/${CLIENT_LANG}/v1/perkstyles.json`),
       ddData("summoner.json").then(({ data }) => data.data),
     ]).then(([perks, styles, spells]) => ({
       perks: new Map(perks.map((p) => [p.id, p])),
