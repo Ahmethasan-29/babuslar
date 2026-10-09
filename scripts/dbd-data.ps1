@@ -225,7 +225,7 @@ foreach ($m in $mapEntries) {
   $schemes = $layouts | Where-Object { (Key ($_ -replace '^AltMapOutline ', '' -replace '\.png$', '' -replace ' (up|down)$', '')) -eq (Key $base) }
   if (-not $mapOut.Contains($id)) {
     $image = Url (MapIcon $v)
-    $mapOut[$id] = [ordered]@{ id = $id; name = $name; realm = $v.realm; description = $v.description; image = $image; layouts = @(); layoutKind = "schema" }
+    $mapOut[$id] = [ordered]@{ id = $id; name = $name; realm = $v.realm; description = $v.description; image = $image; layouts = @() }
   }
   foreach ($s in $schemes) {
     $url = $urls[$s]
@@ -259,53 +259,6 @@ foreach ($x in $missing) {
   if ($x.Contains('portrait')) { $x.portrait = $img } else { $x.image = $img }
 }
 
-# Üstten şeması (AltMapOutline) olmayan haritalarda wiki sayfasındaki harita planı ("...Outline.png") kullanılır.
-# Kapalı haritalarda kat planıdır; açık haritalarda yalnızca dış sınırı ve büyüklüğü gösterir. Eski sürümler elenir.
-$noLayout = @($mapOut.Values | Where-Object { -not $_.layouts.Count })
-$titleOf = @{}
-foreach ($m in $noLayout) {
-  # "Azarov’s" → "Azarov's", "Badham Preschool III" → "Badham Preschool"
-  $titleOf[$m.id] = ($m.name.Replace([string][char]0x2019, "'") -replace ' [IVX]+$', '').Trim()
-}
-$outlines = @{}
-$list = @($titleOf.Values | Sort-Object -Unique)
-for ($i = 0; $i -lt $list.Count; $i += 50) {
-  $batch = $list[$i..([Math]::Min($i + 49, $list.Count - 1))]
-  $q = ($batch | ForEach-Object { [uri]::EscapeDataString($_) }) -join '|'
-  $cont = ""
-  do {
-    $r = Get-Json "$WIKI`?action=query&prop=images&imlimit=500&redirects=1&format=json&titles=$q$cont"
-    $from = @{}
-    foreach ($n in @($r.query.normalized) + @($r.query.redirects)) { if ($n) { $from[$n.to] = $n.from } }
-    foreach ($page in (Values $r.query.pages)) {
-      $t = $page.title
-      for ($hop = 0; $hop -lt 3 -and $from.ContainsKey($t); $hop++) { $t = $from[$t] }
-      foreach ($img in @($page.images)) {
-        $f = if ($img) { $img.title.Substring(5) } else { "" }
-        if ($f -match 'Outline' -and $f -notmatch 'AltMapOutline|old|\d\.\d|v\d|\(2v8\)') {
-          if (-not $outlines[$t]) { $outlines[$t] = @() }
-          if ($outlines[$t] -notcontains $f) { $outlines[$t] += $f }
-        }
-      }
-    }
-    $cont = Continue-Query $r
-  } while ($cont)
-}
-$outlineUrls = Resolve-WikiFiles @($outlines.Values | ForEach-Object { $_ })
-foreach ($m in $noLayout) {
-  $files = @($outlines[$titleOf[$m.id]] | Sort-Object)
-  # Numaralı çeşitler (Badham Preschool IV) kendi planını ("...IVOutline") kullanır; yoksa ve "I" ise numarasız planı.
-  if ($m.name -match ' ([IVX]+)$') {
-    $roman = $Matches[1]
-    $own = @($files | Where-Object { $_ -cmatch "[a-z]$roman ?Outline" })
-    $files = if ($own.Count) { $own } else { @($files | Where-Object { $_ -cmatch '[a-z] ?Outline' -and $_ -cnotmatch '[a-z](I|II|III|IV|V) ?Outline' }) }
-  }
-  foreach ($f in $files) {
-    $url = $outlineUrls[$f]
-    if ($url -and $m.layouts -notcontains $url) { $m.layouts += $url; $m.layoutKind = "outline" }
-  }
-}
-
 $data = [ordered]@{
   killers   = @($killers | Sort-Object { $_.name -replace '^The ', '' })
   survivors = @($survivors | Sort-Object { $_.name })
@@ -319,6 +272,6 @@ $header = "// Dead by Daylight verisi: scripts/dbd-data.ps1 ile oluşturulur, el
 
 $noPortrait = @($killers + $survivors | Where-Object { -not $_.portrait }).Count
 $allPerks = @($perksByChar.Values | ForEach-Object { $_ }) + $general.survivor + $general.killer
-Write-Host ("Katil: {0}, Survivor: {1}, Perk: {2} (ikonsuz {3}, animasyonlu {4}), Harita: {5} (görselli {6}), portresiz karakter: {7}" -f `
+Write-Host ("Katil: {0}, Survivor: {1}, Perk: {2} (ikonsuz {3}, animasyonlu {4}), Harita: {5} (şemalı {6}), portresiz karakter: {7}" -f `
     $killers.Count, $survivors.Count, $allPerks.Count, @($allPerks | Where-Object { -not $_.icon }).Count, @($allPerks | Where-Object { $_.video }).Count, `
     $mapOut.Count, @($mapOut.Values | Where-Object { $_.layouts.Count }).Count, $noPortrait)

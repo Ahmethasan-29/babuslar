@@ -55,7 +55,7 @@ const EN = {
   "Ajanlar · Haritalar · İnfolar": "Agents · Maps · Callouts",
   "Tüm ajanların yetenekleri ve rekabetçi haritalar: radar üzerinde infolar.": "Every agent's abilities and the competitive maps with callouts on the radar.",
   "Katiller · Survivor'lar · Perkler · Haritalar": "Killers · Survivors · Perks · Maps",
-  "Katillerin güçleri, perkler ve animasyonları; haritaların üstten şemaları.": "Killer powers, perks with in-game videos and top-down map layouts.",
+  "Katillerin güçleri, perkler ve oyun içi videoları; haritalarda jeneratör noktaları.": "Killer powers, perks with in-game videos and generator spots on every map.",
 
   // Telif notları
   "Babuşlar, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da League of Legends'ın yapımında veya yönetiminde resmi olarak yer alan kişilerin görüşlerini yansıtmaz.":
@@ -269,13 +269,12 @@ const EN = {
   "Üstten şemalar": "Top-down layouts",
   "Üstten şema": "Top-down layout",
   "Şema yok": "No layout",
-  "Harita planı": "Map plan",
-  "Yüzey": "Surface",
-  "Zindan": "Dungeon",
-  "I. çeşit": "Variant I",
-  "II. çeşit": "Variant II",
-  "Bu görsel wikideki harita planıdır: kapalı haritalarda katları ve odaları, açık haritalarda yalnızca dış sınırı ve büyüklüğü gösterir. Açık haritaların içi her maçta rastgele oluşur.":
-    "This is the map plan from the wiki: for indoor maps it shows the floors and rooms, for outdoor maps only the outer boundary and size. The inside of outdoor maps is randomly generated every match.",
+  "Jeneratör noktaları": "Generator spots",
+  "Sabit": "Fixed",
+  "Olası": "Possible",
+  "Bu harita için bilinen sabit bir jeneratör noktası yok.": "No fixed generator spot is known for this map.",
+  "Her maçta 7 jeneratör çıkar. Burada yazanlar dışındaki jeneratörler, haritanın her maçta değişen bölümlerinde rastgele noktalarda çıkar.":
+    "Every match has 7 generators. Apart from the ones listed here, they spawn at random spots in the parts of the map that change every match.",
   "Bir harita seç; üstten şemasını ve bilgilerini gör.": "Pick a map to see its top-down layout and details.",
   "Bu haritanın üstten şeması henüz yok.": "This map doesn't have a top-down layout yet.",
   "Haritanın bir kısmı her maçta rastgele oluşur. Ana bina, çıkış kapıları ve sabit yapılar şemadaki yerlerinde kalır.":
@@ -287,6 +286,7 @@ const EN = {
   "Survivor perkleri": "Survivor perks",
   "▶ Sadece videolu": "▶ With video only",
   "▶ Oyun içi videoyu izle": "▶ Watch in-game video",
+  "⛶ Tam ekran": "⛶ Fullscreen",
   "Genel perk (herkes kullanabilir)": "General perk (anyone can use it)",
   "Aramana uyan perk bulunamadı.": "No perks match your search.",
   "Dead by Daylight: katiller, survivorlar, perkler ve haritalar.": "Dead by Daylight: killers, survivors, perks and maps.",
@@ -337,7 +337,6 @@ const EN_PATTERNS = [
   [/^(.+) videosunu oynat$/, (_, name) => `Play ${translateText(name)} video`],
   [/^(.+) radar haritası$/, "$1 radar map"],
   [/^(.+) üstten şeması$/, "$1 top-down layout"],
-  [/^(.+) harita planı$/, "$1 map plan"],
   [/^Bu bölgede henüz (.+) atışı yok\. Diğer türler için "Tümü"ne bak\.$/, (_, type) =>
     `No ${translateText(type.replace(/^./, (c) => c.toLocaleUpperCase("tr"))).toLowerCase()} lineups here yet. See "All" for other types.`],
 ];

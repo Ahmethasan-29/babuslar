@@ -962,6 +962,45 @@ a.perk-owner:hover { text-decoration: underline; }
 
 .perk-collage img { width: 22%; max-width: 96px; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); background: linear-gradient(135deg, #4b2a5c, #1d1224); }
 
-.dbd-outline { background: #6b6b6b; }
+/* DBD jeneratör noktaları */
+.dbd-map-panel { display: grid; gap: 16px; align-content: start; }
 
-.dbd-outline figcaption { top: auto; bottom: 10px; }
+.dbd-map-panel .build-card { margin-bottom: 0; }
+
+.gen-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+
+.gen-list li { display: flex; gap: 10px; align-items: baseline; }
+
+.gen-tag {
+  flex: none;
+  min-width: 52px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.gen-tag.sure { color: #fff; background: var(--accent); border-color: var(--accent); }
+
+/* Dead by Daylight kartı: katillerin portreleri, koyu kan kırmızısı üzerinde. */
+.game-card > .dbd-art { background: radial-gradient(ellipse at 50% 30%, #8a1020 0%, #3a0710 55%, #0e0609 100%); opacity: 0.7; }
+
+a.game-card:hover > .dbd-art { opacity: 0.85; }
+
+.dbd-art img { width: 62%; margin: -2% -12% 0; }
+
+/* Perk videosu: büyütme düğmesi ve büyük video penceresi */
+.perk-video-wrap { margin-top: 10px; }
+
+.perk-video-wrap .perk-video { margin-top: 0; }
+
+.perk-zoom { margin-top: 8px; }
+
+dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
+
+.video-dialog-title { margin: 0 44px 12px 4px; font-size: 1.2rem; }
+
+.video-dialog .video-frame { border-radius: 10px; max-height: calc(100vh - 140px); }

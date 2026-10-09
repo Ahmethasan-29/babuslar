@@ -64,12 +64,63 @@ function perkCard(p, withOwner = false) {
   );
 }
 
-// Perkin oyun içi videosu (wikiden). Tıklanınca yüklenir ve döngüde oynar.
+// Perkin oyun içi videosu (wikiden). Tıklanınca yüklenir ve döngüde oynar; "Büyüt" ile büyük pencerede açılır.
 function perkVideo(p) {
   if (!p.video) return null;
   const button = el("button", { class: "chip perk-play", type: "button" }, "▶ Oyun içi videoyu izle");
   button.addEventListener("click", () =>
-    button.replaceWith(el("video", { class: "video-frame perk-video", src: p.video, autoplay: "", loop: "", muted: "", playsinline: "", controls: "" }))
+    button.replaceWith(
+      el(
+        "div",
+        { class: "perk-video-wrap" },
+        el("video", { class: "video-frame perk-video", src: p.video, autoplay: "", loop: "", muted: "", playsinline: "", controls: "" }),
+        el("button", { class: "chip perk-zoom", type: "button", onclick: (event) => enlargeVideo(event.currentTarget.previousElementSibling, p) }, "⛶ Tam ekran")
+      )
+    )
   );
   return button;
+}
+
+// Büyük video penceresi: kartlardaki küçük videoların tam boy hali. Kapatınca video durur.
+let videoDialog;
+
+function openVideoDialog(title, src) {
+  if (!videoDialog) {
+    videoDialog = el(
+      "dialog",
+      { class: "video-dialog", "aria-label": "Video" },
+      el("button", { class: "close", type: "button", "aria-label": "Kapat", onclick: () => videoDialog.close() }, "×"),
+      el("h2", { class: "video-dialog-title" }),
+      el("video", { class: "video-frame", autoplay: "", loop: "", muted: "", playsinline: "", controls: "" })
+    );
+    videoDialog.addEventListener("click", (event) => {
+      if (event.target === videoDialog) videoDialog.close();
+    });
+    videoDialog.addEventListener("close", () => videoDialog.querySelector("video").removeAttribute("src"));
+    document.body.append(videoDialog);
+  }
+  videoDialog.querySelector(".video-dialog-title").textContent = title;
+  const video = videoDialog.querySelector("video");
+  video.src = src;
+  videoDialog.showModal();
+  video.play().catch(() => {});
+}
+
+// Videoyu tam ekran açar (iPhone'da kendi oynatıcısıyla). Tarayıcı tam ekrana izin vermezse büyük pencerede açar.
+function enlargeVideo(video, p) {
+  const fallback = () => openVideoDialog(p.name, p.video);
+  if (video.requestFullscreen && document.fullscreenEnabled) {
+    let settled = false;
+    video
+      .requestFullscreen()
+      .then(() => video.play().catch(() => {}))
+      .catch(fallback)
+      .finally(() => (settled = true));
+    // Bazı gömülü tarayıcılar isteği hiç yanıtlamaz; o zaman da büyük pencere açılır.
+    setTimeout(() => !settled && !document.fullscreenElement && fallback(), 1500);
+  } else if (video.webkitEnterFullscreen) {
+    video.webkitEnterFullscreen();
+  } else {
+    fallback();
+  }
 }
