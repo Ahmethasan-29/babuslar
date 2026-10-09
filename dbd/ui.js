@@ -74,7 +74,7 @@ function perkVideo(p) {
         "div",
         { class: "perk-video-wrap" },
         el("video", { class: "video-frame perk-video", src: p.video, autoplay: "", loop: "", muted: "", playsinline: "", controls: "" }),
-        el("button", { class: "chip perk-zoom", type: "button", onclick: () => openVideoDialog(p.name, p.video) }, "⛶ Büyüt")
+        el("button", { class: "chip perk-zoom", type: "button", onclick: (event) => enlargeVideo(event.currentTarget.previousElementSibling, p) }, "⛶ Tam ekran")
       )
     )
   );
@@ -104,4 +104,23 @@ function openVideoDialog(title, src) {
   video.src = src;
   videoDialog.showModal();
   video.play().catch(() => {});
+}
+
+// Videoyu tam ekran açar (iPhone'da kendi oynatıcısıyla). Tarayıcı tam ekrana izin vermezse büyük pencerede açar.
+function enlargeVideo(video, p) {
+  const fallback = () => openVideoDialog(p.name, p.video);
+  if (video.requestFullscreen && document.fullscreenEnabled) {
+    let settled = false;
+    video
+      .requestFullscreen()
+      .then(() => video.play().catch(() => {}))
+      .catch(fallback)
+      .finally(() => (settled = true));
+    // Bazı gömülü tarayıcılar isteği hiç yanıtlamaz; o zaman da büyük pencere açılır.
+    setTimeout(() => !settled && !document.fullscreenElement && fallback(), 1500);
+  } else if (video.webkitEnterFullscreen) {
+    video.webkitEnterFullscreen();
+  } else {
+    fallback();
+  }
 }
