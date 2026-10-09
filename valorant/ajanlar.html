@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Haritalar · Valorant · Babuşlar</title>
-  <meta name="description" content="Valorant haritaları: radar üzerinde infolar (callout).">
+  <title>Ajanlar · Valorant · Babuşlar</title>
+  <meta name="description" content="Valorant ajanları: rolleri ve yetenekleri (C, Q, E, X).">
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -14,18 +14,25 @@
       <nav class="nav" aria-label="Ana menü">
         <a href="../">Ana sayfa</a>
         <a href="./">Valorant</a>
-        <a href="ajanlar.html">Ajanlar</a>
-        <a href="haritalar.html" aria-current="page">Haritalar</a>
+        <a href="ajanlar.html" aria-current="page">Ajanlar</a>
+        <a href="haritalar.html">Haritalar</a>
       </nav>
     </div>
   </header>
 
   <main>
     <div class="container">
-      <h1 class="page-title">Valorant haritaları</h1>
-      <p class="page-sub">Bir harita seç; infoları radar üzerinde gör.</p>
-      <div class="games" id="maps">
-        <p class="notice">Haritalar yükleniyor…</p>
+      <h1 class="page-title">Ajanlar</h1>
+      <p class="page-sub">Bir ajana tıklayarak yeteneklerini gör.</p>
+
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Ajan ara…" aria-label="Ajan ara" autocomplete="off">
+        <div class="chips" id="roles" role="group" aria-label="Role göre filtrele"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+      </div>
+
+      <div class="grid" id="grid">
+        <p class="notice">Ajanlar yükleniyor…</p>
       </div>
     </div>
   </main>
@@ -38,6 +45,6 @@
 
   <script src="../assets/common.js"></script>
   <script src="api.js"></script>
-  <script src="maps.js"></script>
+  <script src="agents.js"></script>
 </body>
 </html>
