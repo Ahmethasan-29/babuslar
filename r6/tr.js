@@ -124,7 +124,6 @@ const R6_TR = {
   },
   maps: {
     bank: "Los Angeles'ta sıkı korunan büyük bir banka. Bodrum, iki kat ve çatı; savunmacılar küçük odaları kolayca güçlendirir, saldırganlar binaya kat kat ilerler.",
-    bartlettu: "Cambridge, Massachusetts'te bir üniversite. Birbirinden çok farklı iki kat; küçük, yakın mesafe çatışmaya dayalı bir harita.",
     border: "Orta Doğu'da bir sınır kapısı. Eski ve yeni yapılar ile açık hava geçitleri; binanın ortasındaki geçitler iki tarafı birbirine bağlar.",
     calypsocasino: "Las Vegas'ta bir kumarhane. Rainbow Six: Vegas'taki aynı adlı haritadan uyarlanan yeni bir harita.",
     chalet: "Fransız Alpleri'nde (Courchevel) bir dağ evi. Sıcak iç mekânlar ve görüşün kısıtlı olduğu karlı dış alan.",
@@ -135,7 +134,6 @@ const R6_TR = {
     emeraldplains: "Kuzey İrlanda'da bir kır kulübü ve özel çiftlik. Büyük ve açık alanlı bir harita; sabır ve dikkat ister.",
     favela: "Brezilya'da (Rio de Janeiro) bir gecekondu mahallesi. Dar sokaklar, çok sayıda oda ve kırılabilir dış cepheler.",
     fortress: "Fas'ta Atlas Dağları'nda bir kasbah (kale). Avlular ve dar koridorlar.",
-    herefordbaserework: "İngiltere'de SAS'ın eğitim üssü. Bodrum, üç kat ve çatı; yenilenen hâlinde daha çok kırılabilir zemin ve merdiven var.",
     house: "Los Angeles'ta sıradan bir banliyö evi. Küçük ve hızlı oynanan, yıkılabilirliği bol bir harita.",
     kafedostoyevsky: "Moskova'nın merkezinde lüks bir kafe. Üç kat; üst katlarda sıkışık odalar ve çok sayıda kırılabilir zemin.",
     kanal: "Almanya'da (Hamburg) bir kanalın iki yakasındaki binalar. Binalar kanal üzerindeki geçitlerle birbirine bağlıdır.",

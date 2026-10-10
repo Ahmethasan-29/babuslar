@@ -49,6 +49,8 @@ function Dots([string]$v) { ([regex]::Matches($v, '&#9679;|●')).Count }
 function FirstFile([string]$v) {
   if (-not $v) { return $null }
   if ($v -match '\[\[File:([^\]|]+)') { return $Matches[1].Trim() }
+  # Bazı sayfalarda "File:" öneki unutulmuş: "[[HEREFORDrework thumbnail.png|270px]]".
+  if ($v -match '\[\[([^\]|:]+\.(png|jpe?g|webp|gif))') { return $Matches[1].Trim() }
   $f = (($v -replace '(?s)</?gallery[^>]*>', '').Trim() -split "`n")[0]
   ($f -replace '^File:', '' -replace '\|.*$', '').Trim()
 }
@@ -264,6 +266,8 @@ foreach ($title in $mapTitles) {
   if (-not $w) { continue }
   $info = (Get-Templates $w "Infobox/map") | Select-Object -First 1
   if (-not $info) { continue }
+  # Oyundan kaldırılmış haritalar ({{Cut}}) listeye alınmaz.
+  if ($w -match '\{\{\s*Cut\s*\}\}') { Write-Host "  kaldırılmış harita atlandı: $title"; continue }
   $name = $title -replace ' \(Siege\)$', ''
   # Kat planları: dosya adı ya da açıklaması kat/bodrum/çatı belirten en az iki resim içeren ilk galeri
   # (yenilenmiş haritalarda güncel hâl sayfada önce gelir).
@@ -341,7 +345,13 @@ foreach ($o in $operators) {
   foreach ($g in $o.gadgets) { $g.Remove("page"); $g.Remove("type") }
   $o.Remove("page")
 }
-foreach ($w in $weapons.Values) { $w.image = U $w.image }
+foreach ($w in $weapons.Values) {
+  $w.image = U $w.image
+  # Kalkanların wikide silah resmi yok; kalkan operatörün özel yeteneğiyse (Blitz, Montagne…) onun simgesi kullanılır.
+  if (-not $w.image -and $w.type -match 'Shield') {
+    $w.image = @($w.users | ForEach-Object { $id = $_; $op = $operators | Where-Object { $_.id -eq $id }; if ($op.ability.name -match 'Shield') { $op.ability.icon } } | Where-Object { $_ })[0]
+  }
+}
 foreach ($m in $maps) { $m.image = U $m.image; foreach ($f in $m.floors) { $f.url = U $f.file; $f.Remove("file") } ; $m.floors = @($m.floors | Where-Object { $_.url }) }
 
 $data = [ordered]@{
