@@ -23,7 +23,7 @@ function ddRich(html) {
     if (!DD_TAGS.has(node.tagName)) return children;
     const out = document.createElement(node.tagName.toLowerCase());
     // Etki rengi sınıfı (stun, bleed, blight…) korunur; başka öznitelik alınmaz.
-    if (node.tagName === "SPAN" && /^[a-z]+$/.test(node.className)) out.className = `fx-${node.className}`;
+    if (node.tagName === "SPAN" && /^[a-z][a-z0-9-]*$/.test(node.className)) out.className = `fx-${node.className}`;
     out.append(...children);
     return out;
   };
