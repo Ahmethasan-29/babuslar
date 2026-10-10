@@ -1,5 +1,5 @@
 ﻿# Darkest Dungeon Wiki (darkestdungeon.wiki.gg) için ortak yardımcılar: istekler, önbellek, şablon ayrıştırıcı.
-# scripts/dd-data.ps1 ve scripts/dd2-data.ps1 bu dosyayı dot-source ile yükler.
+# scripts/dd-data.ps1 ve scripts/dd2-data.ps1 bu dosyayı dot-source ile yükler; scripts/r6-data.ps1 de $API'yi Rainbow Six Wiki'ye çevirerek kullanır.
 $UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
 $API = "https://darkestdungeon.wiki.gg/api.php"
 
@@ -23,7 +23,7 @@ function Curl-Json([string[]]$extra) {
     & curl.exe -s -m 60 -A $UA -o $TMP @extra
     if ($LASTEXITCODE -eq 0) {
       $text = [IO.File]::ReadAllText($TMP, [Text.Encoding]::UTF8)
-      if ($text.StartsWith("{")) {
+      if ($text.StartsWith("{") -or $text.StartsWith("[")) {
         [IO.File]::WriteAllText($cached, $text, (New-Object Text.UTF8Encoding $false))
         return $text | ConvertFrom-Json
       }
