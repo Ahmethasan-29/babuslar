@@ -1204,3 +1204,77 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .r6-plan-scroll { max-height: calc(100vh - 150px); overflow: auto; border-radius: 10px; background: #fff; }
 .r6-plan-scroll img { display: block; width: 100%; height: auto; cursor: zoom-in; }
 .r6-plan-scroll.zoomed img { width: auto; max-width: none; cursor: zoom-out; }
+
+/* Mount & Blade: harita görüntüleyici ve sayfalar */
+.mbmap-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+.mbmap { position: relative; }
+.mbmap-stage { position: relative; height: 60vh; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--border); background: #0b1720; touch-action: none; cursor: grab; user-select: none; }
+.mbmap-stage:active { cursor: grabbing; }
+.mbmap-inner { position: absolute; left: 0; top: 0; width: 100%; transform-origin: 0 0; }
+.mbmap-img { display: block; width: 100%; height: 100%; pointer-events: none; }
+.mbmap-layer { position: absolute; inset: 0; }
+.mbmap-tools { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
+.mbmap-tools .chip { background: rgba(14, 9, 16, 0.85); min-width: 36px; }
+.mbmap-marker { position: absolute; transform: translate(-50%, -50%) scale(var(--inv, 1)); display: flex; align-items: center; gap: 4px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; }
+.mbmap-marker .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); border: 2px solid #111; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7); }
+.mbmap-marker.castle .dot { width: 10px; height: 10px; border-radius: 2px; transform: rotate(45deg); }
+.mbmap-marker.village .dot { width: 6px; height: 6px; border-width: 1px; }
+.mbmap-marker .name { display: none; position: absolute; left: 14px; white-space: nowrap; font-size: 12px; font-weight: 700; text-shadow: 0 1px 3px #000, 0 0 2px #000; }
+.mbmap-stage.zoomed .mbmap-marker.town .name, .mbmap-marker:hover .name, .mbmap-marker.active .name { display: block; }
+.mbmap-marker.active .dot { box-shadow: 0 0 0 3px #fff, 0 0 12px 4px var(--accent); }
+.mbmap-marker[hidden] { display: none; }
+.mbmap-panel { position: sticky; top: 80px; margin-bottom: 0; max-height: calc(100vh - 100px); overflow: auto; }
+.mbmap-panel h2 { margin: 0 0 8px; }
+.mb-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
+.mb-legend, .mb-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 4px; }
+.mb-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mb-fac { border-color: var(--c); }
+.linklike { padding: 0; border: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; text-align: left; }
+.linklike:hover { text-decoration: underline; }
+.mb-faction { border-left: 5px solid var(--c); }
+.mb-faction h2 { margin: 0 0 6px; }
+.mb-tree, .mb-tree ul { list-style: none; margin: 0; padding: 0; }
+.mb-tree ul { margin-left: 22px; padding-left: 14px; border-left: 2px solid var(--border); }
+.mb-tree li { margin: 8px 0; }
+.mb-troop { display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); border-left: 4px solid #888; }
+.mb-troop.infantry { border-left-color: #c9a227; }
+.mb-troop.ranged { border-left-color: #4caf50; }
+.mb-troop.cavalry { border-left-color: #3a8de8; }
+.mb-troop.horsearcher { border-left-color: #b14bff; }
+.mb-party h2 { margin: 0 0 10px; }
+.mb-party .chips { margin-top: 12px; }
+.mb-warn { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: rgba(217, 83, 79, 0.15); border: 1px solid #d9534f; }
+.mb-warn ul { margin: 6px 0 0; padding-left: 18px; }
+.mb-ok { margin: 12px 0 0; color: #8fd18f; font-weight: 600; }
+.mb-companions { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 14px; margin-top: 16px; }
+.mb-companion { display: grid; grid-template-columns: 72px 1fr; gap: 14px; margin-bottom: 0; scroll-margin-top: 90px; }
+.mb-companion h3 { margin: 0 0 4px; display: flex; gap: 8px; align-items: center; }
+.mb-companion p { margin: 6px 0; }
+.mb-face { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; border: 2px solid var(--border); }
+.mb-good { color: #8fd18f; }
+.mb-bad { color: #f07a76; }
+.mb-noble { font-size: 0.75rem; }
+.mb-faq { display: grid; gap: 10px; margin-top: 16px; }
+.mb-faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+.mb-faq-item summary { padding: 14px 18px; cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+.mb-faq-item[open] summary { border-bottom: 1px solid var(--border); }
+.mb-faq-body { padding: 4px 18px 14px; color: #e6d6e3; }
+.mb-faq-body p { margin: 10px 0; }
+.mb-faq-body ul { margin: 8px 0; padding-left: 20px; display: grid; gap: 6px; }
+@media (max-width: 900px) {
+  .mbmap-layout { grid-template-columns: 1fr; }
+  .mbmap-panel { position: static; max-height: none; }
+
+}
+.bl-places { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 8px; }
+.bl-place { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; text-align: left; color: var(--text); font: inherit; background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--c); border-radius: 10px; cursor: pointer; }
+.bl-place:hover { border-color: var(--accent); border-left-color: var(--c); }
+.bl-troop { flex-direction: row; align-items: center; gap: 10px; }
+.bl-troop img { width: 48px; height: 48px; object-fit: cover; object-position: top; border-radius: 8px; background: #0d0a0c; }
+.bl-troop > div { display: flex; flex-direction: column; gap: 2px; }
+.bl-troop strong { display: flex; gap: 6px; align-items: center; }
+@media (max-width: 600px) {
+  .mb-tree ul { margin-left: 8px; padding-left: 8px; }
+  .mb-companion { grid-template-columns: 56px 1fr; }
+  .mb-face { width: 56px; height: 56px; }
+}
