@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
+  <title>Harita · Bannerlord · Babuşlar</title>
+  <meta name="description" content="Bannerlord Calradia haritası: şehirler, kaleler, köyler, ürettikleri mallar ve bağlı oldukları yerler.">
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script src="../../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../../">Ana sayfa</a>
+        <a href="../">Mount &amp; Blade</a>
+        <a href="./">Bannerlord</a>
+        <a href="harita.html" aria-current="page">Harita</a>
+        <a href="kralliklar.html">Krallıklar</a>
+        <a href="rehber.html">Rehber</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Calradia haritası</h1>
+      <div class="mbmap-layout">
+        <div class="mbmap" id="map"></div>
+        <aside class="build-card mbmap-panel" id="panel" aria-live="polite"></aside>
+      </div>
+      <section class="section">
+        <h2>Yerleşimler</h2>
+        <div class="toolbar">
+          <input class="search" id="search" type="search" placeholder="Şehir, kale, köy ya da ürün ara (ör. Grapes)…" aria-label="Yerleşim ara" autocomplete="off">
+          <div class="chips" id="types" role="group" aria-label="Türe göre filtrele"></div>
+          <div class="chips" id="kingdoms" role="group" aria-label="Krallığa göre filtrele"></div>
+          <p class="count" id="count" aria-live="polite"></p>
+        </div>
+        <div class="bl-places" id="list"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, TaleWorlds Entertainment ile bağlantılı değildir. Mount &amp; Blade II: Bannerlord ve görselleri TaleWorlds Entertainment'a aittir.</p>
+      <p>Yerleşimler, birlikler ve harita resmi Mount &amp; Blade Wiki'den (mountandblade.fandom.com, CC BY-SA) alınır. Siyasi harita: Vesper.</p>
+    </div>
+  </footer>
+  <script src="../../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="../map-viewer.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
