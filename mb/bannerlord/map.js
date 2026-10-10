@@ -42,7 +42,7 @@ function workshopHint(villages) {
 
 function show(p) {
   if (!p) {
-    panel.replaceChildren(
+    fillChildren(panel, 
       el("h2", {}, L("Bir yer seç", "Pick a place")),
       el("p", { class: "tile-sub" }, L("Haritayı fareyle sürükleyip tekerlekle yakınlaştır; adlar resmin üzerinde yazılı. Aşağıdaki listeden bir yerleşime tıklayınca bilgileri burada görünür.", "Drag the map and zoom with the wheel; names are written on the image. Click a settlement in the list below to see its details here.")),
       el("ul", { class: "mb-legend" }, BL.kingdoms.map((k) => el("li", {}, el("span", { class: "mb-swatch", style: `--c:${k.color}` }), kName(k.id))))
@@ -50,7 +50,7 @@ function show(p) {
     return;
   }
   const villages = p.villages.map((v) => byName[v]).filter(Boolean);
-  panel.replaceChildren(
+  fillChildren(panel, 
     el("h2", {}, p.name),
     el(
       "div",

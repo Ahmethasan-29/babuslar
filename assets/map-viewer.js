@@ -1,4 +1,4 @@
-// Yakınlaştırılıp kaydırılabilen dünya haritası (Mount & Blade bölümleri ortak kullanır).
+// Yakınlaştırılıp kaydırılabilen harita resmi (Mount & Blade ve Witcher 3 sayfaları ortak kullanır).
 // Fare tekerleği / iki parmak ile yakınlaşır, sürükleyerek kaydırılır; işaretler (markers) resimle birlikte hareket eder.
 // markers: [{ px, py (resim üzerindeki % konum), label, color, size: "town" | "castle" | "village", data }]
 function createMapViewer(root, { url, width, height, alt, markers = [], onSelect }) {

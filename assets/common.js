@@ -226,3 +226,7 @@ function formatPercent(part, total) {
   const value = ((part / total) * 100).toLocaleString(LANG === "en_US" ? "en-US" : "tr-TR", { maximumFractionDigits: 1, minimumFractionDigits: 1 });
   return LANG === "en_US" ? `${value}%` : `%${value}`;
 }
+// replaceChildren gibi, ama boş (null/false) parçaları atlar ve iç içe dizileri düzleştirir.
+function fillChildren(node, ...children) {
+  node.replaceChildren(...children.flat(Infinity).filter((c) => c != null && c !== false));
+}

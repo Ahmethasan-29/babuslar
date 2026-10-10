@@ -42,7 +42,7 @@ function render() {
   // Kökler: başka birlikten yükseltilmeyenler. Köylü (Peasant) en başa, soylu hat (Noble) sona.
   const roots = own.filter((t) => !targets.has(t.id)).sort((a, b) => (a.noble - b.noble) || ((a.tier || 0) - (b.tier || 0)));
   const fiefs = (type) => BL.places.filter((p) => kingdomsOf(current).includes(p.kingdom) && p.type === type).length;
-  root.replaceChildren(
+  fillChildren(root, 
     el(
       "section",
       { class: "build-card mb-faction", style: `--c:${BL.kingdoms.find((k) => k.id === kingdomsOf(current)[0])?.color}` },
