@@ -1162,7 +1162,6 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .r6-list li { margin-bottom: 4px; }
 .r6-video-wrap { max-width: 720px; }
 .r6-video { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: #000; }
-.r6-video-link { display: inline-block; margin: 8px 12px; font-size: 0.9rem; color: var(--muted); }
 .r6-loadout { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; align-items: start; }
 .r6-loadout .build-card { margin-bottom: 0; }
 .r6-weapon-list { display: grid; gap: 10px; }
@@ -1191,7 +1190,6 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .r6-objectives { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
 .r6-floor { margin-top: 14px; }
 .r6-floor img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); background: #fff; }
-.r6-floor .r6-video-link { margin: 8px 0 0; }
 .game-card > .r6-art img { width: 60%; margin: -2% -10% 0; }
 .game-card > .r6-collage img { width: 28%; max-width: 140px; }
 @media (max-width: 700px) {
@@ -1200,3 +1198,9 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
   .r6-weapon { grid-template-columns: 1fr; }
 }
 .r6-map-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.r6-floor-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.r6-floor-zoom { margin-top: 10px; }
+.r6-plan-hint { margin: -6px 4px 10px; }
+.r6-plan-scroll { max-height: calc(100vh - 150px); overflow: auto; border-radius: 10px; background: #fff; }
+.r6-plan-scroll img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+.r6-plan-scroll.zoomed img { width: auto; max-width: none; cursor: zoom-out; }

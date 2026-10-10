@@ -65,8 +65,7 @@ function r6Video(id, title) {
   return el(
     "div",
     { class: "r6-video" },
-    thumb,
-    el("a", { class: "r6-video-link", href: `https://www.youtube.com/watch?v=${id}`, target: "_blank", rel: "noopener" }, "YouTube'da aç")
+    thumb
   );
 }
 

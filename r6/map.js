@@ -21,7 +21,7 @@ function render() {
     el("div", { class: "champ-hero-body" }, el("h1", {}, m.name), m.place ? el("p", { class: "title" }, m.place) : null, summary ? el("p", { class: "map-summary" }, summary) : null)
   );
 
-  // Kat planları: çiplerle kat seçilir, büyük resim yeni sekmede tam boy açılır.
+  // Kat planları: çiplerle kat seçilir; plan site içinde büyük pencerede açılır (wikiye gitmez).
   let floorSection;
   if (m.floors.length) {
     let current = 0;
@@ -31,8 +31,8 @@ function render() {
       chips.replaceChildren(...m.floors.map((f, i) => el("button", { class: "chip", type: "button", "aria-pressed": String(i === current), onclick: () => ((current = i), show()) }, floorName(f.caption, i, m.floors.length))));
       const f = m.floors[current];
       view.replaceChildren(
-        el("a", { href: f.url, target: "_blank", rel: "noopener", title: "Tam boy aç" }, el("img", { src: thumb(f.url, 1600), alt: `${m.name} · ${floorName(f.caption, current, m.floors.length)}` })),
-        el("a", { class: "r6-video-link", href: f.url, target: "_blank", rel: "noopener" }, "Planı tam boy aç")
+        el("button", { class: "r6-floor-open", type: "button", title: "Büyüt", onclick: () => openPlan(f, current) }, el("img", { src: thumb(f.url, 1600), alt: `${m.name} · ${floorName(f.caption, current, m.floors.length)}` })),
+        el("button", { class: "chip r6-floor-zoom", type: "button", onclick: () => openPlan(f, current) }, "⛶ Planı büyüt")
       );
     };
     show();
@@ -55,4 +55,32 @@ function render() {
   );
 
   root.replaceChildren(hero, objectives, floorSection);
+}
+
+// Kat planı penceresi: sitede kalır. Resme tıklayınca gerçek boyutuna yakınlaşır, kaydırarak gezilir.
+let planDialog;
+function openPlan(f, index) {
+  if (!planDialog) {
+    planDialog = el(
+      "dialog",
+      { class: "video-dialog r6-plan-dialog", "aria-label": "Kat planı" },
+      el("button", { class: "close", type: "button", "aria-label": "Kapat", onclick: () => planDialog.close() }, "×"),
+      el("h2", { class: "video-dialog-title" }),
+      el("p", { class: "tile-sub r6-plan-hint" }, "Yakınlaştırmak için resme tıkla."),
+      el("div", { class: "r6-plan-scroll" }, el("img", { alt: "" }))
+    );
+    const box = planDialog.querySelector(".r6-plan-scroll");
+    box.querySelector("img").addEventListener("click", () => box.classList.toggle("zoomed"));
+    planDialog.addEventListener("click", (event) => {
+      if (event.target === planDialog) planDialog.close();
+    });
+    document.body.append(planDialog);
+  }
+  const name = `${m.name} · ${floorName(f.caption, index, m.floors.length)}`;
+  planDialog.querySelector(".video-dialog-title").textContent = name;
+  planDialog.querySelector(".r6-plan-scroll").classList.remove("zoomed");
+  const img = planDialog.querySelector("img");
+  img.src = f.url;
+  img.alt = name;
+  planDialog.showModal();
 }
