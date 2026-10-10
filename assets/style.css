@@ -1121,3 +1121,21 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .dd-uses ul { margin: 6px 0 0; padding-left: 18px; }
 
 .dd-uses li.sub { margin-left: 16px; list-style: circle; }
+
+/* Darkest Dungeon II etki renkleri ve simge adları */
+.fx-buff-dd2, .fx-green-dd2 { color: #8fd18f; }
+.fx-debuff-dd2 { color: #e2574c; }
+.fx-burn-dd2 { color: #f0a050; }
+.fx-deathdoor-dd2 { color: #c98ad6; }
+.fx-tok { font-weight: 700; color: #e8d7a0; margin-right: 0.3em; }
+.fx-nowrap { white-space: nowrap; }
+
+.dd-ranks i.on.link { box-shadow: -3px 0 0 currentColor; }
+
+.dd-ranks.target i.on.link { box-shadow: -3px 0 0 #d9534f; }
+
+.dd-path { margin-top: 12px; }
+
+.dd-behavior p { margin: 0 0 10px; color: #e6d6e3; }
+
+.dd-behavior p:last-child { margin-bottom: 0; }
