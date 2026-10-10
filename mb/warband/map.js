@@ -22,7 +22,7 @@ function placeLink(p) {
 
 function show(m) {
   if (!m) {
-    panel.replaceChildren(
+    fillChildren(panel, 
       el("h2", {}, L("Bir yer seç", "Pick a place")),
       el(
         "p",
@@ -43,7 +43,7 @@ function show(m) {
   const p = m.data;
   const villages = WB.places.filter((v) => v.bound === p.id);
   const owner = byId[p.bound];
-  panel.replaceChildren(
+  fillChildren(panel, 
     el("h2", {}, p.name),
     el(
       "div",

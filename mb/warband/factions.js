@@ -25,7 +25,7 @@ function render() {
     })
   );
   const own = (type) => WB.places.filter((p) => p.faction === current.id && p.type === type).length;
-  root.replaceChildren(
+  fillChildren(root, 
     el(
       "section",
       { class: "build-card mb-faction", style: `--c:${current.color}` },

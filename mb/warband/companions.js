@@ -29,7 +29,7 @@ function checkParty() {
       if (byId[ids[i]].friend === ids[j] || byId[ids[j]].friend === ids[i]) friends.push([ids[i], ids[j]]);
     }
   }
-  party.replaceChildren(
+  fillChildren(party, 
     el("h2", {}, L("Takımım", "My party")),
     ids.length
       ? el(

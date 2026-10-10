@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
+  <title>Harita · Witcher 3 · Babuşlar</title>
+  <meta name="description" content="The Witcher 3 haritaları: tabelalar, güç yerleri, canavar yuvaları, hazineler, tüccarlar ve daha fazlası.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Witcher 3</a>
+        <a href="harita.html" aria-current="page">Harita</a>
+        <a href="canavarlar.html">Canavarlar</a>
+        <a href="rehber.html">Rehber</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Harita</h1>
+      <div class="toolbar">
+        <div class="chips" id="regions" role="group" aria-label="Bölge seç"></div>
+        <input class="search" id="search" type="search" placeholder="Yer ya da işaret ara (ör. Crows Perch, Place of Power)…" aria-label="Haritada ara" autocomplete="off">
+        <div class="chips" id="groups" role="group" aria-label="İşaret türü"></div>
+      </div>
+      <div class="mbmap-layout">
+        <div class="mbmap" id="map"></div>
+        <aside class="build-card mbmap-panel" id="panel" aria-live="polite"></aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, CD PROJEKT RED ile bağlantılı değildir. The Witcher 3: Wild Hunt, haritaları ve görselleri CD PROJEKT RED'e aittir.</p>
+      <p>Harita karoları ve işaretleri witcher3map projesinden (untamed0 ve katkıda bulunanlar, CC BY-NC-SA); canavar bilgileri ve görselleri The Witcher Wiki'den (witcher.fandom.com, CC BY-SA) alınır.</p>
+    </div>
+  </footer>
+  <script src="../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="../assets/map-viewer.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
