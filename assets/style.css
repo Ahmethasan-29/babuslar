@@ -1004,3 +1004,120 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .video-dialog-title { margin: 0 44px 12px 4px; font-size: 1.2rem; }
 
 .video-dialog .video-frame { border-radius: 10px; max-height: calc(100vh - 140px); }
+
+/* Darkest Dungeon */
+.dd-hero-head { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+
+@media (max-width: 700px) {
+  .dd-hero-head { grid-template-columns: 1fr; }
+  .dd-hero-head .dd-portrait { max-width: 180px; }
+}
+
+.dd-portrait { width: 100%; height: auto; border-radius: 10px; background: #0d0a0c; object-fit: contain; }
+
+.dd-hero-info h1 { margin: 0 0 6px; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+
+.dd-intro { color: #e6d6e3; margin: 10px 0 14px; }
+
+.dd-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-top: 12px; }
+
+.dd-stat { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; background: var(--bg-elev); border-radius: 8px; }
+
+.dd-sub { margin: 16px 0 8px; font-size: 0.95rem; color: var(--muted); }
+
+.dd-res { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.dd-res-item { padding: 3px 10px; font-size: 0.85rem; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); }
+
+.dd-section-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+
+.dd-section-head h2 { margin: 0; }
+
+.dd-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 14px; align-items: start; }
+
+.dd-skill { grid-template-columns: 56px 1fr; }
+
+.dd-attack { grid-template-columns: 1fr; }
+
+.dd-skill-icon, .dd-item-img { width: 56px; height: 56px; border-radius: 8px; border: 2px solid var(--border); background: #0d0a0c; }
+
+.dd-skill-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+.dd-rank-label { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--muted); }
+
+/* Konum noktaları: kahraman konumları sarı, hedefler kırmızı; bağlantılı hedefler (+) çizgiyle birleşik */
+.dd-ranks { display: inline-flex; gap: 3px; }
+
+.dd-ranks i { width: 10px; height: 10px; border-radius: 50%; background: #3a2c36; }
+
+.dd-ranks.rank i.on { background: #e8c35a; }
+
+.dd-ranks.target i.on { background: #d9534f; }
+
+.dd-ranks.linked { gap: 0; }
+
+.dd-ranks.linked i.on + i.on { box-shadow: -3px 0 0 #d9534f; }
+
+.dd-effect { margin-top: 6px; color: #e6d6e3; font-size: 0.95rem; }
+
+.dd-noimg { display: inline-block; border-radius: 8px; background: var(--bg-elev); border: 2px solid var(--border); }
+
+.dd-portrait-sm { width: 96px; height: 96px; object-fit: cover; object-position: top; border-radius: 10px; border: 2px solid var(--border); background: #0d0a0c; }
+
+.dd-hero-tile img { width: 96px; height: 96px; }
+
+/* Etki renkleri (oyundaki renklere yakın) */
+.fx-stun { color: #e8c35a; }
+.fx-bleed { color: #e2574c; }
+.fx-blight { color: #9ac25c; }
+.fx-disease { color: #b5a46a; }
+.fx-debuff { color: #e08a45; }
+.fx-move { color: #6fa6d6; }
+.fx-mark { color: #e2574c; }
+.fx-heal { color: #7fd17f; }
+.fx-guard { color: #b9a1e0; }
+.fx-riposte { color: #e0b46b; }
+.fx-buff { color: #7fc0e6; }
+.fx-trap, .fx-deathblow, .fx-death { color: #c98ad6; }
+
+/* Trinket'lar */
+.dd-trinkets { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+
+.dd-trinket { display: grid; grid-template-columns: 64px 1fr; gap: 14px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: var(--radius); }
+
+.dd-trinket h3 { margin: 0 0 4px; font-size: 1.05rem; }
+
+.dd-trinket-img { width: 64px; height: 64px; object-fit: contain; }
+
+.dd-trinket-tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.85rem; }
+
+.dd-rarity { font-weight: 700; }
+
+.rarity-c { border-left-color: #9a9a9a; } .r-c { color: #b8b8b8; }
+.rarity-u { border-left-color: #6fb36f; } .r-u { color: #7fd17f; }
+.rarity-r { border-left-color: #5b8ed6; } .r-r { color: #7fb0f0; }
+.rarity-v { border-left-color: #a46fd6; } .r-v { color: #c49af0; }
+.rarity-a { border-left-color: #e08a45; } .r-a { color: #f0a868; }
+.rarity-t { border-left-color: #d9534f; } .r-t { color: #f07a76; }
+.rarity-cc { border-left-color: #b0273a; } .r-cc { color: #e05a6a; }
+.rarity-com { border-left-color: #c0b0e0; } .r-com { color: #d7c9f2; }
+
+.dd-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+
+.dd-item { grid-template-columns: 56px 1fr; }
+
+.game-card > .dd-card-img { object-fit: contain; object-position: right center; }
+
+.game-card > .dd-collage { position: absolute; inset: 0; z-index: 0; display: flex; justify-content: flex-end; align-items: center; gap: 6px; padding-right: 14px; opacity: 0.45; }
+
+.dd-collage img { width: 20%; max-width: 80px; }
+
+.dd-quote { margin: 6px 0 0; font-style: italic; color: var(--accent); }
+
+.dd-uses { margin-top: 8px; font-size: 0.9rem; }
+
+.dd-uses summary { cursor: pointer; color: var(--muted); }
+
+.dd-uses ul { margin: 6px 0 0; padding-left: 18px; }
+
+.dd-uses li.sub { margin-left: 16px; list-style: circle; }
