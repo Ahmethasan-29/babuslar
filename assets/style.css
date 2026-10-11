@@ -1329,3 +1329,53 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .mbmap-marker.cpw.quest .dot { border-radius: 3px; transform: rotate(45deg); width: 12px; height: 12px; }
 .cp-quest { display: inline-block; margin: 8px 0 0; padding: 4px 10px; border-radius: 8px; font-weight: 700; background: rgba(179, 136, 255, 0.15); border-left: 3px solid #b388ff; }
 .cp-quest-line { color: #c9b3ff; }
+
+/* Project Zomboid */
+.pz-h { margin: 28px 0 10px; font-size: 1.3rem; }
+.pz-icon { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; flex: none; }
+.pz-icon.big { width: 48px; height: 48px; }
+.pz-build { position: sticky; top: 64px; z-index: 5; padding: 14px 16px; margin: 10px 0 6px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); display: grid; gap: 10px; }
+.pz-build-head { display: flex; gap: 12px; align-items: center; }
+.pz-build-head > div { display: flex; flex-direction: column; }
+.pz-left { margin-left: auto; text-align: right; }
+.pz-left strong { font-size: 1.6rem; color: #6fdc8c; }
+.pz-left.bad strong { color: #ff6b6b; }
+.pz-warn { margin: 0; color: #ff8a8a; }
+.pz-chosen, .pz-skills .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.pz-skills { display: grid; gap: 4px; }
+.pz-occs, .pz-traits { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; }
+.pz-occ, .pz-trait { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; color: var(--text); font: inherit; text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; }
+.pz-occ:hover, .pz-trait:hover { border-color: var(--accent); }
+.pz-occ.on, .pz-trait.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+.pz-occ-top { display: flex; align-items: center; gap: 8px; }
+.pz-occ-top strong { flex: 1; }
+.pz-pts { font-weight: 800; padding: 1px 8px; border-radius: 999px; background: var(--bg-elev); }
+.pz-pts.pos { color: #6fdc8c; }
+.pz-pts.neg { color: #ff8a8a; }
+.pz-trait.pz-negative { border-left: 3px solid #ff6b6b; }
+.pz-trait.pz-positive { border-left: 3px solid #6fdc8c; }
+.chip.pz-negative { border-color: #ff6b6b; }
+.chip.pz-positive { border-color: #6fdc8c; }
+.pz-effect { color: #c9b3ff; }
+.pz-occ-traits { color: var(--accent); }
+.pz-weapons { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.pz-weapon { margin-bottom: 0; }
+.pz-weapon-head { display: flex; gap: 12px; align-items: center; }
+.pz-weapon-head h3 { margin: 0; font-size: 1.05rem; }
+.pz-weapon-head p { margin: 2px 0 0; }
+.pz-stats { grid-template-columns: repeat(3, 1fr); margin-bottom: 0; }
+.pz-map { border: 1px solid var(--border); border-radius: var(--radius); background: #12161a; overflow: hidden; }
+.pz-svg { display: block; width: 100%; height: auto; max-height: 78vh; }
+.pz-grid { stroke: rgba(255, 255, 255, 0.06); stroke-width: 12; }
+.pz-town { cursor: pointer; }
+.pz-town circle { fill: #b0a4c4; stroke: #111; stroke-width: 40; }
+.pz-town.spawn circle { fill: #ff5c8a; }
+.pz-town text { fill: #ddd; font-size: 260px; font-weight: 700; paint-order: stroke; stroke: #000; stroke-width: 60; }
+.pz-town:not(.big) text { font-size: 200px; fill: #aaa; }
+.pz-town:hover circle, .pz-town.on circle, .pz-town:focus circle { stroke: #fff; stroke-width: 70; }
+.pz-town.on text { fill: #fff; }
+.pz-town-img { width: 100%; border-radius: 8px; margin: 6px 0; background: #0d0a0c; }
+@media (max-width: 700px) {
+  .pz-build { position: static; }
+  .pz-stats { grid-template-columns: repeat(2, 1fr); }
+}

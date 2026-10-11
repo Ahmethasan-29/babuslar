@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
+  <title>Karakter · Project Zomboid · Babuşlar</title>
+  <meta name="description" content="Project Zomboid meslekleri ve özellikleri: puanları, becerileri ve karakter planlayıcı.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Project Zomboid</a>
+        <a href="karakter.html" aria-current="page">Karakter</a>
+        <a href="silahlar.html">Silahlar</a>
+        <a href="harita.html">Harita</a>
+        <a href="rehber.html">Rehber</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Karakter planlayıcı</h1>
+      <p class="page-sub" id="intro"></p>
+      <div class="pz-build" id="build" aria-live="polite"></div>
+      <h2 class="pz-h">Meslekler</h2>
+      <div class="pz-occs" id="occs"></div>
+      <h2 class="pz-h">Özellikler</h2>
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Özellik ara (ör. Strong, Kısa Görüşlü)…" aria-label="Özellik ara" autocomplete="off">
+        <div class="chips" id="kinds" role="group" aria-label="Özellik türü"></div>
+      </div>
+      <div class="pz-traits" id="traits"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, The Indie Stone ile bağlantılı değildir. Project Zomboid ve görselleri The Indie Stone'a aittir.</p>
+      <p>Meslek, özellik, silah ve kasaba bilgileri PZwiki'den (pzwiki.net, CC BY-SA); Türkçe adlar oyunun resmî çevirilerinden alınır.</p>
+    </div>
+  </footer>
+  <script src="../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="karakter.js"></script>
+</body>
+</html>
