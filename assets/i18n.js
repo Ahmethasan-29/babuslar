@@ -573,6 +573,21 @@ const EN = {
   "Nadirlik": "Rarity",
   "Etiket": "Tag",
   "Filtre": "Filter",
+  // Battlefield
+  "Battlefield 1": "Battlefield 1",
+  "Battlefield 2": "Battlefield 2",
+  "Battlefield 3": "Battlefield 3",
+  "Battlefield 4": "Battlefield 4",
+  "Battlefield V": "Battlefield V",
+  "Battlefield 6": "Battlefield 6",
+  "Haritalar": "Maps",
+  "Silahlar · Haritalar": "Weapons · Maps",
+  "Silah ara…": "Search weapons…",
+  "Harita ara…": "Search maps…",
+  "Harita ara": "Search maps",
+  "Harita grubu": "Map group",
+  "Battlefield oyunları Electronic Arts'a aittir. Battlefield verileri Battlefield Wiki'den (CC BY-SA) alınır.": "The Battlefield games belong to Electronic Arts. Battlefield data comes from the Battlefield Wiki (CC BY-SA).",
+  "Silah ve harita bilgileri ile görseller Battlefield Wiki'den (battlefield.fandom.com, CC BY-SA) alınır.": "Weapon and map data and images come from the Battlefield Wiki (battlefield.fandom.com, CC BY-SA).",
   "Bölge seç": "Choose a region",
   "Yer ya da işaret ara (ör. Crows Perch, Place of Power)…": "Search places or markers (e.g. Crows Perch, Place of Power)…",
   "Haritada ara": "Search the map",
@@ -624,6 +639,8 @@ const LANE_EN = { Üst: "Top", Orman: "Jungle", Orta: "Mid", Alt: "Bot", Destek:
 
 // Sayı ya da ad içeren yazılar.
 const EN_PATTERNS = [
+  [/^Babuşlar, Electronic Arts ve DICE ile bağlantılı değildir\. (.+) ve görselleri Electronic Arts'a aittir\.$/, "Babuşlar is not affiliated with Electronic Arts or DICE. $1 and its images belong to Electronic Arts."],
+  [/^(Birinci Dünya Savaşı|İkinci Dünya Savaşı|modern savaş \(\d+\)): (\d+) silahın değerleri ve (\d+) harita\.$/, (m, era, w, n) => `${{ "Birinci Dünya Savaşı": "World War I", "İkinci Dünya Savaşı": "World War II" }[era] || era.replace("modern savaş", "Modern warfare")}: stats for ${w} weapons and ${n} maps.`],
   [/^(\d+) operatör$/, "$1 operators"],
   [/^(\d+) silah$/, "$1 weapons"],
   [/^(\d+) harita$/, "$1 maps"],
