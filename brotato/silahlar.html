@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Silahlar · Brotato · Babuşlar</title>
+  <meta name="description" content="Brotato silahları: hasar, saldırı hızı, kritik, menzil ve fiyat; dört seviyede.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Brotato</a>
+        <a href="karakterler.html">Karakterler</a>
+        <a href="silahlar.html" aria-current="page">Silahlar</a>
+        <a href="esyalar.html">Eşyalar</a>
+        <a href="rehber.html">Rehber</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Silahlar</h1>
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Silah ara (ör. SMG, Spear)…" aria-label="Silah ara" autocomplete="off">
+        <div class="chips" id="f1" role="group" aria-label="Silah sınıfı"></div>
+        <div class="chips" id="f2" role="group" aria-label="Seviye"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+      </div>
+      <div class="bro-grid" id="list"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, Blobfish ile bağlantılı değildir. Brotato ve görselleri Blobfish'e aittir.</p>
+      <p>Karakter, silah ve eşya bilgileri ile görseller Brotato Wiki'den (brotato.wiki.spellsandguns.com, CC BY-SA) alınır.</p>
+    </div>
+  </footer>
+  <script src="../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="silahlar.js"></script>
+</body>
+</html>
