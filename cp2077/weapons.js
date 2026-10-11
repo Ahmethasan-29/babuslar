@@ -40,7 +40,8 @@ function card(w) {
             { class: "cp-weapon-text" },
             el("strong", {}, w.name),
             el("span", { class: "tile-sub" }, [typeName(w.type), w.maker].filter(Boolean).join(" · ")),
-            w.iconic ? el("span", { class: "tile-sub cp-has" }, w.yt ? L("▶ Video", "▶ Video") : "", w.at ? L(" · 📍 Haritada", " · 📍 On the map") : "") : null
+            w.quest ? el("span", { class: "tile-sub cp-quest-line" }, questLabel(w.quest)) : null,
+            w.iconic ? el("span", { class: "tile-sub cp-has" }, [w.yt ? "▶ Video" : null, w.at ? L("📍 Haritada", "📍 On the map") : null].filter(Boolean).join(" · ")) : null
           )
         )
   );
@@ -50,7 +51,7 @@ function card(w) {
 function render() {
   const q = normalize(search.value.trim());
   const items = CP.weapons.filter(
-    (w) => (kind === "all" || w.iconic) && (type === "all" || w.type === type) && (!q || normalize(`${w.name} ${w.type} ${typeName(w.type)} ${w.maker} ${w.source}`).includes(q))
+    (w) => (kind === "all" || w.iconic) && (type === "all" || w.type === type) && (!q || normalize(`${w.name} ${w.type} ${typeName(w.type)} ${w.maker} ${w.source} ${w.quest?.name || ""}`).includes(q))
   );
   count.textContent = L(`${items.length} silah`, `${items.length} weapons`);
   if (!items.length) {

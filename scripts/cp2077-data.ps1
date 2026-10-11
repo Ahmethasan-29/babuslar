@@ -140,6 +140,7 @@ foreach ($t in $titles) {
     image    = (FileName $box["image"])
     spot     = $(if ($gallery) { $gallery.Groups[1].Value.Trim() } else { $null })
     raw      = @(@($acq -split "`n" | Where-Object { $_ -match '^\s*\*' -and $_ -notmatch 'Herold Lowe' }) + @($box["source"]) | Where-Object { $_ })
+    rawAll   = @($acq -split "`n" | Where-Object { $_ -match '^\s*\*' })
   }
 }
 
@@ -162,7 +163,8 @@ function Locate([string]$line) {
   $links = @(Links $line)
   foreach ($l in $links) { if ($byNorm.ContainsKey((Norm $l))) { return @{ place = $byNorm[(Norm $l)] } } }
   $plain = Plain $line
-  foreach ($p in $named) { if ($plain -match ('\b' + [regex]::Escape($p.name) + '\b')) { return @{ place = $p } } }
+  # Ad metinde kısaltılmış da geçebilir: "Night City Municipal Landfill" → "Municipal Landfill".
+  foreach ($p in $named) { if ($plain -match ('\b' + [regex]::Escape(($p.name -replace '^Night City ', '')) + '\b')) { return @{ place = $p } } }
   # Satırda adı geçen alt bölge ("in Kabuki, Watson", "Longshore Stacks, Dogtown"); önce alt bölgeler, sonra bölgeler.
   foreach ($k in $areaNames) { if ($plain -match ('\b' + [regex]::Escape($centers[$k].name) + '\b')) { return @{ area = $k } } }
   # Bağlantı verilen yer sayfasının alt bölgesi. Görev sayfasının bölgesi kullanılmaz: görevler çoğu zaman birkaç bölgede geçer.
@@ -183,6 +185,42 @@ foreach ($w in ($weapons | Where-Object { $_.iconic })) {
     break
   }
 }
+
+# --- Görev ödülü ikonikler -----------------------------------------------------------------------------------
+# Silahın alındığı görev: satırdaki ilk görev (Infobox Quest) bağlantısı. Haritada yeri yukarıda bulunamayan silah,
+# görevin "location" alanındaki ilk önemli yere, yoksa görevin (ya da görev yerlerinin) bölgesine konur ("quest").
+# V'nin zulasına (stash) gelenler V'nin dairesine, adı geçmeyen airdrop silahları Dogtown'a konur.
+$allLinks = @($weapons | Where-Object { $_.iconic } | ForEach-Object { $_.rawAll | ForEach-Object { Links $_ } } | Where-Object { -not $linkText.ContainsKey($_) } | Sort-Object -Unique)
+foreach ($kv in (Get-Wikitext $allLinks).GetEnumerator()) { $linkText[$kv.Key] = $kv.Value }
+function QuestBox([string]$page) { $wt = [string]$linkText[$page]; if ($wt) { (Get-Templates $wt "Infobox Quest") | Select-Object -First 1 } }
+$questLocs = @($weapons | Where-Object { $_.iconic } | ForEach-Object { $_.raw | Select-Object -First 1 | ForEach-Object { Links $_ } } | ForEach-Object { $q = QuestBox $_; if ($q) { Links $q["location"] } } | Where-Object { -not $linkText.ContainsKey($_) } | Sort-Object -Unique)
+foreach ($kv in (Get-Wikitext $questLocs).GetEnumerator()) { $linkText[$kv.Key] = $kv.Value }
+$vHome = $byNorm[(Norm "Megabuilding H10")]
+foreach ($w in ($weapons | Where-Object { $_.iconic })) {
+  $first = @($w.raw)[0]
+  foreach ($l in (Links $first)) {
+    $q = QuestBox $l
+    if ($q) { $w.quest = [ordered]@{ name = ($l -replace '\s*\((?:quest|2077|Cyberpunk 2077)\)$', ''); type = Plain $q["type"] }; $w.qbox = $q; break }
+  }
+  if ($w.at) { continue }
+  $all = Plain (@($w.rawAll) -join " ")
+  if ($all -match 'Airdrop') { $c = $centers["dogtown"]; $w.at = [ordered]@{ x = $c.x; y = $c.y; place = $c.name; exact = $false; kind = "airdrop" }; continue }
+  if ($all -match "V's [Ss]tash|added to (?:V's |the |your )?[Ss]tash") { $w.at = [ordered]@{ x = $vHome.x; y = $vHome.y; place = $vHome.name; exact = $true; kind = "stash" }; continue }
+  if ($w.qbox) {
+    # Afterlife pek Ã§ok gÃ¶revin yalnÄ±zca buluÅma yeri: baÅka Ã¶nemli yer varsa o seÃ§ilir.
+    $cands = @(Links $w.qbox["location"] | Where-Object { $byNorm.ContainsKey((Norm $_)) } | ForEach-Object { $byNorm[(Norm $_)] })
+    $p = @(@($cands | Where-Object { $_.name -ne "The Afterlife" }) + $cands)[0]
+    if ($p) { $w.at = [ordered]@{ x = $p.x; y = $p.y; place = $p.name; exact = $true; kind = "quest" }; continue }
+    $a = Area $w.qbox
+    if (-not $a) { foreach ($l in (Links $w.qbox["location"])) { $wt = [string]$linkText[$l]; $loc = $(if ($wt) { (Get-Templates $wt "Infobox Location") | Select-Object -First 1 }); if ($loc) { $a = Area $loc; if ($a) { break } } } }
+    if ($a) { $c = $centers[$a]; $w.at = [ordered]@{ x = $c.x; y = $c.y; place = $c.name; exact = $false; kind = "quest" }; continue }
+  }
+  # Görevi olup yeri haritada bulunamayan (ör. Badlands'teki görevler) satıcıya düşürülmez; haritada gösterilmez.
+  if ($w.qbox) { continue }
+  # Son çare: satıcı satırları da dahil adı geçen yer (ör. yalnızca Herold Lowe'dan satılan Order → EBM Petrochem Stadium).
+  foreach ($line in $w.rawAll) { $r = Locate $line; if ($r) { if ($r.place) { $w.at = [ordered]@{ x = $r.place.x; y = $r.place.y; place = $r.place.name; exact = $true; kind = "vendor" } } else { $c = $centers[$r.area]; $w.at = [ordered]@{ x = $c.x; y = $c.y; place = $c.name; exact = $false; kind = "vendor" } }; break } }
+}
+foreach ($w in $weapons) { if ($w.at -and -not $w.at.kind) { $w.at.kind = "world" } }
 
 # --- Video bölümleri ------------------------------------------------------------------------------------------
 & curl.exe -s -m 60 -A $UA -H "Accept-Language: en-US" -o $TMP "https://www.youtube.com/watch?v=$VIDEO"
@@ -218,7 +256,7 @@ $imgs = Get-ImageUrls @($weapons | ForEach-Object { $_.image; $_.spot } | Where-
 foreach ($w in $weapons) {
   $w.image = $(if ($w.image) { $imgs[($w.image -replace '_', ' ')] } else { $null })
   $w.spot = $(if ($w.spot) { $imgs[($w.spot -replace '_', ' ')] } else { $null })
-  $w.Remove("raw"); $w.Remove("page")
+  $w.Remove("raw"); $w.Remove("rawAll"); $w.Remove("qbox"); $w.Remove("page")
   if (-not $w.iconic) { $w.Remove("effect"); $w.Remove("how"); $w.Remove("spot") }
 }
 foreach ($p in $places) { $p.Remove("page") }

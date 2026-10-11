@@ -53,12 +53,23 @@ const CP_TR = {
   },
   // Harita işaret grupları
   groups: {
-    iconic: { name: ["İkonik silahlar", "Iconic weapons"], color: "#ff3b8d" },
+    iconic: { name: ["Gizli ikonikler", "Hidden iconics"], color: "#ff3b8d" },
+    quest: { name: ["Görev ödülü ikonikler", "Quest reward iconics"], color: "#b388ff" },
     corp: { name: ["Şirket ve resmî", "Corporate & government"], color: "#4fc3f7" },
     fun: { name: ["Bar, kulüp, otel", "Bars, clubs, hotels"], color: "#ffb74d" },
     shop: { name: ["Dükkân ve klinik", "Shops & clinics"], color: "#81c784" },
     home: { name: ["Konut", "Residential"], color: "#fff176" },
     other: { name: ["Sanayi, çete ve diğer", "Industry, gangs & other"], color: "#b0a4c4" },
+  },
+  // Görev türleri (wikideki "type" ya da görev adının öneki)
+  questTypes: {
+    "Main Job": ["Ana görev", "Main job"],
+    "Side Job": ["Yan görev", "Side job"],
+    "Minor Job": ["Küçük görev", "Minor job"],
+    Gig: ["Gig (iş)", "Gig"],
+    "SOS: Merc Needed": ["Gig (SOS)", "SOS: Merc Needed"],
+    "Suspected Organized Crime Activity": ["NCPD – organize suç", "NCPD – organized crime"],
+    "Increased Criminal Activity": ["NCPD – artan suç", "NCPD – criminal activity"],
   },
   placeGroups: {
     "Government Facility": "corp",

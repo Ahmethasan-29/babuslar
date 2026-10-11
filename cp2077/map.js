@@ -9,6 +9,8 @@ const groupName = (g) => L(...CP_TR.groups[g].name);
 const color = (g) => CP_TR.groups[g].color;
 
 const iconics = CP.weapons.filter((w) => w.iconic && w.at);
+// Görevle ya da ödül olarak (zula) alınanlar ayrı renkte; gerisi dünyada saklı duran silahlar.
+const weaponGroup = (w) => (w.quest || w.at.kind === "stash" ? "quest" : "iconic");
 // Aynı yerdeki silahlar üst üste binmesin: aynı noktadakiler küçük bir çember üzerinde dağıtılır.
 const spots = {};
 for (const w of iconics) (spots[`${w.at.x},${w.at.y}`] ||= []).push(w);
@@ -19,7 +21,7 @@ const markers = [
     list.map((w, i) => {
       const a = (2 * Math.PI * i) / list.length;
       const r = list.length > 1 ? 0.3 + 0.08 * list.length : 0;
-      return { px: w.at.x + r * Math.cos(a), py: w.at.y + r * Math.sin(a) * 0.76, label: w.name, color: color("iconic"), size: w.at.exact ? "cpw" : "cpw area", data: { kind: "weapon", g: "iconic", w } };
+      return { px: w.at.x + r * Math.cos(a), py: w.at.y + r * Math.sin(a) * 0.76, label: w.name, color: color(weaponGroup(w)), size: `cpw ${weaponGroup(w)}${w.at.exact ? "" : " area"}`, data: { kind: "weapon", g: weaponGroup(w), w } };
     })
   ),
 ];
@@ -33,8 +35,8 @@ function show(m) {
         "p",
         { class: "tile-sub" },
         L(
-          "Haritayı sürükleyip tekerlekle (telefonda iki parmakla) yakınlaştır. Pembe işaretler ikonik silahlar: tıklayınca nerede ve nasıl alındığını gösteren kısa video açılır. Halkalı işaretler yalnızca bölgeyi gösterir, tam yeri videoda.",
-          "Drag the map and zoom with the wheel (pinch on phones). Pink markers are iconic weapons: click one for a short video showing where and how to get it. Ringed markers only show the district; the exact spot is in the video."
+          "Haritayı sürükleyip tekerlekle (telefonda iki parmakla) yakınlaştır. Pembe işaretler haritada saklı ikonik silahlar, mor elmaslar görev ödülü ikonikler (işaret görevin geçtiği yerde). Tıklayınca hangi görevden ve nasıl alındığını gösteren kısa video açılır. Halkalı işaretler yalnızca bölgeyi gösterir, tam yeri videoda.",
+          "Drag the map and zoom with the wheel (pinch on phones). Pink markers are iconic weapons hidden in the world, purple diamonds are quest rewards (placed where the quest happens). Click one for the quest and a short video showing how to get it. Ringed markers only show the district; the exact spot is in the video."
         )
       ),
       el(
@@ -42,7 +44,7 @@ function show(m) {
         { class: "mb-legend" },
         GROUPS.map((g) => el("li", {}, el("span", { class: "mb-swatch", style: `--c:${color(g)}` }, ""), `${groupName(g)} (${markers.filter((x) => x.data.g === g).length})`))
       ),
-      el("p", { class: "tile-sub" }, L(`Haritada yeri olmayan ikonik silahlar (görev ödülleri vb.) Silahlar sayfasında.`, "Iconic weapons without a spot on the map (quest rewards etc.) are on the Weapons page."))
+      el("p", { class: "tile-sub" }, L(`Haritanın dışında (Badlands) alınan birkaç ikonik silah yalnızca Silahlar sayfasında.`, "A few iconics obtained outside the map (Badlands) are only on the Weapons page."))
     );
     return;
   }
