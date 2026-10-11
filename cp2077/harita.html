@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
+  <title>Harita · Cyberpunk 2077 · Babuşlar</title>
+  <meta name="description" content="Night City haritası: önemli yerler ve ikonik silahların bulunduğu yerler.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Cyberpunk 2077</a>
+        <a href="harita.html" aria-current="page">Harita</a>
+        <a href="silahlar.html">Silahlar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Night City haritası</h1>
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Yer ya da silah ara (ör. Afterlife, Skippy)…" aria-label="Haritada ara" autocomplete="off">
+        <div class="chips" id="groups" role="group" aria-label="İşaret türü"></div>
+      </div>
+      <div class="mbmap-layout">
+        <div class="mbmap" id="map"></div>
+        <aside class="build-card mbmap-panel" id="panel" aria-live="polite"></aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, CD PROJEKT RED ile bağlantılı değildir. Cyberpunk 2077, haritası ve görselleri CD PROJEKT RED'e aittir.</p>
+      <p>Harita, önemli yerler ve silah bilgileri Cyberpunk Wiki'den (cyberpunk.fandom.com, CC BY-SA) alınır. İkonik silah klipleri: Big Dan Gaming (YouTube).</p>
+    </div>
+  </footer>
+  <script src="../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="../assets/map-viewer.js"></script>
+  <script src="ui.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
