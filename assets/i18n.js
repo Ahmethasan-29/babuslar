@@ -508,6 +508,8 @@ const EN = {
   "Silah ara": "Search weapons",
   "İkonik ya da hepsi": "Iconic or all",
   "Silah türü": "Weapon type",
+  "Harita seç": "Choose a map",
+  "Harita, önemli yerler ve silah bilgileri Cyberpunk Wiki'den (cyberpunk.fandom.com, CC BY-SA); Badlands uydu haritası ve bölge sınırları NC Zoning Board'dan alınır. İkonik silah klipleri: Big Dan Gaming (YouTube).": "The map, landmarks and weapon data come from the Cyberpunk Wiki (cyberpunk.fandom.com, CC BY-SA); the Badlands satellite map and area borders from NC Zoning Board. Iconic weapon clips: Big Dan Gaming (YouTube).",
   "Bölge seç": "Choose a region",
   "Yer ya da işaret ara (ör. Crows Perch, Place of Power)…": "Search places or markers (e.g. Crows Perch, Place of Power)…",
   "Haritada ara": "Search the map",

@@ -222,6 +222,70 @@ foreach ($w in ($weapons | Where-Object { $_.iconic })) {
 }
 foreach ($w in $weapons) { if ($w.at -and -not $w.at.kind) { $w.at.kind = "world" } }
 
+# --- Badlands haritası ----------------------------------------------------------------------------------------
+# Wiki haritası yalnızca şehri kapsar. Badlands için NC Zoning Board'un (nczoning/nc-zoning-board) uydu haritası kullanılır:
+# satellite_8k.webp oyun dünyasının tamamı (CET X -6298..5815, Y -7684..4427; kuzey yukarıda), alt bölge sınırları
+# data/subdistricts.json'da aynı koordinatlarla. Resmin kenarlardaki boş (siyah) kısmı kırpılıp küçültülerek
+# cp2077/maps/badlands.jpg yazılır. Badlands'teki görevlerin silahları görevin alt bölgesinin ortasına konur.
+$NCZ = "https://raw.githubusercontent.com/nczoning/nc-zoning-board/main"
+$WX0 = -6298; $WX1 = 5815; $WY0 = -7684; $WY1 = 4427
+$CROP = @{ x = 160; y = 80; w = 7424; h = 6896 }   # 8192 px resimde dolu alan
+$SCALE = 0.4
+$satFile = Join-Path $CACHE "satellite_8k.webp"
+if (-not (Test-Path $satFile)) { & curl.exe -s -L -o $satFile "$NCZ/assets/img/satellite_8k.webp" }
+$subs = (Get-Json "$NCZ/data/subdistricts.json").districts | Where-Object { $_.name -eq "Badlands" } | ForEach-Object { $_.subdistricts }
+$outImg = Join-Path (Get-Location) "cp2077/maps/badlands.jpg"
+New-Item -ItemType Directory -Force (Split-Path $outImg) | Out-Null
+Add-Type -AssemblyName PresentationCore, WindowsBase
+$fs = [IO.File]::OpenRead($satFile)
+$frame = [Windows.Media.Imaging.BitmapDecoder]::Create($fs, 0, [Windows.Media.Imaging.BitmapCacheOption]::OnLoad).Frames[0]
+$cropped = New-Object Windows.Media.Imaging.CroppedBitmap($frame, (New-Object Windows.Int32Rect($CROP.x, $CROP.y, $CROP.w, $CROP.h)))
+$small = New-Object Windows.Media.Imaging.TransformedBitmap($cropped, (New-Object Windows.Media.ScaleTransform($SCALE, $SCALE)))
+$enc = New-Object Windows.Media.Imaging.JpegBitmapEncoder; $enc.QualityLevel = 78
+$enc.Frames.Add([Windows.Media.Imaging.BitmapFrame]::Create($small))
+$os = [IO.File]::Create($outImg); $enc.Save($os); $os.Close(); $fs.Close()
+$px = $frame.PixelWidth
+# Oyun koordinatı → kırpılmış resimde yüzde.
+function WorldPct([double]$x, [double]$y) {
+  $ix = ($x - $WX0) / ($WX1 - $WX0) * $px - $CROP.x
+  $iy = ($WY1 - $y) / ($WY1 - $WY0) * $px - $CROP.y
+  @{ x = [Math]::Round($ix / $CROP.w * 100, 3); y = [Math]::Round($iy / $CROP.h * 100, 3) }
+}
+$badAreas = @(foreach ($sd in $subs) {
+    $pts = @($sd.polygon | Where-Object { $_ -and $_.Count -eq 2 })
+    if (-not $pts.Count) { continue }
+    $c = WorldPct (($pts | ForEach-Object { [double]$_[0] }) | Measure-Object -Average).Average (($pts | ForEach-Object { [double]$_[1] }) | Measure-Object -Average).Average
+    [ordered]@{ name = $sd.name; key = (Norm $sd.name); x = $c.x; y = $c.y }
+  })
+# "Rocky Ridge Plains" → "Rocky Ridge" gibi: alt bölge adı polygon adıyla başlıyorsa eşleşir.
+function BadArea([string]$name) {
+  $k = Norm $name
+  if (-not $k) { return $null }
+  @($badAreas | Where-Object { $k.StartsWith($_.key) -or $_.key.StartsWith($k) })[0]
+}
+# Birden çok alt bölge yazılmışsa ilk eşleşen alınır ("[[Rocky Ridge Plains]]<br>[[Red Peaks]]" → Rocky Ridge).
+function BadFirst([string]$v) {
+  foreach ($part in (($v -replace '<br\s*/?>', '|' -replace '\]\]\s*\[\[', ']]|[[') -split '\|')) { $a = BadArea (Plain $part); if ($a) { return $a } }
+  $null
+}
+foreach ($w in ($weapons | Where-Object { $_.iconic -and -not $_.at })) {
+  $hit = $null
+  $plain = Plain (@($w.rawAll) -join " ")
+  foreach ($a in $badAreas) { if ($plain -match ('\b' + [regex]::Escape($a.name) + '\b')) { $hit = $a; break } }
+  if (-not $hit -and $w.qbox) {
+    $hit = BadFirst $w.qbox["sub_district"]
+    if (-not $hit) {
+      foreach ($l in (Links $w.qbox["location"])) {
+        $wt = [string]$linkText[$l]
+        if (-not $wt) { $wt = [string](Get-Wikitext @($l))[$l]; $linkText[$l] = $wt }
+        $loc = $(if ($wt) { (Get-Templates $wt "Infobox Location") | Select-Object -First 1 })
+        if ($loc) { $hit = BadFirst ($loc["sub_district"] + "|" + $loc["subregion"]); if ($hit) { break } }
+      }
+    }
+  }
+  if ($hit) { $w.at = [ordered]@{ map = "badlands"; x = $hit.x; y = $hit.y; place = $hit.name; exact = $false; kind = $(if ($w.qbox) { "quest" } else { "vendor" }) } }
+}
+
 # --- Video bölümleri ------------------------------------------------------------------------------------------
 & curl.exe -s -m 60 -A $UA -H "Accept-Language: en-US" -o $TMP "https://www.youtube.com/watch?v=$VIDEO"
 $html = [IO.File]::ReadAllText($TMP, [Text.Encoding]::UTF8)
@@ -262,6 +326,7 @@ foreach ($w in $weapons) {
 foreach ($p in $places) { $p.Remove("page") }
 $data = [ordered]@{
   map     = [ordered]@{ image = $mapImg; width = $W; height = $H; places = @($places | Sort-Object { $_.name }) }
+  badlands = [ordered]@{ image = "maps/badlands.jpg"; width = [int]($CROP.w * $SCALE); height = [int]($CROP.h * $SCALE); areas = @($badAreas | ForEach-Object { $_.Remove("key"); $_ }) }
   weapons = @($weapons | Sort-Object { $_.name })
 }
 $json = $data | ConvertTo-Json -Depth 8 -Compress
