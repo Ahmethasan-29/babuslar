@@ -1326,3 +1326,6 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
   .cp-weapon.open .cp-weapon-img.big { float: none; width: 100%; margin: 28px 0 8px; }
 }
 .mbmap-marker.cpw .dot { width: 14px; height: 14px; }
+.mbmap-marker.cpw.quest .dot { border-radius: 3px; transform: rotate(45deg); width: 12px; height: 12px; }
+.cp-quest { display: inline-block; margin: 8px 0 0; padding: 4px 10px; border-radius: 8px; font-weight: 700; background: rgba(179, 136, 255, 0.15); border-left: 3px solid #b388ff; }
+.cp-quest-line { color: #c9b3ff; }

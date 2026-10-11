@@ -64,15 +64,33 @@ function howTo(w) {
   );
 }
 
+// Silahın alındığı görev: "Ana görev: The Heist", "NCPD (organize suç): Vice Control" gibi.
+const QUEST_PREFIX = /^(Gig|Suspected Organized Crime Activity|Increased Criminal Activity|SOS: Merc Needed):\s*/;
+function questLabel(q) {
+  const m = q.name.match(QUEST_PREFIX);
+  const kind = (m && m[1]) || q.type;
+  const name = q.name.replace(QUEST_PREFIX, "");
+  const t = CP_TR.questTypes[kind];
+  return `${t ? L(t[0], t[1]) : kind || L("Görev", "Quest")}: ${name}`;
+}
+
+// Haritadaki işaretin ne anlama geldiği.
 function placeNote(w) {
-  if (!w.at) return null;
-  return el(
-    "p",
-    { class: "tile-sub" },
-    el("strong", {}, L("Haritada: ", "On the map: ")),
-    w.at.place,
-    w.at.exact ? "" : L(" (bölge — tam yeri videoda)", " (district — exact spot in the video)")
-  );
+  if (!w.at) {
+    return w.quest
+      ? el("p", { class: "tile-sub" }, L("Haritada yok: görev haritanın dışında (Badlands) geçiyor; yeri videoda.", "Not on the map: the quest takes place outside it (Badlands); the spot is in the video."))
+      : null;
+  }
+  const area = w.at.exact ? "" : L(" (bölge)", " (district)");
+  const notes = {
+    world: [`${w.at.place}${area}`, `${w.at.place}${area}`],
+    quest: [`${w.at.place}${area} — görevin geçtiği yer, tam yeri videoda`, `${w.at.place}${area} — where the quest takes place; exact spot in the video`],
+    stash: ["V'nin dairesindeki zula (stash), Megabuilding H10", "V's apartment stash, Megabuilding H10"],
+    airdrop: ["Dogtown'daki airdrop'lar", "Airdrops in Dogtown"],
+    vendor: [`${w.at.place} — satıcıdan satın alınır`, `${w.at.place} — bought from a vendor`],
+  };
+  const [tr, en] = notes[w.at.kind] || notes.world;
+  return el("p", { class: "tile-sub" }, el("strong", {}, L("Haritada: ", "On the map: ")), L(tr, en), w.at.kind === "world" && !w.at.exact ? L(" — tam yeri videoda", " — exact spot in the video") : "");
 }
 
 function weaponDetail(w, { mapLink = false, listLink = false } = {}) {
@@ -87,6 +105,7 @@ function weaponDetail(w, { mapLink = false, listLink = false } = {}) {
       w.tech ? el("span", { class: "badge" }, IS_EN ? w.tech : CP_TR.tech[w.tech] || w.tech) : null,
       w.maker ? el("span", { class: "badge" }, w.maker) : null
     ),
+    w.quest ? el("p", { class: "cp-quest" }, questLabel(w.quest)) : null,
     w.effect ? el("p", { class: "cp-effect" }, el("strong", {}, L("İkonik etkisi: ", "Iconic effect: ")), (!IS_EN && CP_TR.effect[w.id]) || w.effect) : null,
     clipPlayer(w),
     howTo(w),
