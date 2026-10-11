@@ -1387,3 +1387,28 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .sot-company ul { margin: 4px 0 8px; padding-left: 20px; }
 .sot-ships { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 12px; }
 .sot-ships .build-card { margin-bottom: 0; }
+
+/* Brotato */
+.bro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; align-items: start; }
+.bro-card { margin-bottom: 0; border-top: 3px solid #bbb; }
+.bro-card.r2 { border-top-color: #4aa8ff; }
+.bro-card.r3 { border-top-color: #b061ff; }
+.bro-card.r4 { border-top-color: #ff4a4a; }
+.bro-head { display: flex; gap: 12px; align-items: center; }
+.bro-head h3 { margin: 0; font-size: 1.05rem; }
+.bro-head p { margin: 2px 0 0; }
+.bro-icon { width: 48px; height: 48px; object-fit: contain; flex: none; border-radius: 8px; background: #2a2330; }
+.bro-icon.big { width: 64px; height: 64px; }
+.bro-card-img { object-fit: contain !important; background: #2a2330; }
+.bro-stats { grid-template-columns: repeat(2, 1fr); }
+.bro-special { margin: 8px 0; line-height: 1.5; }
+.bro-rich b { font-weight: 700; }
+.bro-rich b.pos { color: #6fdc8c; }
+.bro-rich b.neg { color: #ff7b7b; }
+.bro-rich b.tier1 { color: #ddd; }
+.bro-rich b.tier2 { color: #6cb8ff; }
+.bro-rich b.tier3 { color: #c58cff; }
+.bro-rich b.tier4 { color: #ff7070; }
+.bro-weps { display: grid; gap: 4px; margin: 8px 0; }
+.bro-weps > div { display: flex; flex-wrap: wrap; gap: 4px; }
+.bro-mini { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; background: #2a2330; }
