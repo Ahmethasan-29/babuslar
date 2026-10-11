@@ -78,7 +78,8 @@ function Get-WikiTables([string]$text) {
     if ($line -match '^\s*!(.*)$') {
       if ($null -eq $cur) { $cur = @() }
       $isHeader = $true
-      foreach ($c in (Split-Inline $Matches[1] '!!')) { $cur += (Split-Cell $c) }
+      # Başlıklar "!!" ile ayrılır ama bazı wikiler "! Ad || Grid" yazar.
+      foreach ($c in (Split-Inline $Matches[1] '!!' | ForEach-Object { Split-Inline $_ '||' })) { $cur += (Split-Cell $c) }
       continue
     }
     if ($line -match '^\s*\|(.*)$') {
