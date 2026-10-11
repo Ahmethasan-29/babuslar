@@ -90,7 +90,7 @@ function placeNote(w) {
     vendor: [`${w.at.place} — satıcıdan satın alınır`, `${w.at.place} — bought from a vendor`],
   };
   const [tr, en] = notes[w.at.kind] || notes.world;
-  return el("p", { class: "tile-sub" }, el("strong", {}, L("Haritada: ", "On the map: ")), L(tr, en), w.at.kind === "world" && !w.at.exact ? L(" — tam yeri videoda", " — exact spot in the video") : "");
+  return el("p", { class: "tile-sub" }, el("strong", {}, L("Haritada: ", "On the map: ")), L(tr, en), w.at.kind === "world" && !w.at.exact ? L(" — tam yeri videoda", " — exact spot in the video") : "", w.at.map === "badlands" ? L(" (Badlands haritası)", " (Badlands map)") : "");
 }
 
 function weaponDetail(w, { mapLink = false, listLink = false } = {}) {
