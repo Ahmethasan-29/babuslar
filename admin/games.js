@@ -187,9 +187,17 @@ const GAMES = [
   {
     name: "Age of Empires II",
     sections: [
-      dataSection("aoe2/data.js", "AOE2", "civs", "Medeniyetler"),
-      dataSection("aoe2/data.js", "AOE2", "units", "Birlikler"),
-      dataSection("aoe2/data.js", "AOE2", "techs", "Teknolojiler"),
+      dataSection("aoe2/data.js", "AOE2", "civs", "Medeniyetler", true),
+      dataSection("aoe2/data.js", "AOE2", "units", "Birlikler", true),
+      dataSection("aoe2/data.js", "AOE2", "techs", "Teknolojiler", true),
+    ],
+  },
+  {
+    name: "Age of Empires IV",
+    sections: [
+      dataSection("aoe4/data.js", "AOE4", "civs", "Medeniyetler", true),
+      dataSection("aoe4/data.js", "AOE4", "units", "Birlikler", true),
+      dataSection("aoe4/data.js", "AOE4", "techs", "Teknolojiler", true),
     ],
   },
   {
@@ -231,6 +239,7 @@ const GAME_INFO = {
   "Company of Heroes 2": { id: "coh2", image: "https://cdn.jsdelivr.net/gh/cohstats/coh2stats@master/packages/web/public/resources/map-images/8p_essen_steelworks_x300.webp" },
   "Elden Ring": { id: "eldenring", image: "https://eldenring.fanapis.com/images/bosses/17f69a48308l0i1ux3rigvv37tx84f.png" },
   "Age of Empires II": { id: "aoe2", image: "https://cdn.jsdelivr.net/gh/SiegeEngineers/aoe2techtree@master/img/Civs/turks.png" },
+  "Age of Empires IV": { id: "aoe4", image: "https://data.aoe4world.com/images/units/janissary-3.png" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
 

@@ -13,6 +13,8 @@ $games = @(
   @{ name = "Bannerlord"; script = "bannerlord-data.ps1"; dir = "mb/bannerlord"; const = "BL" }
   @{ name = "Darkest Dungeon II"; script = "dd2-data.ps1"; dir = "dd/2"; const = "DKD2" }
   @{ name = "Company of Heroes 3"; script = "coh3-data.ps1"; dir = "coh3"; const = "COH" }
+  @{ name = "Age of Empires II"; script = "aoe2-data.ps1"; dir = "aoe2"; const = "AOE2" }
+  @{ name = "Age of Empires IV"; script = "aoe4-data.ps1"; dir = "aoe4"; const = "AOE4" }
 )
 if ($Only) { $games = @($games | Where-Object { $Only -contains $_.dir }) }
 
