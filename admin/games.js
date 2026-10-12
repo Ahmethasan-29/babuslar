@@ -184,6 +184,7 @@ const GAMES = [
       dataSection("eldenring/data.js", "ER", "classes", "Başlangıç sınıfları"),
     ],
   },
+  { name: "Age of Empires", sections: [dataSection("aoe1/data.js", "AOEW", "civs", "Medeniyetler")] },
   {
     name: "Age of Empires II",
     sections: [
@@ -200,6 +201,8 @@ const GAMES = [
       dataSection("aoe4/data.js", "AOE4", "techs", "Teknolojiler", true),
     ],
   },
+  { name: "Age of Empires III", sections: [dataSection("aoe3/data.js", "AOEW", "civs", "Medeniyetler")] },
+  { name: "Age of Mythology", sections: [dataSection("aom/data.js", "AOEW", "civs", "Ana tanrılar")] },
   {
     name: "Company of Heroes 3",
     sections: [
@@ -238,6 +241,9 @@ const GAME_INFO = {
   "Company of Heroes": { id: "coh1", image: "https://static.wikia.nocookie.net/companyofheroes/images/8/8b/Commander_Infantry_Company_Banner.png/revision/latest/scale-to-width-down/600?path-prefix=en" },
   "Company of Heroes 2": { id: "coh2", image: "https://cdn.jsdelivr.net/gh/cohstats/coh2stats@master/packages/web/public/resources/map-images/8p_essen_steelworks_x300.webp" },
   "Elden Ring": { id: "eldenring", image: "https://eldenring.fanapis.com/images/bosses/17f69a48308l0i1ux3rigvv37tx84f.png" },
+  "Age of Empires": { id: "aoe1", image: "https://static.wikia.nocookie.net/ageofempires/images/4/4f/Egyptians_AoE.png/revision/latest/scale-to-width-down/300" },
+  "Age of Empires III": { id: "aoe3", image: "https://static.wikia.nocookie.net/ageofempires/images/a/a1/Flag_OttomanDE.png/revision/latest/scale-to-width-down/300" },
+  "Age of Mythology": { id: "aom", image: "https://static.wikia.nocookie.net/ageofempires/images/1/14/AoMRT_Greek_Zeus.webp/revision/latest/scale-to-width-down/300" },
   "Age of Empires II": { id: "aoe2", image: "https://cdn.jsdelivr.net/gh/SiegeEngineers/aoe2techtree@master/img/Civs/turks.png" },
   "Age of Empires IV": { id: "aoe4", image: "https://data.aoe4world.com/images/units/janissary-3.png" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },

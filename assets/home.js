@@ -45,7 +45,10 @@ const ALIASES = {
   "coh2/": "coh coh2 company heroes 2",
   "coh3/": "coh coh3 company heroes 3",
   "eldenring/": "er elden ring souls",
+  "aoe1/": "aoe aoe1 age empires 1 definitive return rome",
   "aoe2/": "aoe aoe2 age empires 2 ii",
+  "aoe3/": "aoe aoe3 age empires 3 iii",
+  "aom/": "aom age mythology retold tanri",
   "aoe4/": "aoe aoe4 age empires 4 iv",
 };
 
