@@ -52,34 +52,40 @@ function showLogin(error) {
   app.replaceChildren(form);
 }
 
+// Oyunun görseli ve adı (sitedeki oyun kartları gibi). Wiki görselleri yabancı sitelere referer ile verilmez.
+const banner = (game, big) =>
+  el(
+    "div",
+    { class: `admin-banner${game.top ? " top" : ""}${game.image ? "" : " plain"}${big ? " big" : ""}` },
+    game.image ? el("img", { src: game.image, alt: "", loading: "lazy", referrerpolicy: "no-referrer" }) : null,
+    el(big ? "h1" : "h2", {}, game.name === "Site" ? "Site (ana sayfa, Hakkımda)" : game.name),
+    el("small", {}, `${game.sections.length} bölüm`)
+  );
+
+// Ana sayfa yalnızca oyun kartlarını gösterir; bölümler oyuna tıklayınca açılır (index.html?oyun=<kısa ad>).
+// Tek bölümlü oyunlar doğrudan o bölüme gider.
 function showGames() {
-  app.replaceChildren(
+  const game = GAMES.find((g) => g.id === new URLSearchParams(location.search).get("oyun"));
+  if (game) return showGame(game);
+  fill(
+    app,
     el("h1", { class: "page-title" }, "Yönetim paneli"),
-    el("p", { class: "page-sub" }, `Hoş geldin ${Panel.user.name || Panel.user.login}. Düzenlemek istediğin oyunu ve bölümü seç.`),
+    el("p", { class: "page-sub" }, `Hoş geldin ${Panel.user.name || Panel.user.login}. Düzenlemek istediğin oyunu seç.`),
     el(
       "div",
       { class: "admin-games" },
-      GAMES.map((game) =>
-        el(
-          "section",
-          { class: "admin-game" },
-          // Sitedeki oyun kartları gibi üstte oyunun görseli. Wiki görselleri yabancı sitelere referer ile verilmez.
-          el(
-            "div",
-            { class: `admin-banner${game.top ? " top" : ""}${game.image ? "" : " plain"}` },
-            game.image ? el("img", { src: game.image, alt: "", loading: "lazy", referrerpolicy: "no-referrer" }) : null,
-            el("h2", {}, game.name === "Site" ? "Site (ana sayfa, Hakkımda)" : game.name),
-            el("small", {}, `${game.sections.length} bölüm`)
-          ),
-          el(
-            "div",
-            { class: "admin-sections" },
-            game.sections.map((s) =>
-              s.href ? el("a", { class: "admin-section", href: s.href }, s.label) : el("span", { class: "admin-section soon" }, s.label, el("small", {}, "Yakında"))
-            )
-          )
-        )
-      )
+      GAMES.map((g) => el("a", { class: "admin-game", href: g.sections.length === 1 ? g.sections[0].href : `?oyun=${g.id}` }, banner(g)))
     )
+  );
+}
+
+function showGame(game) {
+  document.title = `${game.name} · Yönetim paneli · Babuşlar`;
+  fill(
+    app,
+    el("div", { class: "crumbs" }, el("a", { href: "./" }, "Panel"), ` / ${game.name}`),
+    el("div", { class: "admin-game single" }, banner(game, true)),
+    el("p", { class: "page-sub" }, "Düzenlemek istediğin bölümü seç."),
+    el("div", { class: "admin-sections grid" }, game.sections.map((s) => el("a", { class: "admin-section", href: s.href }, s.label)))
   );
 }

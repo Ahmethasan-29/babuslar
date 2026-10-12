@@ -72,7 +72,7 @@ function render() {
   const top = el(
     "div",
     {},
-    el("div", { class: "crumbs" }, el("a", { href: "./" }, "Panel"), " / Counter-Strike 2 / ", PANEL === "haritalar" ? "Haritalar ve infolar" : "Atış videoları"),
+    el("div", { class: "crumbs" }, el("a", { href: "./" }, "Panel"), " / ", el("a", { href: "./?oyun=cs2" }, "Counter-Strike 2"), " / ", PANEL === "haritalar" ? "Haritalar ve infolar" : "Atış videoları"),
     el(
       "div",
       { class: "chips" },

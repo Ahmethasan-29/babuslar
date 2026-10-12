@@ -219,3 +219,12 @@ a.admin-section:hover { border-color: var(--accent); }
 .admin-banner h2 { margin: 0; font-size: 1.2rem; }
 .admin-banner small { color: var(--muted); }
 .admin-game:hover { border-color: var(--accent); }
+
+/* Oyun kartları tıklanabilir; bölümler oyunun kendi sayfasında */
+a.admin-game { display: block; text-decoration: none; color: var(--text); transition: transform 0.2s, border-color 0.2s; }
+a.admin-game:hover { transform: translateY(-3px); }
+.admin-game.single { margin: 8px 0 16px; }
+.admin-banner.big { height: 180px; }
+.admin-banner.big h1 { margin: 0; font-size: 1.8rem; }
+.admin-sections.grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); padding: 0; }
+.admin-banner.big.top img { object-position: center 20%; }
