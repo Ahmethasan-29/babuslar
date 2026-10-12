@@ -128,6 +128,20 @@ function mapEditor() {
     }
   }
 
+  // Bomba bölgeleri (A, B) ve doğuşlar (T, CT): sitedeki gibi ayrı işaretler, sürüklenerek taşınır.
+  // Bölge konumu [x, y] ya da alt kattaysa [x, y, "lower"]; doğuşlar üst kattadır.
+  function drawMarkers() {
+    const add = (holder, key, kind) => {
+      const at = holder[key];
+      if (map.levels && (at[2] || "upper") !== activeLevel) return;
+      const node = el("div", { class: `marker ${kind}`, style: `left:${at[0] * 100}%;top:${at[1] * 100}%`, title: kind === "site" ? `${key} bölgesi` : `${key} doğuşu` }, key);
+      node.target = { holder, key };
+      radar.append(node);
+    };
+    for (const key of Object.keys(map.sites || {})) add(map.sites, key, "site");
+    for (const key of Object.keys(map.spawns || {})) add(map.spawns, key, `spawn ${key.toLowerCase()}`);
+  }
+
   function drawRows() {
     rows.replaceChildren(
       ...map.callouts.filter(onLevel).map((c) => {
@@ -179,8 +193,14 @@ function mapEditor() {
     return [clamp((e.clientX - r.left) / r.width), clamp((e.clientY - r.top) / r.height)];
   };
   let dragging = null;
+  let draggingMarker = null;
   radar.addEventListener("pointerdown", (e) => {
     e.preventDefault();
+    if (e.target.target) {
+      draggingMarker = e.target;
+      radar.setPointerCapture(e.pointerId);
+      return;
+    }
     let c = e.target.callout;
     if (!c) {
       c = { name: "Yeni info", at: pos(e), ...(map.levels && activeLevel !== "upper" ? { level: activeLevel } : {}) };
@@ -199,6 +219,15 @@ function mapEditor() {
     radar.setPointerCapture(e.pointerId);
   });
   radar.addEventListener("pointermove", (e) => {
+    if (draggingMarker) {
+      const { holder, key } = draggingMarker.target;
+      const [x, y] = pos(e);
+      holder[key] = holder[key][2] ? [x, y, holder[key][2]] : [x, y];
+      draggingMarker.style.left = `${x * 100}%`;
+      draggingMarker.style.top = `${y * 100}%`;
+      changed();
+      return;
+    }
     if (!dragging) return;
     dragging.at = pos(e);
     const pin = pins.get(dragging);
@@ -206,8 +235,9 @@ function mapEditor() {
     pin.style.top = `${dragging.at[1] * 100}%`;
     changed();
   });
-  radar.addEventListener("pointerup", () => (dragging = null));
+  radar.addEventListener("pointerup", () => (dragging = draggingMarker = null));
 
+  drawMarkers();
   drawPins();
   drawRows();
 
@@ -251,7 +281,7 @@ function mapEditor() {
           )
         : null,
       radar,
-      el("p", { class: "hint" }, "Radarda boş bir yere tıkla: oraya yeni info eklenir. İnfoları sürükleyerek taşıyabilirsin.")
+      el("p", { class: "hint" }, "Radarda boş bir yere tıkla: oraya yeni info eklenir. İnfoları, bomba bölgelerini (A, B) ve doğuşları (T, CT) sürükleyerek taşıyabilirsin; bunlar için ayrıca info eklemene gerek yok.")
     ),
     el(
       "div",

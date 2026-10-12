@@ -185,3 +185,22 @@ a.admin-section:hover { border-color: var(--accent); }
 
 .site-header .back-site { margin-left: auto; margin-right: 16px; color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 999px; }
 .site-header .back-site:hover { color: var(--text); background: var(--accent-soft); }
+
+/* CS2 radarında bomba bölgeleri ve doğuşlar (sitedeki renklerle) */
+.marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fff;
+  border: 2px solid #fff;
+  cursor: grab;
+  z-index: 1;
+}
+.marker:active { cursor: grabbing; }
+.marker.site { width: 26px; height: 26px; border-radius: 50%; background: rgba(230, 60, 60, 0.9); }
+.marker.spawn { min-width: 30px; height: 20px; padding: 0 4px; border-radius: 5px; }
+.marker.spawn.t { background: rgba(220, 150, 40, 0.95); }
+.marker.spawn.ct { background: rgba(60, 130, 230, 0.95); }

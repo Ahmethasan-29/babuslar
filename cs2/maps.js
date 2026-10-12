@@ -86,8 +86,6 @@ const CS2_MAPS = [
       { name: "Window", at: [0.27, 0.13] },
       { name: "Pool", at: [0.11, 0.05] },
       { name: "Dark", at: [0.453, 0.773] },
-      { name: "T spawn", at: [0.38, 0.901] },
-      { name: "CT spawn", at: [0.612, 0.207] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
