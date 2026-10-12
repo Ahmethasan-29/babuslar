@@ -53,13 +53,13 @@ function Num([string]$v) { $x = (Plain $v) -replace ',', ''; if ($x -match '^-?[
 # --- Harita ---------------------------------------------------------------------------------------------------
 $mapPage = Get-Wikitext @("Map:Night City 2077")
 $map = $mapPage["Map:Night City 2077"] | ConvertFrom-Json
-$W = [double]$map.mapBounds[1][0]; $H = [double]$map.mapBounds[1][1]
+$mapW = [double]$map.mapBounds[1][0]; $mapH = [double]$map.mapBounds[1][1]
 $catNames = @{}; foreach ($c in $map.categories) { $catNames[[string]$c.id] = $c.name.Trim() }
 $places = @()
 foreach ($m in $map.markers) {
-  $px = [Math]::Round($m.position[0] / $W * 100, 3)
+  $px = [Math]::Round($m.position[0] / $mapW * 100, 3)
   # Haritanın başlangıç noktası sol alt köşe: y yukarı doğru artar.
-  $py = [Math]::Round((1 - $m.position[1] / $H) * 100, 3)
+  $py = [Math]::Round((1 - $m.position[1] / $mapH) * 100, 3)
   $places += [ordered]@{ name = $m.popup.title.Trim(); page = $(if ($m.popup.link.url) { $m.popup.link.url } else { $m.popup.title.Trim() }); cat = $catNames[[string]$m.categoryId]; x = $px; y = $py }
 }
 $mapImg = (Get-ImageUrls @($map.mapImage))[($map.mapImage -replace '_', ' ')]
@@ -325,7 +325,7 @@ foreach ($w in $weapons) {
 }
 foreach ($p in $places) { $p.Remove("page") }
 $data = [ordered]@{
-  map     = [ordered]@{ image = $mapImg; width = $W; height = $H; places = @($places | Sort-Object { $_.name }) }
+  map     = [ordered]@{ image = $mapImg; width = [int]$mapW; height = [int]$mapH; places = @($places | Sort-Object { $_.name }) }
   badlands = [ordered]@{ image = "maps/badlands.jpg"; width = [int]($CROP.w * $SCALE); height = [int]($CROP.h * $SCALE); areas = @($badAreas | ForEach-Object { $_.Remove("key"); $_ }) }
   weapons = @($weapons | Sort-Object { $_.name })
 }
