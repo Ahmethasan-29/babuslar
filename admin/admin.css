@@ -206,3 +206,16 @@ a.admin-section:hover { border-color: var(--accent); }
 .marker.spawn { width: 6cqw; height: 3.6cqw; border-radius: 1cqw; }
 .marker.spawn.t { background: rgba(220, 150, 40, 0.95); }
 .marker.spawn.ct { background: rgba(60, 130, 230, 0.95); }
+
+/* Panel ana sayfası: sitedeki gibi görselli oyun kartları */
+.admin-game { padding: 0; overflow: hidden; }
+.admin-game .admin-sections { padding: 12px 14px 14px; }
+.admin-banner { position: relative; height: 120px; display: flex; flex-direction: column; justify-content: flex-end; padding: 12px 16px; overflow: hidden; background: var(--bg-elev); }
+.admin-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+.admin-banner.top img { object-position: top; }
+.admin-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 15%, rgba(14, 9, 16, 0.95)); }
+.admin-banner.plain { background: linear-gradient(135deg, var(--accent-soft), var(--bg-elev) 70%); }
+.admin-banner > :not(img) { position: relative; z-index: 1; }
+.admin-banner h2 { margin: 0; font-size: 1.2rem; }
+.admin-banner small { color: var(--muted); }
+.admin-game:hover { border-color: var(--accent); }

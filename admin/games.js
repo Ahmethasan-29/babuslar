@@ -17,6 +17,7 @@ const bf = (dir, name, auto) => ({
 });
 
 const GAMES = [
+  { name: "Site", sections: [literalSection("assets/hakkimda.js", "HAKKIMDA", "", "Hakkımda sayfası")] },
   {
     name: "Counter-Strike 2",
     sections: [
@@ -163,12 +164,39 @@ const GAMES = [
   bf("bfv", "Battlefield V"),
   bf("bf6", "Battlefield 6", true),
   { name: "Battlefield (ortak)", sections: [literalSection("bf/tr.js", "BF_TR", "groups", "Silah grubu adları")] },
-  { name: "Site", sections: [literalSection("assets/hakkimda.js", "HAKKIMDA", "", "Hakkımda sayfası")] },
 ];
 
-// Bölüm adresi: edit.html?oyun=<sıra>&bolum=<sıra>
-GAMES.forEach((game, g) =>
+// Kart görselleri (sitenin ana sayfasındakilerle aynı) ve adreslerde kullanılan kısa adlar.
+const WIKIA = "https://static.wikia.nocookie.net";
+const GAME_INFO = {
+  Site: { id: "site" },
+  "Counter-Strike 2": { id: "cs2", image: "../cs2/img/hero.jpg" },
+  "League of Legends": { id: "lol", image: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_0.jpg" },
+  Valorant: { id: "valorant", image: "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/fullportrait.png", top: true },
+  "Dead by Daylight": { id: "dbd", image: `${WIKIA}/deadbydaylight_gamepedia_en/images/8/81/K01_TheTrapper_Portrait.png/revision/latest/scale-to-width-down/400`, top: true },
+  "Darkest Dungeon": { id: "dd1", image: "https://darkestdungeon.wiki.gg/images/Crusader.png", top: true },
+  "Darkest Dungeon II": { id: "dd2", image: "https://darkestdungeon.wiki.gg/images/Hwm_wiki.png", top: true },
+  "Rainbow Six Siege": { id: "r6", image: `${WIKIA}/rainbowsix/images/4/42/Ash_-_Full_Body.png/revision/latest/scale-to-width-down/400`, top: true },
+  "Mount & Blade II: Bannerlord": { id: "bannerlord", image: `${WIKIA}/mountandblade/images/d/d6/Bannerlord_Calradia_Political_map.png/revision/latest/scale-to-width-down/800` },
+  "Mount & Blade: Warband": { id: "warband", image: `${WIKIA}/mountandblade/images/8/88/WarbandWorldMap.jpg/revision/latest/scale-to-width-down/800` },
+  "The Witcher 3": { id: "witcher3", image: "../witcher3/maps/velen-small.jpg" },
+  "Cyberpunk 2077": { id: "cp2077", image: `${WIKIA}/cyberpunk/images/4/42/Night_City_Map_2076_CEMK.jpg/revision/latest/scale-to-width-down/800` },
+  "Project Zomboid": { id: "pz", image: "https://pzwiki.net/w/images/1/18/Muldraughmap.png" },
+  "Sea of Thieves": { id: "sot", image: `${WIKIA}/seaofthieves_gamepedia/images/6/60/PlunderValley_Map.png/revision/latest/scale-to-width-down/800` },
+  Brotato: { id: "brotato", image: "https://brotato.wiki.spellsandguns.com/images/f/fa/Brawler.png", top: true },
+  "Battlefield 1": { id: "bf1", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
+  "Battlefield 2": { id: "bf2", image: `${WIKIA}/battlefield/images/5/57/BF2_Dalian_Plant.png/revision/latest/scale-to-width-down/800` },
+  "Battlefield 3": { id: "bf3", image: `${WIKIA}/battlefield/images/d/db/Caspian-border-promo.jpg/revision/latest/scale-to-width-down/800` },
+  "Battlefield 4": { id: "bf4", image: `${WIKIA}/battlefield/images/7/73/Dawnbreaker.jpg/revision/latest/scale-to-width-down/800` },
+  "Battlefield V": { id: "bfv", image: `${WIKIA}/battlefield/images/9/96/Battlefield_V_Aerodrome_Article_Header.png/revision/latest/scale-to-width-down/800` },
+  "Battlefield 6": { id: "bf6", image: `${WIKIA}/battlefield/images/0/0d/Battlefield_6_Empire_State.jpg/revision/latest/scale-to-width-down/800` },
+  "Battlefield (ortak)": { id: "bf", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
+};
+
+// Bölüm adresi: edit.html?oyun=<kısa ad>&bolum=<sıra>
+for (const game of GAMES) {
+  Object.assign(game, GAME_INFO[game.name]);
   game.sections.forEach((section, s) => {
-    section.href = section.href || `edit.html?oyun=${g}&bolum=${s}`;
-  })
-);
+    section.href = section.href || `edit.html?oyun=${game.id}&bolum=${s}`;
+  });
+}

@@ -2,7 +2,7 @@
 // Solda kayıtların listesi ve arama, sağda seçili kaydın tüm alanları. Alanların türüne göre form kendiliğinden oluşur.
 
 const params = new URLSearchParams(location.search);
-const game = GAMES[Number(params.get("oyun"))];
+const game = GAMES.find((g) => g.id === params.get("oyun")) || GAMES[Number(params.get("oyun"))];
 const section = game?.sections[Number(params.get("bolum"))];
 const app = document.getElementById("app");
 
