@@ -109,6 +109,82 @@ img { max-width: 100%; display: block; }
 
 .lang-toggle:hover { color: #fff; background: var(--accent); }
 
+/* Ana sayfa üst menüsü: "Oyunlar" açılır menüsü */
+.nav-menu { position: relative; }
+
+.nav-menu-btn {
+  font: inherit;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-menu-btn::after { content: " ▾"; font-size: 0.8em; }
+
+.nav-menu-btn:hover,
+.nav-menu-btn[aria-expanded="true"] { color: var(--text); background: var(--accent-soft); }
+
+.nav-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  width: min(520px, calc(100vw - 32px));
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  padding: 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.nav-menu-panel[hidden] { display: none; }
+
+.nav-menu-panel a { border-radius: 10px; }
+
+/* Telefonda menü düğmeye değil başlığın tamamına göre açılır; ekrandan taşmaz. */
+@media (max-width: 560px) {
+  .nav-menu { position: static; }
+  .nav-menu-panel {
+    top: 100%;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ana sayfa oyun arama kutusu */
+.game-search {
+  display: block;
+  width: min(520px, 100%);
+  margin: 24px auto 0;
+  padding: 12px 20px;
+  font: inherit;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.game-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.game-search::placeholder { color: var(--muted); }
+
+.games .game-card[hidden] { display: none; }
+
+.search-empty { text-align: center; color: var(--muted); margin: 24px 0 0; }
+
 main { flex: 1; padding: 32px 0 56px; }
 
 /* Başlıklar */
