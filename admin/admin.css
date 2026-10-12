@@ -77,22 +77,25 @@ a.admin-section:hover { border-color: var(--accent); }
 .field textarea { min-height: 70px; resize: vertical; }
 
 /* Radar üzerinde info düzenleme */
+.radar-edit { container-type: inline-size; }
 .radar-edit { position: relative; border-radius: var(--radius); overflow: hidden; background: #000; cursor: crosshair; user-select: none; touch-action: none; }
 .radar-edit img { width: 100%; display: block; pointer-events: none; }
 .pin {
   position: absolute;
-  transform: translate(-50%, -50%);
-  font-size: 0.72rem;
-  font-weight: 700;
+  transform: translate(-50%, calc(-100% - 1cqw));
+  font: 700 2.1cqw "Outfit", system-ui, sans-serif;
   white-space: nowrap;
   color: #fff;
-  background: rgba(14, 9, 16, 0.85);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 2px 6px;
+  background: none;
+  padding: 0 0.3cqw;
+  line-height: 1;
+  text-shadow: 0 0 0.3cqw #000, 0 0 0.3cqw #000, 0 0 0.3cqw #000;
   cursor: grab;
 }
-.pin.active { background: var(--accent); border-color: #fff; z-index: 2; }
+.pin.active { color: var(--accent); font-size: 2.6cqw; z-index: 2; }
+/* Sitedeki gibi: infonun yeri küçük bir nokta, adı noktanın üstünde. */
+.pin::after { content: ""; position: absolute; left: 50%; top: calc(100% + 0.3cqw); width: 1.4cqw; height: 1.4cqw; border-radius: 50%; background: var(--accent); transform: translateX(-50%); box-shadow: 0 0 0 0.15cqw #000; }
+.pin.active::after { background: #fff; width: 2.6cqw; height: 2.6cqw; top: calc(100% - 0.3cqw); }
 .pin:active { cursor: grabbing; }
 .hint { color: var(--muted); font-size: 0.85rem; margin: 6px 0 0; }
 
@@ -192,15 +195,14 @@ a.admin-section:hover { border-color: var(--accent); }
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font: 700 2.4cqw "Outfit", system-ui, sans-serif;
   color: #fff;
-  border: 2px solid #fff;
+  border: 0.3cqw solid #fff;
   cursor: grab;
   z-index: 1;
 }
 .marker:active { cursor: grabbing; }
-.marker.site { width: 26px; height: 26px; border-radius: 50%; background: rgba(230, 60, 60, 0.9); }
-.marker.spawn { min-width: 30px; height: 20px; padding: 0 4px; border-radius: 5px; }
+.marker.site { width: 6cqw; height: 6cqw; font-size: 3.2cqw; border-radius: 50%; background: rgba(230, 60, 60, 0.9); }
+.marker.spawn { width: 6cqw; height: 3.6cqw; border-radius: 1cqw; }
 .marker.spawn.t { background: rgba(220, 150, 40, 0.95); }
 .marker.spawn.ct { background: rgba(60, 130, 230, 0.95); }
