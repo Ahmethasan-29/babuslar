@@ -1,28 +1,6 @@
 // Panel giriş sayfası: giriş yoksa anahtar formu, varsa oyun kategorileri.
 
-// Her oyun bir kategori; içindeki bölümler ayrı panellerdir. Paneli olmayan bölümler "Yakında" görünür.
-const GAMES = [
-  {
-    name: "Counter-Strike 2",
-    sections: [
-      { label: "Haritalar ve infolar", href: "cs2.html?panel=haritalar" },
-      { label: "Atış videoları", href: "cs2.html?panel=atislar" },
-    ],
-  },
-  { name: "League of Legends", sections: [{ label: "Eşya dizilimleri" }] },
-  { name: "Valorant", sections: [{ label: "Yetenek videoları" }] },
-  { name: "Dead by Daylight", sections: [{ label: "Türkçe perk metinleri" }, { label: "Jeneratör yerleri" }] },
-  { name: "Darkest Dungeon", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Rainbow Six Siege", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Mount & Blade", sections: [{ label: "Türkçe metinler" }] },
-  { name: "The Witcher 3", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Cyberpunk 2077", sections: [{ label: "İkonik silah metinleri" }] },
-  { name: "Project Zomboid", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Sea of Thieves", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Brotato", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Battlefield", sections: [{ label: "Türkçe metinler" }] },
-  { name: "Site", sections: [{ label: "Ana sayfa kartları" }, { label: "Hakkımda" }] },
-];
+// Oyunlar ve bölümleri games.js'te tanımlı.
 
 const app = document.getElementById("app");
 

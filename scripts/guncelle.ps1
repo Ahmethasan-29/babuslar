@@ -4,19 +4,20 @@
 param([string[]]$Only)
 
 $games = @(
-  @{ name = "Dead by Daylight"; script = "dbd-data.ps1"; dir = "dbd" }
-  @{ name = "Rainbow Six Siege"; script = "r6-data.ps1"; dir = "r6" }
-  @{ name = "Battlefield 6"; script = "bf-data.ps1"; args = @{ Game = "BF6" }; dir = "bf6" }
-  @{ name = "Project Zomboid"; script = "pz-data.ps1"; dir = "pz" }
-  @{ name = "Sea of Thieves"; script = "sot-data.ps1"; dir = "sot" }
-  @{ name = "Brotato"; script = "brotato-data.ps1"; dir = "brotato" }
-  @{ name = "Bannerlord"; script = "bannerlord-data.ps1"; dir = "mb/bannerlord" }
-  @{ name = "Darkest Dungeon II"; script = "dd2-data.ps1"; dir = "dd/2" }
+  @{ name = "Dead by Daylight"; script = "dbd-data.ps1"; dir = "dbd"; const = "DBD" }
+  @{ name = "Rainbow Six Siege"; script = "r6-data.ps1"; dir = "r6"; const = "R6" }
+  @{ name = "Battlefield 6"; script = "bf-data.ps1"; args = @{ Game = "BF6" }; dir = "bf6"; const = "BF" }
+  @{ name = "Project Zomboid"; script = "pz-data.ps1"; dir = "pz"; const = "PZ" }
+  @{ name = "Sea of Thieves"; script = "sot-data.ps1"; dir = "sot"; const = "SOT" }
+  @{ name = "Brotato"; script = "brotato-data.ps1"; dir = "brotato"; const = "BRO" }
+  @{ name = "Bannerlord"; script = "bannerlord-data.ps1"; dir = "mb/bannerlord"; const = "BL" }
+  @{ name = "Darkest Dungeon II"; script = "dd2-data.ps1"; dir = "dd/2"; const = "DKD2" }
 )
 if ($Only) { $games = @($games | Where-Object { $Only -contains $_.dir }) }
 
 # Git satır sonu uyarılarını stderr'e yazar; Actions'taki PowerShell bunu hata sayıp durur. Uyarılar kapatılır.
 function Invoke-Git { $ErrorActionPreference = "Continue"; & git -c core.safecrlf=false @args 2>$null }
+function Invoke-Node { $ErrorActionPreference = "Continue"; & node @args 2>&1 | ForEach-Object { Write-Host $_ } }
 
 $report = @()
 foreach ($g in $games) {
@@ -31,6 +32,11 @@ foreach ($g in $games) {
   Write-Host "::endgroup::"
   $after = if (Test-Path $file) { (Get-Item $file).Length } else { 0 }
   if (-not $err -and $after -lt $before * 0.9) { $err = "veri dosyası küçüldü ($before → $after bayt)" }
+  # Panelden yapılan düzeltmeler (duzeltmeler.json) yeni veriye yeniden uygulanır.
+  if (-not $err -and (Test-Path "$($g.dir)/duzeltmeler.json")) {
+    Invoke-Node scripts/duzeltmeler.mjs $file $g.const
+    if ($LASTEXITCODE) { $err = "panel düzeltmeleri uygulanamadı" }
+  }
   if ($err) {
     Invoke-Git checkout -- $g.dir
     Invoke-Git clean -fdq -- $g.dir

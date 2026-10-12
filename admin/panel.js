@@ -271,3 +271,8 @@ function saveBar({ onSave, snapshot, restore }) {
     },
   };
 }
+
+// replaceChildren gibi, ama boş (null) öğeleri atlar (yoksa sayfada "null" yazar).
+function fill(node, ...children) {
+  node.replaceChildren(...children.flat().filter((c) => c != null));
+}
