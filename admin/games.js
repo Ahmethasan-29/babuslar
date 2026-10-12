@@ -164,6 +164,14 @@ const GAMES = [
   bf("bfv", "Battlefield V"),
   bf("bf6", "Battlefield 6", true),
   { name: "Battlefield (ortak)", sections: [literalSection("bf/tr.js", "BF_TR", "groups", "Silah grubu adları")] },
+  {
+    name: "Company of Heroes 3",
+    sections: [
+      dataSection("coh3/data.js", "COH", "units", "Birlikler", true),
+      dataSection("coh3/data.js", "COH", "commanders", "Battlegroup'lar", true),
+      dataSection("coh3/data.js", "COH", "maps", "Haritalar", true),
+    ],
+  },
 ];
 
 // Kart görselleri (sitenin ana sayfasındakilerle aynı) ve adreslerde kullanılan kısa adlar.
@@ -191,6 +199,7 @@ const GAME_INFO = {
   "Battlefield V": { id: "bfv", image: `${WIKIA}/battlefield/images/9/96/Battlefield_V_Aerodrome_Article_Header.png/revision/latest/scale-to-width-down/800` },
   "Battlefield 6": { id: "bf6", image: `${WIKIA}/battlefield/images/0/0d/Battlefield_6_Empire_State.jpg/revision/latest/scale-to-width-down/800` },
   "Battlefield (ortak)": { id: "bf", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
+  "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
 
 // Bölüm adresi: edit.html?oyun=<kısa ad>&bolum=<sıra>

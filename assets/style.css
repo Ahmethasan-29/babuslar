@@ -1566,3 +1566,34 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 @media (max-width: 560px) {
   .about-list li { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* Company of Heroes (coh1, coh2, coh3: ortak sayfalar coh/*.js) */
+.coh-factions { margin: 0 0 18px; }
+.coh-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: baseline; }
+.coh-unit-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.coh-unit-head h3 { margin: 0 0 2px; }
+.coh-unit-head .tile-sub { margin: 0; }
+.coh-icon { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; border-radius: 10px; background: #16121a; }
+.coh-costs, .coh-points { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.coh-cost, .coh-point { font-size: 0.82rem; padding: 2px 8px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--muted); }
+.coh-cost b, .coh-point b { color: var(--text); }
+.coh-cost.manpower b { color: #e8e2e6; }
+.coh-cost.munition b, .coh-point.munitions b { color: #f0a050; }
+.coh-cost.fuel b, .coh-point.fuel b { color: #f2d15a; }
+.coh-cost.popcap b { color: #8fc7ff; }
+.coh-point.victory b { color: var(--accent); }
+.coh-facts { color: var(--muted); font-size: 0.85rem; margin: 0 0 6px; }
+.coh-role { margin: 0 0 6px; font-weight: 600; color: var(--accent); font-size: 0.9rem; }
+.coh-text { white-space: pre-line; margin: 0 0 6px; font-size: 0.92rem; line-height: 1.5; }
+.coh-banner { width: calc(100% + 36px); margin: -18px -18px 12px; height: 110px; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; }
+.coh-commander { grid-column: span 1; }
+.coh-branch h4 { margin: 12px 0 6px; font-size: 0.95rem; color: var(--accent); }
+.coh-abilities { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.coh-ability { display: flex; gap: 10px; align-items: flex-start; }
+.coh-ability img, .coh-ability-noimg { width: 40px; height: 40px; flex-shrink: 0; border-radius: 8px; background: #16121a; object-fit: contain; }
+.coh-ability strong { font-size: 0.92rem; }
+.coh-ability p { margin: 2px 0 0; font-size: 0.85rem; color: var(--muted); white-space: pre-line; }
+.coh-badge { display: inline-block; margin-left: 6px; font-size: 0.72rem; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); vertical-align: middle; }
+.coh-map-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: #16121a; margin-bottom: 8px; }
+.coh-map h3 { margin: 0 0 2px; }
+.game-card .coh-card-icon { object-fit: contain; padding: 20px; }
