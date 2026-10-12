@@ -61,7 +61,7 @@ $its = Parse-DataTemplate $src["Template:Item Data"]
 
 # Sayfa adları (büyük harf) için wikideki gerçek başlıklar: kategori yerine tablo anahtarlarını başlık biçimine çeviririz
 # ve resim adları "Ad.png" olarak denenir.
-function Title([string]$k) { (Get-Culture).TextInfo.ToTitleCase($k) }
+function Title([string]$k) { $TI.ToTitleCase($k) }
 $TI = (New-Object Globalization.CultureInfo "en-US").TextInfo
 
 $characters = @(foreach ($k in $chars.Keys) {

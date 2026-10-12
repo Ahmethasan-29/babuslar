@@ -15,7 +15,8 @@ function Get-Json([string]$path) {
 }
 function Clean([string]$s) { if ($s) { ($s -replace '\r', '').Trim() } }
 # "archery-range" → "Archery Range"
-function Pretty([string]$id) { (Get-Culture).TextInfo.ToTitleCase(($id -replace '-', ' ')) }
+# Sabit kültürle: bilgisayarın dili Türkçeyse ToTitleCase "i"yi "İ" yapar ("İmperial").
+function Pretty([string]$id) { [Globalization.CultureInfo]::InvariantCulture.TextInfo.ToTitleCase(($id -replace '-', ' ')) }
 function Cost($c) {
   $o = [ordered]@{}
   if (-not $c) { return $o }

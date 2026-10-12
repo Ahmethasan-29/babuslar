@@ -72,7 +72,7 @@ const PAGES = {
             [L("Menzil", "Range"), u.range || null],
             [L("Hız", "Speed"), u.speed],
             [L("Görüş", "Line of sight"), u.los],
-            [L("Üretim süresi", "Train time"), u.time ? `${u.time} sn` : null],
+            [L("Üretim süresi", "Train time"), u.time ? L(`${u.time} sn`, `${u.time}s`) : null],
           ]),
           civsLine(u),
           T(u.help) ? el("p", { class: "coh-text" }, T(u.help)) : null
