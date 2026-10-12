@@ -163,6 +163,7 @@ const GAMES = [
   bf("bfv", "Battlefield V"),
   bf("bf6", "Battlefield 6", true),
   { name: "Battlefield (ortak)", sections: [literalSection("bf/tr.js", "BF_TR", "groups", "Silah grubu adları")] },
+  { name: "Site", sections: [literalSection("assets/hakkimda.js", "HAKKIMDA", "", "Hakkımda sayfası")] },
 ];
 
 // Bölüm adresi: edit.html?oyun=<sıra>&bolum=<sıra>
