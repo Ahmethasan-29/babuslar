@@ -23,6 +23,7 @@ const LABELS = {
   maps: "Haritalar", weapons: "Silahlar", tactics: "Taktik", weak: "Zayıf olduğu", where: "Bulunduğu yer", side: "Taraf",
   roles: "Roller", abilities: "Yetenekler", culture: "Kültür", tier: "Seviye", wage: "Maaş", up: "Yükseltmeler", color: "Renk",
   modes: "Modlar", date: "Tarih", terrain: "Arazi", magazine: "Şarjör", velocity: "Mermi hızı", ammo: "Mermi", rof: "Atış hızı",
+  text: "Paragraflar", items: "Maddeler", links: "Bağlantılar", url: "Adres (bağlantı)", detail: "Kısa yazı", label: "Etiket",
   fire: "Atış modu", kit: "Sınıf", maker: "Üretici", source: "Kaynak", layouts: "Yerleşimler", realm: "Diyar", tags: "Etiketler",
 };
 const label = (key) => (typeof key === "number" ? `${key + 1}.` : LABELS[key] || key);
@@ -164,8 +165,11 @@ function entries() {
 
 function itemTitle(value, i) {
   if (value === null || typeof value !== "object") return String(value).slice(0, 60) || `${i + 1}.`;
-  const t = value.name ?? value.title ?? value.id ?? value.tr;
-  return t ? (Array.isArray(t) ? t[0] : String(t)) : `${i + 1}.`;
+  // Ad bir dizi ([Türkçe, İngilizce]) ya da { tr, en } olabilir; boşsa sıra numarası.
+  const text = (t) => (Array.isArray(t) ? t[0] : t && typeof t === "object" ? t.tr || t.en : t);
+  const t = [value.name, value.title, value.label, value.id, value.tr].map(text).find((x) => x);
+  if (!t && "title" in value) return "Başlıksız (sayfanın üstündeki yazı)";
+  return t ? String(t) : `${i + 1}.`;
 }
 
 function render() {
