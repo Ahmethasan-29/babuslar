@@ -7,7 +7,7 @@ getMaps()
         el(
           "a",
           { class: "game-card", href: `harita.html?id=${m.id}` },
-          el("img", { class: "card-img", src: m.photo, alt: "", loading: "lazy" }),
+          el("img", { class: "card-img", src: m.thumb || m.photo, alt: "", loading: "lazy", onerror: (e) => e.target.src !== m.photo && (e.target.src = m.photo) }),
           el("span", { class: "badge" }, `${m.callouts.length} info`),
           el("h2", {}, m.name),
           el("p", {}, siteLabel(m.sites))

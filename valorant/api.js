@@ -64,6 +64,9 @@ async function getMaps() {
       sites: m.tacticalDescription || "",
       radar: m.displayIcon,
       photo: m.splash,
+      // Kartlarda splash, wsrv.nl ile 640 px webp olarak (~40 KB); asıl dosya 7 MB'a kadar çıkabiliyor.
+      // Servis yanıt vermezse kart asıl görsele döner (maps.js).
+      thumb: m.splash ? `https://wsrv.nl/?url=${encodeURIComponent(m.splash)}&w=640&output=webp&q=80` : null,
       // Oyun koordinatı radar görüntüsünde 0–1 arası orana çevrilir (x ve y oyunda yer değiştirir).
       callouts: m.callouts.map((c) => ({
         group: c.superRegionName,
