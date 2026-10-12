@@ -63,7 +63,14 @@ function showGames() {
         el(
           "section",
           { class: "admin-game" },
-          el("h2", {}, game.name),
+          // Sitedeki oyun kartları gibi üstte oyunun görseli. Wiki görselleri yabancı sitelere referer ile verilmez.
+          el(
+            "div",
+            { class: `admin-banner${game.top ? " top" : ""}${game.image ? "" : " plain"}` },
+            game.image ? el("img", { src: game.image, alt: "", loading: "lazy", referrerpolicy: "no-referrer" }) : null,
+            el("h2", {}, game.name === "Site" ? "Site (ana sayfa, Hakkımda)" : game.name),
+            el("small", {}, `${game.sections.length} bölüm`)
+          ),
           el(
             "div",
             { class: "admin-sections" },
