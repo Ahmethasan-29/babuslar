@@ -18,7 +18,7 @@ function card(m) {
     el(
       "p",
       { class: "tile-sub" },
-      [m.players ? L(`${m.players} oyunculu`, `${m.players} players`) : null, m.layout, m.community ? L(`Topluluk haritası${m.author ? ` (${m.author})` : ""}`, `Community map${m.author ? ` (${m.author})` : ""}`) : null].filter(Boolean).join(" · ")
+      [m.players ? L(`${m.players} oyunculu`, `${m.players} players`) : null, m.layout, m.automatch ? L("Dereceli maç havuzunda", "In the ranked pool") : null, m.community ? L(`Topluluk haritası${m.author ? ` (${m.author})` : ""}`, `Community map${m.author ? ` (${m.author})` : ""}`) : null].filter(Boolean).join(" · ")
     ),
     points.length ? el("div", { class: "coh-points" }, points) : null,
     T(m.desc) ? el("details", { class: "dd-uses" }, el("summary", {}, L("Hikâyesi", "Background")), para(m.desc)) : null
