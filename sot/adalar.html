@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
+  <title>Adalar · Sea of Thieves · Babuşlar</title>
+  <meta name="description" content="Sea of Thieves ada arama: her ada, karakol ve kale tek tek; adına, koordinatına ya da bilmece cümlesine göre ara.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/i18n.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../"><span>Babuşlar</span></a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="../">Ana sayfa</a>
+        <a href="./">Sea of Thieves</a>
+        <a href="adalar.html" aria-current="page">Adalar</a>
+        <a href="harita.html">Harita</a>
+        <a href="sirketler.html">Şirketler</a>
+        <a href="rehber.html">Rehber</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Adalar</h1>
+      <p class="page-sub">Ada adını, koordinatını (ör. G-16), bölgesini ya da bilmece haritasındaki cümleden birkaç kelime yaz. Bir adaya tıklayınca resimleri, adadakiler ve bilmece cevapları açılır.</p>
+      <input class="search sot-search" id="search" type="search" placeholder="Ara: Plunder Valley, G-16, tavuk, “shark statue”…" aria-label="Ada ara" autocomplete="off">
+      <div class="toolbar">
+        <div class="chips" id="kinds" role="group" aria-label="Yer türü"></div>
+        <div class="chips" id="regions" role="group" aria-label="Bölge"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+      </div>
+      <div id="riddles"></div>
+      <div class="sot-islands" id="list"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Babuşlar, Rare Ltd. ve Microsoft ile bağlantılı değildir. Sea of Thieves ve görselleri Rare Ltd. ve Microsoft'a aittir.</p>
+      <p>Ada, karakol ve kale bilgileri ile görseller Sea of Thieves Wiki'den (seaofthieves.fandom.com, CC BY-SA) alınır.</p>
+    </div>
+  </footer>
+  <script src="../assets/common.js"></script>
+  <script src="data.js"></script>
+  <script src="tr.js"></script>
+  <script src="adalar.js"></script>
+</body>
+</html>

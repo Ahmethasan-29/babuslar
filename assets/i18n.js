@@ -549,6 +549,12 @@ const EN = {
   "Sea of Thieves başlangıç rehberi: sık sorulan sorular.": "Sea of Thieves beginner's guide: frequently asked questions.",
   "Ada ya da koordinat ara (ör. Plunder Valley, G-16)…": "Search islands or coordinates (e.g. Plunder Valley, G-16)…",
   "Yer türü": "Place type",
+  "Adalar": "Islands",
+  "Ada ara": "Search islands",
+  "Bölge": "Region",
+  "Ara: Plunder Valley, G-16, tavuk, “shark statue”…": "Search: Plunder Valley, G-16, chicken, “shark statue”…",
+  "Ada adını, koordinatını (ör. G-16), bölgesini ya da bilmece haritasındaki cümleden birkaç kelime yaz. Bir adaya tıklayınca resimleri, adadakiler ve bilmece cevapları açılır.": "Type an island name, coordinate (e.g. G-16), region or a few words from a riddle map. Click an island for its pictures, what's on it and riddle answers.",
+  "Sea of Thieves ada arama: her ada, karakol ve kale tek tek; adına, koordinatına ya da bilmece cümlesine göre ara.": "Sea of Thieves island search: every island, outpost and fort; search by name, coordinate or riddle text.",
   // Brotato
   "Brotato": "Brotato",
   "Karakterler": "Characters",

@@ -71,3 +71,7 @@ search.addEventListener("input", () => {
 
 updateKinds();
 show(null);
+// Adalar sayfasından "Haritada göster" ile gelindiyse o yer seçilir (sahne boyutlandıktan sonra).
+const wanted = new URLSearchParams(location.search).get("yer");
+const target = wanted && markers.find((m) => m.data.name === wanted);
+if (target) requestAnimationFrame(() => setTimeout(() => viewer.select(target, true), 100));
