@@ -26,7 +26,7 @@ const EN = {
   "Oyun ara": "Search games",
   "Aramana uyan oyun bulunamadı.": "No games match your search.",
   "Hakkımda": "About",
-  "21 yaşındayım, bilgisayar programcılığı okuyorum. Babuşlar, oynadığım oyunlar için hazırladığım Türkçe oyun rehberi.": "I'm 21 and I study computer programming. Babuşlar is the Turkish game guide I made for the games I play.",
+  "21 yaşında bir bilgisayar programcılığı öğrencisiyim. Babuşlar, oyun tutkumla okulda öğrendiklerimi bir araya getirdiğim kişisel projem.": "I'm a 21-year-old computer programming student. Babuşlar is my personal project, where my love of games meets what I learn at school.",
   "Babuşlar nedir?": "What is Babuşlar?",
   "Oyun oynarken aklıma takılan şeyleri hep farklı sitelerde, çoğu zaman İngilizce aramak zorunda kalıyordum. Babuşlar'ı, bu bilgileri tek yerde ve Türkçe toplamak için kurdum.": "Whenever I had a question while playing, I had to look it up on different sites, usually in English. I built Babuşlar to gather that information in one place, in Turkish.",
   "Karakterlerin yetenekleri, eşyalar, haritalar, infolar ve lineup videoları; her oyun için o oyunda gerçekten işe yarayan bilgiler. Reklam yok, üyelik yok.": "Character abilities, items, maps, callouts and lineup videos: for every game, the information that actually helps in that game. No ads, no sign-up.",
