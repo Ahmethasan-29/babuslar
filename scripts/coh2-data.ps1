@@ -51,6 +51,19 @@ $maps = @()
 $tree = Get-Text "https://api.github.com/repos/$REPO/git/trees/master?recursive=1" | ConvertFrom-Json
 $images = @{}
 foreach ($t in $tree.tree) { if ($t.path -match 'public/resources/map-images/(.+)_x300\.webp$') { $images[$Matches[1]] = $true } }
+# Depoda olmayan yetenek ikonları: bilinenler benzeriyle değiştirilir, diğerleri boş kalır (sayfada boş kutu).
+$iconFiles = @{}
+foreach ($t in $tree.tree) { if ($t.path -match 'public/resources/exportedIcons/(.+)$') { $iconFiles[$Matches[1]] = $true } }
+$ICON_FIX = @{ "Icons_units_unit_german_m1910_hmg.png" = "Icons_intel_bulletins_hmg_ger_mg42_rof.png" }
+foreach ($c in $commanders) {
+  foreach ($a in $c.branches[0].upgrades) {
+    if (-not $a.icon) { continue }
+    $file = ($a.icon -split '/')[-1]
+    if ($iconFiles.ContainsKey($file)) { continue }
+    $a.icon = $(if ($ICON_FIX.ContainsKey($file)) { "$CDN/exportedIcons/$($ICON_FIX[$file])" })
+    Write-Host "Eksik ikon: $file"
+  }
+}
 $ts = Get-Text "$RAW/src/coh/maps.ts"
 foreach ($m in [regex]::Matches($ts, '"([^"]+)":\s*\{\s*type:\s*\[([^\]]*)\],\s*displayName:\s*"([^"]+)",\s*autoMatch:\s*(true|false),\s*maxPlayers:\s*(\d+)')) {
   $key = $m.Groups[1].Value
