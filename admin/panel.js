@@ -276,3 +276,13 @@ function saveBar({ onSave, snapshot, restore }) {
 function fill(node, ...children) {
   node.replaceChildren(...children.flat().filter((c) => c != null));
 }
+
+// Sayfa açılırken beklenmeyen bir hata olursa "Yükleniyor…"da kalmasın; hata yazılsın.
+// (Açıldıktan sonraki hatalarda ekrana dokunulmaz, kaydedilmemiş değişiklikler kaybolmasın.)
+function showStartupError(message) {
+  const app = document.getElementById("app");
+  if (!app || app.textContent.trim() !== "Yükleniyor…") return;
+  fill(app, el("p", { class: "form-error" }, `Panel açılamadı: ${message}`), el("p", { class: "hint" }, "Sayfayı Ctrl+F5 ile (telefonda yenileyerek) tekrar açmayı dene. Düzelmezse bu yazıyı bana gönder."));
+}
+window.addEventListener("error", (e) => showStartupError(e.message));
+window.addEventListener("unhandledrejection", (e) => showStartupError(e.reason?.message || String(e.reason)));
