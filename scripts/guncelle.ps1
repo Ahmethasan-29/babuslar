@@ -15,6 +15,9 @@ $games = @(
 )
 if ($Only) { $games = @($games | Where-Object { $Only -contains $_.dir }) }
 
+# Git satır sonu uyarılarını stderr'e yazar; Actions'taki PowerShell bunu hata sayıp durur. Uyarılar kapatılır.
+function Invoke-Git { $ErrorActionPreference = "Continue"; & git -c core.safecrlf=false @args 2>$null }
+
 $report = @()
 foreach ($g in $games) {
   $file = "$($g.dir)/data.js"
@@ -29,14 +32,14 @@ foreach ($g in $games) {
   $after = if (Test-Path $file) { (Get-Item $file).Length } else { 0 }
   if (-not $err -and $after -lt $before * 0.9) { $err = "veri dosyası küçüldü ($before → $after bayt)" }
   if ($err) {
-    & git checkout -- $g.dir 2>$null
-    & git clean -fdq -- $g.dir 2>$null
+    Invoke-Git checkout -- $g.dir
+    Invoke-Git clean -fdq -- $g.dir
     $report += "- ❌ $($g.name): $err — eski veri korundu"
     Write-Host "::warning::$($g.name): $err"
   } else {
     # Yalnızca satır sonu farkı olan dosyalar git add sonrası değişmiş sayılmaz.
-    & git add -- $g.dir 2>$null
-    $changed = & git diff --cached --name-only -- $g.dir
+    Invoke-Git add -- $g.dir
+    $changed = Invoke-Git diff --cached --name-only -- $g.dir
     $report += $(if ($changed) { "- ✅ $($g.name): güncellendi" } else { "- ➖ $($g.name): değişiklik yok" })
   }
 }
