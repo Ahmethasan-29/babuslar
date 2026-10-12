@@ -173,6 +173,18 @@ const GAMES = [
     sections: [dataSection("coh2/data.js", "COH", "commanders", "Komutanlar"), dataSection("coh2/data.js", "COH", "maps", "Haritalar")],
   },
   {
+    name: "Elden Ring",
+    sections: [
+      dataSection("eldenring/data.js", "ER", "bosses", "Bosslar"),
+      dataSection("eldenring/data.js", "ER", "weapons", "Silahlar ve kalkanlar"),
+      dataSection("eldenring/data.js", "ER", "spells", "Büyüler"),
+      dataSection("eldenring/data.js", "ER", "talismans", "Tılsımlar"),
+      dataSection("eldenring/data.js", "ER", "spirits", "Ruh külleri"),
+      dataSection("eldenring/data.js", "ER", "ashes", "Savaş külleri"),
+      dataSection("eldenring/data.js", "ER", "classes", "Başlangıç sınıfları"),
+    ],
+  },
+  {
     name: "Company of Heroes 3",
     sections: [
       dataSection("coh3/data.js", "COH", "units", "Birlikler", true),
@@ -209,6 +221,7 @@ const GAME_INFO = {
   "Battlefield (ortak)": { id: "bf", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
   "Company of Heroes": { id: "coh1", image: "https://static.wikia.nocookie.net/companyofheroes/images/8/8b/Commander_Infantry_Company_Banner.png/revision/latest/scale-to-width-down/600?path-prefix=en" },
   "Company of Heroes 2": { id: "coh2", image: "https://cdn.jsdelivr.net/gh/cohstats/coh2stats@master/packages/web/public/resources/map-images/8p_essen_steelworks_x300.webp" },
+  "Elden Ring": { id: "eldenring", image: "https://eldenring.fanapis.com/images/bosses/17f69a48308l0i1ux3rigvv37tx84f.png" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
 
