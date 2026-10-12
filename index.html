@@ -14,25 +14,31 @@
       <a class="brand" href="./"><span>Babuşlar</span></a>
       <nav class="nav" aria-label="Ana menü">
         <a href="./" aria-current="page">Ana sayfa</a>
-        <a href="lol/">League of Legends</a>
-        <a href="cs2/">CS2</a>
-        <a href="valorant/">Valorant</a>
-        <a href="dbd/">DBD</a>
-        <a href="dd/">Darkest Dungeon</a>
-        <a href="r6/">R6 Siege</a>
-        <a href="mb/bannerlord/">Mount &amp; Blade II: Bannerlord</a>
-        <a href="mb/warband/">Mount &amp; Blade: Warband</a>
-        <a href="witcher3/">Witcher 3</a>
-        <a href="cp2077/">Cyberpunk 2077</a>
-        <a href="pz/">Project Zomboid</a>
-        <a href="sot/">Sea of Thieves</a>
-        <a href="brotato/">Brotato</a>
-        <a href="bf1/">Battlefield 1</a>
-        <a href="bf2/">Battlefield 2</a>
-        <a href="bf3/">Battlefield 3</a>
-        <a href="bf4/">Battlefield 4</a>
-        <a href="bfv/">Battlefield V</a>
-        <a href="bf6/">Battlefield 6</a>
+        <div class="nav-menu">
+          <button type="button" class="nav-menu-btn" aria-expanded="false" aria-controls="games-menu">Oyunlar</button>
+          <div class="nav-menu-panel" id="games-menu" hidden>
+            <a href="lol/">League of Legends</a>
+            <a href="cs2/">CS2</a>
+            <a href="valorant/">Valorant</a>
+            <a href="dbd/">DBD</a>
+            <a href="dd/">Darkest Dungeon</a>
+            <a href="r6/">R6 Siege</a>
+            <a href="mb/bannerlord/">Mount &amp; Blade II: Bannerlord</a>
+            <a href="mb/warband/">Mount &amp; Blade: Warband</a>
+            <a href="witcher3/">Witcher 3</a>
+            <a href="cp2077/">Cyberpunk 2077</a>
+            <a href="pz/">Project Zomboid</a>
+            <a href="sot/">Sea of Thieves</a>
+            <a href="brotato/">Brotato</a>
+            <a href="bf1/">Battlefield 1</a>
+            <a href="bf2/">Battlefield 2</a>
+            <a href="bf3/">Battlefield 3</a>
+            <a href="bf4/">Battlefield 4</a>
+            <a href="bfv/">Battlefield V</a>
+            <a href="bf6/">Battlefield 6</a>
+          </div>
+        </div>
+        <a href="hakkimda.html">Hakkımda</a>
       </nav>
     </div>
   </header>
@@ -42,6 +48,7 @@
       <section class="hero">
         <h1>Oyunlarını <span>keşfet</span></h1>
         <p>Şampiyonlar, rünler ve eşya dizilimleri; haritalar, infolar ve smoke videoları. Hepsi tek yerde, Türkçe.</p>
+        <input type="search" class="game-search" id="game-search" placeholder="Oyun ara…" aria-label="Oyun ara" autocomplete="off">
       </section>
 
       <h2 class="page-title" style="font-size:1.5rem">Oyunlar</h2>
@@ -177,6 +184,7 @@
           <p>Yeni oyunlar eklenecek.</p>
         </div>
       </div>
+      <p class="search-empty" id="search-empty" hidden>Aramana uyan oyun bulunamadı.</p>
     </div>
   </main>
 
@@ -198,5 +206,6 @@
       <p>Battlefield oyunları Electronic Arts'a aittir. Battlefield verileri Battlefield Wiki'den (CC BY-SA) alınır.</p>
     </div>
   </footer>
+  <script src="assets/home.js"></script>
 </body>
 </html>
