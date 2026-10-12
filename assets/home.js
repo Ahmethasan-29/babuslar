@@ -45,6 +45,7 @@ const ALIASES = {
   "coh2/": "coh coh2 company heroes 2",
   "coh3/": "coh coh3 company heroes 3",
   "eldenring/": "er elden ring souls",
+  "aoe2/": "aoe aoe2 age empires 2 ii",
 };
 
 // Büyük/küçük harf ve Türkçe karakter farkı gözetmez ("sampiyon" = "Şampiyon").

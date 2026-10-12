@@ -27,6 +27,7 @@ const LABELS = {
   time: "Üretim süresi (sn)", manpower: "Adam gücü", munition: "Mühimmat", fuel: "Yakıt", popcap: "Nüfus", branches: "Dallar", upgrades: "Yetenekler",
   players: "Oyuncu sayısı", layout: "Düzen", points: "Noktalar", community: "Topluluk haritası", author: "Yapan", full: "Büyük görsel",
   munitions: "Mühimmat noktası", strategic: "Stratejik nokta", victory: "Zafer noktası", cp: "Komuta puanı",
+  bonuses: "Bonuslar", uniqueUnits: "Özel birlikler (numaraları)", uniqueTechs: "Özel teknolojiler (numaraları)", emblem: "Arma", era: "Dönem", hp: "Can", attack: "Saldırı", melee: "Yakın zırh", pierce: "Delici zırh", range: "Menzil", speed: "Hız", los: "Görüş", age: "Çağ", building: "Bina", unique: "Özel", regional: "Bölgesel", civs: "Medeniyetler", food: "Yemek", wood: "Odun", gold: "Altın", stone: "Taş",
   text: "Paragraflar", items: "Maddeler", links: "Bağlantılar", url: "Adres (bağlantı)", detail: "Kısa yazı", label: "Etiket",
   fire: "Atış modu", kit: "Sınıf", maker: "Üretici", source: "Kaynak", layouts: "Yerleşimler", realm: "Diyar", tags: "Etiketler",
 };

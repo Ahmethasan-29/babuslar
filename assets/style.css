@@ -1612,3 +1612,25 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .er-class-stats { grid-template-columns: repeat(3, 1fr); }
 .game-card .er-card-img { object-fit: contain; padding: 16px; }
 .chips[hidden] { display: none; }
+
+/* Age of Empires (aoe2/ …) */
+.aoe-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.aoe-head h3 { margin: 0 0 2px; }
+.aoe-head .tile-sub { margin: 0; }
+.aoe-icon { width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0; background: #16121a; }
+.aoe-emblem { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+.aoe-mini { width: 24px; height: 24px; border-radius: 4px; }
+.aoe-costs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.aoe-cost { font-size: 0.82rem; padding: 2px 8px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--muted); }
+.aoe-cost b { color: var(--text); }
+.aoe-cost.food b { color: #e8a0a0; }
+.aoe-cost.wood b { color: #c9a06a; }
+.aoe-cost.gold b { color: #f2d15a; }
+.aoe-cost.stone b { color: #b9b9c9; }
+.aoe-stats { grid-template-columns: repeat(4, 1fr); }
+.aoe-civs { font-size: 0.85rem; color: var(--accent); margin: 6px 0; }
+.aoe-bonuses { margin: 6px 0 10px; padding-left: 18px; font-size: 0.9rem; line-height: 1.5; }
+.aoe-uniques { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; align-items: center; }
+.aoe-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; padding: 3px 10px 3px 4px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); text-decoration: none; }
+.aoe-chip:hover { border-color: var(--accent); }
+@media (max-width: 560px) { .aoe-stats { grid-template-columns: repeat(2, 1fr); } }
