@@ -34,7 +34,9 @@ foreach ($g in $games) {
     $report += "- ❌ $($g.name): $err — eski veri korundu"
     Write-Host "::warning::$($g.name): $err"
   } else {
-    $changed = & git status --porcelain -- $g.dir
+    # Yalnızca satır sonu farkı olan dosyalar git add sonrası değişmiş sayılmaz.
+    & git add -- $g.dir 2>$null
+    $changed = & git diff --cached --name-only -- $g.dir
     $report += $(if ($changed) { "- ✅ $($g.name): güncellendi" } else { "- ➖ $($g.name): değişiklik yok" })
   }
 }

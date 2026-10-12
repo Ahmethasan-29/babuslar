@@ -22,7 +22,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 150
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Verileri çek
         shell: powershell
