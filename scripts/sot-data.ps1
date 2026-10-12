@@ -61,16 +61,36 @@ foreach ($p in $places) {
   # Resim: bilgi kutusundaki "image", yoksa sayfadaki ilk dosya. Ada haritası: galerideki "… Map.png" (harita masasındaki görünüm).
   $box = (Get-Templates $wt "infobox") | Select-Object -First 1
   $p.image = $(if ($box -and $box["image"]) { ($box["image"] -replace '^File:', '').Trim() } elseif ($wt -match '\[\[File:([^\]|]+\.(?:png|jpg|jpeg))') { $Matches[1].Trim() } else { $null })
-  $p.map = $(if ($wt -match '(?m)^\s*(?:File:)?([^|\n]*?[ _]Map\.png)\s*\|') { $Matches[1].Trim() } else { $null })
+  # Harita masası görünümü "CannonCove_Map.png" / "PlunderValley Map.png" biçiminde (tek parça ad + Map);
+  # "CannonCove_EndOfPier_Map.png" gibi bilmece haritaları alınmaz.
+  $p.map = $(if ($wt -match "(?<![\w'’-])([A-Za-z'’-]+[ _]Map\.(?:png|jpg))") { $Matches[1].Trim() } else { $null })
   # "Features" bölümündeki maddeler (hayvanlar ayrıca tutuluyor).
   $feat = if ($wt -match '(?s)\n==\s*Features\s*==\s*\n(.*?)(?=\n==[^=]|$)') { $Matches[1] } else { "" }
+  # Bilmeceler ({{Riddle|clue=|riddle=|image=|map=}}): bilmece haritasındaki cümle, cevabın ekran görüntüsü ve haritadaki yeri.
+  $p.riddles = @(foreach ($r in (Get-Templates $wt "Riddle")) {
+      $rtext = Plain $r["riddle"]
+      if (-not $rtext) { continue }
+      [ordered]@{ clue = Plain $r["clue"]; text = $rtext; image = (($r["image"] + "") -replace '^File:', '').Trim(); map = (($r["map"] + "") -replace '^File:', '').Trim() }
+    })
   $p.features = @(foreach ($line in ($feat -split "`n")) {
       if ($line -notmatch '^(\*+)\s*(.*)$') { continue }
       $depth = $Matches[1].Length; $x = Plain $Matches[2]
       if ($x -and $x -notmatch '^(Chickens?|Pigs?|Snakes?)$') { $(if ($depth -gt 1) { "— $x" } else { $x }) }
     })
 }
-$imgs = Get-ImageUrls @($places | ForEach-Object { $_.image; $_.map } | Where-Object { $_ })
+# Bilgi kutusunda resmi olmayan yerler için wikinin sayfa resmi (pageimages).
+$noImg = @($places | Where-Object { -not $_.image } | ForEach-Object { $_.name })
+foreach ($batch in (Batches $noImg 40)) {
+  $r = Post-Json @{ action = "query"; prop = "pageimages"; piprop = "name"; redirects = "1"; format = "json"; formatversion = "2"; titles = ($batch -join "|") }
+  foreach ($pg in $r.query.pages) { if ($pg.pageimage) { $hit = $places | Where-Object { $_.name -eq $pg.title } | Select-Object -First 1; if ($hit -and $pg.pageimage -ne $hit.map) { $hit.image = $pg.pageimage } } }
+}
+# Harita masası görünümü sayfada yoksa adı tahmin edilir: "Salty Sands" → "SaltySands_Map.png".
+$guess = @{}
+foreach ($p in ($places | Where-Object { -not $_.map })) { $guess[$p.name] = (($p.name -replace '\s*\(.*\)$', '' -replace "[\s'’\-]", '') + "_Map.png") }
+$found = Get-ImageUrls @($guess.Values)
+foreach ($p in ($places | Where-Object { -not $_.map })) { if ($found[($guess[$p.name] -replace '_', ' ')]) { $p.map = $guess[$p.name] } }
+$imgs = Get-ImageUrls @($places | ForEach-Object { $_.image; $_.map; $_.riddles | ForEach-Object { $_.image; $_.map } } | Where-Object { $_ })
+foreach ($p in $places) { foreach ($r in $p.riddles) { $r.image = $(if ($r.image) { $imgs[($r.image -replace '_', ' ')] } else { $null }); $r.map = $(if ($r.map) { $imgs[($r.map -replace '_', ' ')] } else { $null }) } }
 foreach ($p in $places) {
   $p.image = $(if ($p.image) { $imgs[($p.image -replace '_', ' ')] } else { $null })
   $p.map = $(if ($p.map) { $imgs[($p.map -replace '_', ' ')] } else { $null })

@@ -2,6 +2,16 @@
 const count = (k) => SOT.places.filter((p) => p.kind === k).length;
 const sections = [
   {
+    href: "adalar.html",
+    title: L("Adalar ve bilmeceler", "Islands & riddles"),
+    badge: L("Ara · Resimler · Bilmece cevapları", "Search · Pictures · Riddle answers"),
+    text: L(
+      `${SOT.places.length} yer tek tek: adını, koordinatını ya da bilmece cümlesini yaz, adayı resmiyle bul. ${SOT.places.reduce((n, p) => n + p.riddles.length, 0)} bilmecenin cevabı resimli.`,
+      `${SOT.places.length} places one by one: type a name, coordinate or riddle line and find the island with pictures. ${SOT.places.reduce((n, p) => n + p.riddles.length, 0)} riddle answers with screenshots.`
+    ),
+    img: SOT.places.find((p) => p.name === "Shark Bait Cove")?.image?.replace(/\/revision\/latest.*$/, "/revision/latest/scale-to-width-down/600"),
+  },
+  {
     href: "harita.html",
     title: L("Harita", "Map"),
     badge: L("Adalar · Karakollar · Kaleler · Koordinatlar", "Islands · Outposts · Forts · Coordinates"),
