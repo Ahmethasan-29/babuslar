@@ -85,6 +85,7 @@ const CS2_MAPS = [
       { name: "B Doors", at: [0.33, 0.2] },
       { name: "Window", at: [0.27, 0.13] },
       { name: "Pool", at: [0.11, 0.05] },
+      { name: "Dark", at: [0.453, 0.773] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
@@ -377,4 +378,5 @@ const CS2_MAPS = [
       { site: "Mid", type: "smoke", name: "Connector smoke", yt: ["4xmnUiruV-Y", 122, 161], by: "CS Tactics" },
       { site: "Mid", type: "smoke", name: "Mid smoke'ları", yt: ["rGq5UYl4Tkw", 279, 373], by: "CS Tactics" },
     ],
-  },];
+  },
+];
