@@ -1639,3 +1639,4 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .aoew-info dt { color: var(--muted); }
 .aoew-info dd { margin: 0; white-space: pre-line; }
 .aoew-section ul { margin: 6px 0 4px; padding-left: 18px; font-size: 0.9rem; line-height: 1.5; }
+.age-hero { display: block; width: 100%; height: clamp(160px, 28vw, 300px); object-fit: cover; border-radius: var(--radius); margin: 4px 0 20px; border: 1px solid var(--border); background: #16121a; }
