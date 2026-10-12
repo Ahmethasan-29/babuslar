@@ -41,6 +41,7 @@ const ALIASES = {
   "bf4/": "bf bf4 battlefield 4",
   "bfv/": "bf bf5 bfv battlefield v 5",
   "bf6/": "bf bf6 battlefield 6",
+  "coh1/": "coh coh1 company heroes 1",
   "coh2/": "coh coh2 company heroes 2",
   "coh3/": "coh coh3 company heroes 3",
 };

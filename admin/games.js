@@ -165,6 +165,10 @@ const GAMES = [
   bf("bf6", "Battlefield 6", true),
   { name: "Battlefield (ortak)", sections: [literalSection("bf/tr.js", "BF_TR", "groups", "Silah grubu adları")] },
   {
+    name: "Company of Heroes",
+    sections: [dataSection("coh1/data.js", "COH", "units", "Birlikler"), dataSection("coh1/data.js", "COH", "commanders", "Doktrinler")],
+  },
+  {
     name: "Company of Heroes 2",
     sections: [dataSection("coh2/data.js", "COH", "commanders", "Komutanlar"), dataSection("coh2/data.js", "COH", "maps", "Haritalar")],
   },
@@ -203,6 +207,7 @@ const GAME_INFO = {
   "Battlefield V": { id: "bfv", image: `${WIKIA}/battlefield/images/9/96/Battlefield_V_Aerodrome_Article_Header.png/revision/latest/scale-to-width-down/800` },
   "Battlefield 6": { id: "bf6", image: `${WIKIA}/battlefield/images/0/0d/Battlefield_6_Empire_State.jpg/revision/latest/scale-to-width-down/800` },
   "Battlefield (ortak)": { id: "bf", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
+  "Company of Heroes": { id: "coh1", image: "https://static.wikia.nocookie.net/companyofheroes/images/8/8b/Commander_Infantry_Company_Banner.png/revision/latest/scale-to-width-down/600?path-prefix=en" },
   "Company of Heroes 2": { id: "coh2", image: "https://cdn.jsdelivr.net/gh/cohstats/coh2stats@master/packages/web/public/resources/map-images/8p_essen_steelworks_x300.webp" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
