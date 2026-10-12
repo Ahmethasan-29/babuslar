@@ -33,7 +33,18 @@ const EN = {
   "56 medeniyetin bonusları, 247 birlik ve 198 teknoloji; oyunun Türkçe metinleriyle.": "Bonuses of 56 civilizations, 247 units and 198 technologies.",
   "Babuşlar, Microsoft ve World's Edge ile bağlantılı değildir. Age of Empires II ve görselleri sahiplerine aittir.": "Babuşlar is not affiliated with Microsoft or World's Edge. Age of Empires II and its images belong to their owners.",
   "Veriler, oyunun Türkçe metinleri ve görseller SiegeEngineers/aoe2techtree'den (MIT) alınır.": "Data, the game's texts and images come from SiegeEngineers/aoe2techtree (MIT).",
-  "Age of Empires oyunları Microsoft ve World's Edge'e aittir. Age of Empires II verileri SiegeEngineers/aoe2techtree'den (MIT), Age of Empires IV verileri aoe4world/data'dan alınır.": "Age of Empires games belong to Microsoft and World's Edge. Age of Empires II data comes from SiegeEngineers/aoe2techtree (MIT), Age of Empires IV data from aoe4world/data.",
+  "Age of Empires oyunları Microsoft ve World's Edge'e aittir. Age of Empires II verileri SiegeEngineers/aoe2techtree'den (MIT), Age of Empires IV verileri aoe4world/data'dan; Age of Empires, Age of Empires III ve Age of Mythology bilgileri Age of Empires Wiki'den (CC BY-SA) alınır.": "Age of Empires games belong to Microsoft and World's Edge. Age of Empires II data comes from SiegeEngineers/aoe2techtree (MIT), Age of Empires IV data from aoe4world/data; Age of Empires, Age of Empires III and Age of Mythology info from the Age of Empires Wiki (CC BY-SA).",
+  "Medeniyetler · Bonuslar": "Civilizations · Bonuses",
+  "17 medeniyetin bonusları, takım bonusu ve eksik birlik/teknolojileri.": "Bonuses, team bonus and missing units/technologies of 17 civilizations.",
+  "Medeniyetler · Özel birlikler": "Civilizations · Unique units",
+  "24 medeniyetin bonusları, özel birlik ve binaları, ana şehirleri ve devrimleri.": "Bonuses, unique units and buildings, home cities and revolutions of 24 civilizations.",
+  "Tanrılar · Tanrı güçleri · Kahramanlar": "Gods · God powers · Heroes",
+  "23 ana tanrı: küçük tanrılar, tanrı güçleri, mit teknolojileri, kahramanlar ve bonuslar.": "23 major gods: minor gods, god powers, myth technologies, heroes and bonuses.",
+  "Medeniyetler: bonuslar, takım bonusu, eksik birlik ve teknolojiler.": "Civilizations: bonuses, team bonus, missing units and technologies.",
+  "Medeniyetler: bonuslar, özel birlikler ve binalar, ana şehir, devrimler.": "Civilizations: bonuses, unique units and buildings, home city, revolutions.",
+  "Ana tanrılar: küçük tanrılar, tanrı güçleri, mit teknolojileri, kahramanlar ve bonuslar.": "Major gods: minor gods, god powers, myth technologies, heroes and bonuses.",
+  "Tanrı ara…": "Search gods…",
+  "Bilgiler ve görseller Age of Empires Wiki'den (ageofempires.fandom.com, CC BY-SA) alınır.": "Info and images come from the Age of Empires Wiki (ageofempires.fandom.com, CC BY-SA).",
   "23 medeniyetin bonusları, 228 birlik ve 468 teknoloji.": "Bonuses of 23 civilizations, 228 units and 468 technologies.",
   "Babuşlar, Microsoft ve World's Edge ile bağlantılı değildir. Age of Empires IV ve görselleri sahiplerine aittir.": "Babuşlar is not affiliated with Microsoft or World's Edge. Age of Empires IV and its images belong to their owners.",
   "Veriler ve görseller aoe4world/data'dan (oyun dosyalarından çıkarılmış veri) alınır.": "Data and images come from aoe4world/data (extracted from the game files).",
@@ -715,6 +726,7 @@ const LANE_EN = { Üst: "Top", Orman: "Jungle", Orta: "Mid", Alt: "Bot", Destek:
 
 // Sayı ya da ad içeren yazılar.
 const EN_PATTERNS = [
+  [/^Babuşlar, Microsoft ve World's Edge ile bağlantılı değildir. (.+) ve görselleri sahiplerine aittir.$/, "Babuşlar is not affiliated with Microsoft or World's Edge. $1 and its images belong to their owners."],
   [/^Babuşlar, Relic Entertainment ve SEGA ile bağlantılı değildir. (.+) ve görselleri sahiplerine aittir.$/, "Babuşlar is not affiliated with Relic Entertainment or SEGA. $1 and its images belong to their owners."],
   [/^Babuşlar, Electronic Arts ve DICE ile bağlantılı değildir\. (.+) ve görselleri Electronic Arts'a aittir\.$/, "Babuşlar is not affiliated with Electronic Arts or DICE. $1 and its images belong to Electronic Arts."],
   [/^(Birinci Dünya Savaşı|İkinci Dünya Savaşı|modern savaş \(\d+\)): (\d+) silahın değerleri ve (\d+) harita\.$/, (m, era, w, n) => `${{ "Birinci Dünya Savaşı": "World War I", "İkinci Dünya Savaşı": "World War II" }[era] || era.replace("modern savaş", "Modern warfare")}: stats for ${w} weapons and ${n} maps.`],
