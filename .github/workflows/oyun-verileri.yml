@@ -6,8 +6,6 @@ on:
   schedule:
     - cron: "0 2 * * 1" # her pazartesi 05:00 (Türkiye saati)
   workflow_dispatch:
-  push:
-    branches: [oyun-verileri-otomatik]
 
 permissions:
   contents: write
