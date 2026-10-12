@@ -44,8 +44,8 @@ const HAKKIMDA = [
       {
         label: { tr: "Haftalık", en: "Weekly" },
         text: {
-          tr: "Hâlâ yama alan oyunlar (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II) her hafta wikilerden otomatik olarak yenilenir.",
-          en: "Games that still get patches (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II) are refreshed from their wikis automatically every week.",
+          tr: "Hâlâ yama alan oyunlar (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II, Company of Heroes 3) her hafta otomatik olarak yenilenir.",
+          en: "Games that still get patches (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II, Company of Heroes 3) are refreshed automatically every week.",
         },
       },
       {

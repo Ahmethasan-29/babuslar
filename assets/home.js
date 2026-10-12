@@ -41,6 +41,7 @@ const ALIASES = {
   "bf4/": "bf bf4 battlefield 4",
   "bfv/": "bf bf5 bfv battlefield v 5",
   "bf6/": "bf bf6 battlefield 6",
+  "coh3/": "coh coh3 company heroes 3",
 };
 
 // Büyük/küçük harf ve Türkçe karakter farkı gözetmez ("sampiyon" = "Şampiyon").

@@ -23,6 +23,19 @@ const EN = {
   "Ana menü": "Main menu",
   "Oyunlar": "Games",
   "Oyun ara…": "Search games…",
+  "Birlik ara…": "Search units…",
+  "Birlikler · Battlegroup'lar · Haritalar": "Units · Battlegroups · Maps",
+  "4 fraksiyon: 98 birliğin fiyatı ve nüfusu, 29 battlegroup ve 59 harita.": "4 factions: cost and population of 98 units, 29 battlegroups and 59 maps.",
+  "Company of Heroes oyunları Relic Entertainment ve SEGA'ya aittir. Company of Heroes 3 verileri cohstats/coh3-data'dan (oyun dosyaları, MIT) alınır.": "Company of Heroes games belong to Relic Entertainment and SEGA. Company of Heroes 3 data comes from cohstats/coh3-data (game files, MIT).",
+  "Battlegroup'lar": "Battlegroups",
+  "Komutanlar": "Commanders",
+  "Doktrinler": "Doctrines",
+  "Fraksiyon": "Faction",
+  "Fraksiyonlar": "Factions",
+  "Birlik türü": "Unit type",
+  "Oyuncu sayısı": "Players",
+  "Ara…": "Search…",
+  "Birlik, battlegroup ve harita bilgileri cohstats/coh3-data'dan (oyun dosyalarından çıkarılmış veri, MIT), görseller coh3stats.com'dan alınır.": "Unit, battlegroup and map data comes from cohstats/coh3-data (extracted from the game files, MIT); images from coh3stats.com.",
   "Oyun ara": "Search games",
   "Aramana uyan oyun bulunamadı.": "No games match your search.",
   "Hakkımda": "About",
@@ -666,6 +679,7 @@ const LANE_EN = { Üst: "Top", Orman: "Jungle", Orta: "Mid", Alt: "Bot", Destek:
 
 // Sayı ya da ad içeren yazılar.
 const EN_PATTERNS = [
+  [/^Babuşlar, Relic Entertainment ve SEGA ile bağlantılı değildir. (.+) ve görselleri sahiplerine aittir.$/, "Babuşlar is not affiliated with Relic Entertainment or SEGA. $1 and its images belong to their owners."],
   [/^Babuşlar, Electronic Arts ve DICE ile bağlantılı değildir\. (.+) ve görselleri Electronic Arts'a aittir\.$/, "Babuşlar is not affiliated with Electronic Arts or DICE. $1 and its images belong to Electronic Arts."],
   [/^(Birinci Dünya Savaşı|İkinci Dünya Savaşı|modern savaş \(\d+\)): (\d+) silahın değerleri ve (\d+) harita\.$/, (m, era, w, n) => `${{ "Birinci Dünya Savaşı": "World War I", "İkinci Dünya Savaşı": "World War II" }[era] || era.replace("modern savaş", "Modern warfare")}: stats for ${w} weapons and ${n} maps.`],
   [/^(\d+) operatör$/, "$1 operators"],

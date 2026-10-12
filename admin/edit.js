@@ -23,6 +23,10 @@ const LABELS = {
   maps: "Haritalar", weapons: "Silahlar", tactics: "Taktik", weak: "Zayıf olduğu", where: "Bulunduğu yer", side: "Taraf",
   roles: "Roller", abilities: "Yetenekler", culture: "Kültür", tier: "Seviye", wage: "Maaş", up: "Yükseltmeler", color: "Renk",
   modes: "Modlar", date: "Tarih", terrain: "Arazi", magazine: "Şarjör", velocity: "Mermi hızı", ammo: "Mermi", rof: "Atış hızı",
+  faction: "Fraksiyon", cat: "Tür", brief: "Kısa açıklama", help: "Rol", extra: "Yükseltmeler", buildings: "Üretildiği bina", size: "Asker sayısı",
+  time: "Üretim süresi (sn)", manpower: "Adam gücü", munition: "Mühimmat", fuel: "Yakıt", popcap: "Nüfus", branches: "Dallar", upgrades: "Yetenekler",
+  players: "Oyuncu sayısı", layout: "Düzen", points: "Noktalar", community: "Topluluk haritası", author: "Yapan", full: "Büyük görsel",
+  munitions: "Mühimmat noktası", strategic: "Stratejik nokta", victory: "Zafer noktası", cp: "Komuta puanı",
   text: "Paragraflar", items: "Maddeler", links: "Bağlantılar", url: "Adres (bağlantı)", detail: "Kısa yazı", label: "Etiket",
   fire: "Atış modu", kit: "Sınıf", maker: "Üretici", source: "Kaynak", layouts: "Yerleşimler", realm: "Diyar", tags: "Etiketler",
 };
@@ -187,7 +191,7 @@ function render() {
       game.sections.map((s) => el("a", { class: "chip", href: s.href, "aria-pressed": String(s === section) }, s.label))
     ),
     section.auto
-      ? el("p", { class: "hint" }, "Bu veri her hafta wikiden yenilenir. Burada yaptığın değişiklikler ayrıca kaydedilir ve her güncellemeden sonra yeniden uygulanır.")
+      ? el("p", { class: "hint" }, "Bu veri her hafta otomatik olarak yenilenir. Burada yaptığın değişiklikler ayrıca kaydedilir ve her güncellemeden sonra yeniden uygulanır.")
       : null
   );
 
