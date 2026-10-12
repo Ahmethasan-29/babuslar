@@ -1,6 +1,6 @@
 name: Oyun verileri
 
-# Her hafta hâlâ yama alan oyunların (DBD, R6, BF6, PZ, SoT, Brotato, Bannerlord, DD2, CoH3)
+# Her hafta hâlâ yama alan oyunların (DBD, R6, BF6, PZ, SoT, Brotato, Bannerlord, DD2, CoH3, AoE2, AoE4)
 # verisini wikilerden yeniden çeker; değişiklik varsa ana dala kaydeder, site kendiliğinden güncellenir.
 on:
   schedule:
