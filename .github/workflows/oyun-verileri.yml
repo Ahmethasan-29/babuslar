@@ -1,0 +1,44 @@
+name: Oyun verileri
+
+# Her hafta hâlâ yama alan oyunların (DBD, R6, BF6, PZ, SoT, Brotato, Bannerlord, DD2)
+# verisini wikilerden yeniden çeker; değişiklik varsa ana dala kaydeder, site kendiliğinden güncellenir.
+on:
+  schedule:
+    - cron: "0 2 * * 1" # her pazartesi 05:00 (Türkiye saati)
+  workflow_dispatch:
+  push:
+    branches: [oyun-verileri-otomatik]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oyun-verileri
+  cancel-in-progress: false
+
+jobs:
+  guncelle:
+    # Betikler Windows PowerShell 5.1 için yazıldı.
+    runs-on: windows-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verileri çek
+        shell: powershell
+        run: |
+          [Console]::OutputEncoding = [Text.Encoding]::UTF8
+          .\scripts\guncelle.ps1
+          Get-Content -Encoding UTF8 "$env:TEMP\oyun-verileri-rapor.md" | Out-File -Append -Encoding utf8 $env:GITHUB_STEP_SUMMARY
+
+      - name: Değişiklikleri kaydet
+        shell: bash
+        run: |
+          git add -A
+          if git diff --cached --quiet; then echo "Değişiklik yok."; exit 0; fi
+          git diff --cached --stat
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then echo "Deneme çalışması: kaydedilmedi."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Oyun verileri: haftalık güncelleme ($(date -u +%F))"
+          git push -q
