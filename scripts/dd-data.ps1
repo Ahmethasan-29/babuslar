@@ -199,6 +199,8 @@ $data = [ordered]@{
   items    = @($items | Sort-Object { $_.kind }, { $_.name })
 }
 $json = $data | ConvertTo-Json -Depth 10 -Compress
+# Wikide yazılmayan değerler ConvertTo-Json'da {} olur ve sayfada "[object Object]" görünür; null yap.
+$json = $json -replace '":\{\}', '":null'
 $header = "// Darkest Dungeon verisi: scripts/dd-data.ps1 ile Darkest Dungeon Wiki'den (CC BY-SA) oluşturulur, elle düzenlenmez.`n"
 [IO.File]::WriteAllText((Join-Path (Get-Location) $Out), $header + "const DKD = " + $json + ";`n", (New-Object Text.UTF8Encoding $false))
 Write-Host ("Kahraman: {0}, beceri: {1}, trinket: {2}, boss: {3}, eşya: {4}; görselsiz: kahraman {5}, trinket {6}, boss {7}" -f `
