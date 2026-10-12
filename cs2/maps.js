@@ -3,6 +3,9 @@
 // Doğuş ve bomba bölgesi konumları oyunun radar dosyalarından alınmıştır.
 // İnfo konumları, oyunun navigasyon dosyasındaki yer (place) bölgelerinin merkezidir; bölge sınırları
 // Starfie1d1272/cs2-demo-analysis-kit (packages/maps/map-zones) verisinden radar ölçeğine çevrilerek hesaplandı.
+// Mirage: Tetris, Firebox ve Ticket ayrıntılı bölge verisinden (pr1malator/pr1maly), Ninja radardaki nesnelerden;
+// Dust II: Xbox ve Pool radardaki nesnelerden (oyuncular tarafından doğrulandı).
+// Bu dosya yönetim panelinden (admin/cs2.html) de düzenlenir; panel kaydederken dosyayı yeniden yazar.
 //
 // Atışlar (lineups): site "A" | "B" | "Mid", type "smoke" | "flash" | "molly".
 //   yt:   [YouTube video kimliği, başlangıç sn, bitiş sn] — videonun yalnızca o kısmı oynar.
@@ -17,8 +20,6 @@ const CS2_MAPS = [
     summary: "Fas temalı klasik harita. Orta (Mid) kontrolü iki bölgeyi de açar.",
     spawns: { T: [0.87, 0.36], CT: [0.28, 0.7] },
     sites: { A: [0.54, 0.76], B: [0.23, 0.28] },
-    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Tetris, Firebox ve Ticket ayrıntılı bölge verisinden (pr1malator/pr1maly),
-    // Ninja radardaki nesnelerden (oyuncular tarafından doğrulandı).
     callouts: [
       { name: "Ramp", at: [0.67, 0.64] },
       { name: "Palace", at: [0.81, 0.73] },
@@ -66,7 +67,6 @@ const CS2_MAPS = [
     summary: "En bilinen harita. Uzun koridorlar ve net bölgeler; Long ve Tunnels kontrolü önemli.",
     spawns: { T: [0.39, 0.91], CT: [0.62, 0.21] },
     sites: { A: [0.8, 0.16], B: [0.21, 0.12] },
-    // Konumlar oyunun yer (nav) bölgelerinin merkezinden; Xbox ve Pool radardaki nesnelerden (oyuncular tarafından doğrulandı).
     callouts: [
       { name: "Outside Long", at: [0.65, 0.74] },
       { name: "Long Doors", at: [0.69, 0.6] },
@@ -114,7 +114,6 @@ const CS2_MAPS = [
     summary: "Dar sokaklı İtalyan kasabası. Banana (B) ve Apartments (A) kontrolü belirleyicidir.",
     spawns: { T: [0.1, 0.67], CT: [0.9, 0.35] },
     sites: { A: [0.81, 0.69], B: [0.49, 0.22] },
-    // Konumlar oyunun yer (nav) bölgelerinin merkezinden.
     callouts: [
       { name: "T Ramp", at: [0.28, 0.69] },
       { name: "Lower Mid", at: [0.38, 0.62] },
