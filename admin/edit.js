@@ -180,7 +180,7 @@ function render() {
   const top = el(
     "div",
     {},
-    el("div", { class: "crumbs" }, el("a", { href: "./" }, "Panel"), ` / ${game.name} / ${section.label}`),
+    el("div", { class: "crumbs" }, el("a", { href: "./" }, "Panel"), " / ", el("a", { href: `./?oyun=${game.id}` }, game.name), ` / ${section.label}`),
     el(
       "div",
       { class: "chips" },
