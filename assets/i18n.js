@@ -26,6 +26,7 @@ const EN = {
   "Oyun ara": "Search games",
   "Aramana uyan oyun bulunamadı.": "No games match your search.",
   "Hakkımda": "About",
+  "Yönetim": "Admin",
   "21 yaşında bir Bilgisayar Programcılığı öğrencisiyim. Babuşlar, oyun tutkumla okulda öğrendiklerimi bir araya getirdiğim kişisel projem.": "I'm a 21-year-old Computer Programming student. Babuşlar is my personal project, where my love of games meets what I learn at school.",
   "Babuşlar nedir?": "What is Babuşlar?",
   "Oyun oynarken aklıma takılan şeyleri hep farklı sitelerde, çoğu zaman İngilizce aramak zorunda kalıyordum. Babuşlar'ı, bu bilgileri tek yerde ve Türkçe toplamak için kurdum.": "Whenever I had a question while playing, I had to look it up on different sites, usually in English. I built Babuşlar to gather that information in one place, in Turkish.",
