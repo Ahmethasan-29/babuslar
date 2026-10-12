@@ -17,6 +17,8 @@ page() { # $1 sayfa, $2 başlık, $3 ana içerik, $4 betik
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Wiki görselleri yalnızca yönlendiren adres gönderilmezse açılır. -->
+  <meta name="referrer" content="no-referrer">
   <title>$2</title>
   <meta name="description" content="$name: birlikler, komutanlar ve haritalar.">
   <link rel="stylesheet" href="../assets/style.css">

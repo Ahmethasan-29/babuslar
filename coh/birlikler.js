@@ -2,7 +2,7 @@
 const list = document.getElementById("list");
 const search = document.getElementById("search");
 const count = document.getElementById("count");
-const CATS = [...new Set(COH.units.map((u) => u.cat))];
+const CATS = Object.keys(COH_TR.cats).filter((c) => COH.units.some((u) => u.cat === c));
 // Sıra: fraksiyonların sırası, sonra tür, sonra adam gücü.
 const order = (u) => [COH.factions.findIndex((f) => f.id === u.faction), CATS.indexOf(u.cat), u.cost?.manpower || 0];
 const UNITS = [...COH.units].sort((a, b) => { const x = order(a), y = order(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; });
