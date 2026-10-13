@@ -22,7 +22,7 @@ const CS2_MAPS = [
     sites: { A: [0.54, 0.76], B: [0.23, 0.28] },
     callouts: [
       { name: "Ramp", at: [0.67, 0.64] },
-      { name: "Palace", at: [0.81, 0.73] },
+      { name: "Palace", at: [0.749, 0.768] },
       { name: "Palace Alley", at: [0.78, 0.59] },
       { name: "Balcony", at: [0.64, 0.72] },
       { name: "Tetris", at: [0.6, 0.63] },
