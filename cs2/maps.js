@@ -208,7 +208,7 @@ const CS2_MAPS = [
     sites: { A: [0.31, 0.25], B: [0.8, 0.4] },
     callouts: [
       { name: "A Main", at: [0.17, 0.46] },
-      { name: "Donut", at: [0.32, 0.41] },
+      { name: "Donut", at: [0.314, 0.458] },
       { name: "Outside", at: [0.29, 0.67] },
       { name: "Mid", at: [0.46, 0.51] },
       { name: "Top Mid", at: [0.48, 0.4] },
