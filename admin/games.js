@@ -193,6 +193,7 @@ const GAMES = [
       dataSection("aoe2/data.js", "AOE2", "techs", "Teknolojiler", true),
     ],
   },
+  { name: "Age of Empires III", sections: [dataSection("aoe3/data.js", "AOEW", "civs", "Medeniyetler")] },
   {
     name: "Age of Empires IV",
     sections: [
@@ -201,7 +202,6 @@ const GAMES = [
       dataSection("aoe4/data.js", "AOE4", "techs", "Teknolojiler", true),
     ],
   },
-  { name: "Age of Empires III", sections: [dataSection("aoe3/data.js", "AOEW", "civs", "Medeniyetler")] },
   { name: "Age of Mythology", sections: [dataSection("aom/data.js", "AOEW", "civs", "Ana tanrılar")] },
   {
     name: "Company of Heroes 3",
