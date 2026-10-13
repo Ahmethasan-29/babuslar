@@ -261,6 +261,7 @@ const CS2_MAPS = [
       { name: "Connector", at: [0.39, 0.58] },
       { name: "Outside Long", at: [0.24, 0.63] },
       { name: "Ruins", at: [0.33, 0.77] },
+      { name: "Water", at: [0.559, 0.587] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "Heaven smoke'ları", yt: ["z-qjha2fj64", 48, 141], by: "CS Tactics" },
