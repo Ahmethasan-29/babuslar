@@ -131,7 +131,7 @@ const CS2_MAPS = [
       { name: "Graveyard", at: [0.92, 0.72] },
       { name: "Library", at: [0.92, 0.5] },
       { name: "Arch", at: [0.79, 0.53] },
-      { name: "Banana", at: [0.5, 0.42] },
+      { name: "Banana", at: [0.48, 0.401] },
       { name: "Ruins", at: [0.61, 0.14] },
     ],
     lineups: [
@@ -177,6 +177,7 @@ const CS2_MAPS = [
       { name: "Decon", at: [0.51, 0.6], level: "lower" },
       { name: "Observation", at: [0.65, 0.47], level: "lower" },
       { name: "Secret", at: [0.69, 0.7], level: "lower" },
+      { name: "Red", at: [0.575, 0.724] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "Heaven smoke", yt: ["tzUBsnvKOcg", 197, 225], by: "CS Tactics" },
