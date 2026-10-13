@@ -73,7 +73,7 @@ const CS2_MAPS = [
       { name: "Long A", at: [0.81, 0.48] },
       { name: "Pit", at: [0.86, 0.61] },
       { name: "A Ramp", at: [0.88, 0.17] },
-      { name: "Short", at: [0.64, 0.36] },
+      { name: "Short", at: [0.637, 0.293] },
       { name: "Catwalk", at: [0.55, 0.4] },
       { name: "Top Mid", at: [0.5, 0.63] },
       { name: "Mid", at: [0.47, 0.47] },
