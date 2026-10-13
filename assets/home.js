@@ -64,33 +64,63 @@ const fold = (s) =>
 
 const search = document.getElementById("game-search");
 const empty = document.getElementById("search-empty");
-const cards = [...document.querySelectorAll(".games .game-card")].map((card) => ({
+
+// Bir oyun kartının aranacak metinleri. Önce adda, sonra açıklamada geçenler öne alınır.
+const entry = (card) => ({
   card,
-  // Önce adda, sonra açıklamada geçenler üstte gösterilir.
+  href: card.getAttribute("href"),
   name: fold(`${card.querySelector("h2")?.textContent || ""} ${ALIASES[card.getAttribute("href")] || ""}`),
   text: fold(card.textContent),
-}));
+});
+
+// Ana sayfadaki kartlar: tek oyun kartları ve seri kartları (içinde birden çok oyun).
+const cards = [...document.querySelectorAll(".games > .game-card")].map((card) => {
+  if (!card.classList.contains("series")) return entry(card);
+  const head = card.querySelector(".series-head");
+  const kids = [...card.querySelectorAll(".series-games > .game-card")].map(entry);
+  // title: yalnızca serinin adı ("Battlefield serisi"); açıklamada geçen oyun adları hepsini açmasın.
+  return { card, head, kids, title: fold(head.querySelector("h2").textContent) };
+});
+
+// Seri kartını açar/kapatır: açıkken tüm satıra yayılır ve oyunları gösterir.
+function setOpen(series, open) {
+  series.card.classList.toggle("open", open);
+  series.head.setAttribute("aria-expanded", String(open));
+  series.card.querySelector(".series-games").hidden = !open;
+}
+for (const c of cards) if (c.kids) c.head.addEventListener("click", () => setOpen(c, !c.card.classList.contains("open")));
 
 function runSearch() {
   const words = fold(search.value).split(" ").filter(Boolean);
+  const match = (x) => words.every((w) => x.text.includes(w) || x.name.includes(w));
   let shown = 0;
-  for (const { card, name, text } of cards) {
-    const soon = card.classList.contains("soon");
-    const hit = !words.length || (!soon && words.every((w) => text.includes(w) || name.includes(w)));
-    card.hidden = !hit;
-    if (hit && !soon) shown++;
+  for (const c of cards) {
+    const soon = c.card.classList.contains("soon");
+    if (!c.kids) {
+      const hit = !words.length || (!soon && match(c));
+      c.card.hidden = !hit;
+      if (hit && !soon) shown++;
+      continue;
+    }
+    // Seri: arama yoksa kapalı ve tüm oyunlar görünür; varsa yalnızca eşleşen oyunlar açık gösterilir
+    // (serinin kendi adı eşleşiyorsa — "battlefield" — hepsi).
+    const seriesHit = words.length && words.every((w) => c.title.includes(w));
+    const kidHits = c.kids.filter((k) => !words.length || seriesHit || match(k));
+    for (const k of c.kids) k.card.hidden = !kidHits.includes(k);
+    c.card.hidden = words.length > 0 && !kidHits.length;
+    setOpen(c, words.length > 0 && kidHits.length > 0);
+    shown += kidHits.length;
   }
   empty.hidden = !words.length || shown > 0;
 }
 
 search.addEventListener("input", runSearch);
-// Enter: ilk bulunan oyuna git.
+// Enter: ilk bulunan oyuna git (adı eşleşen öne).
 search.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
   const words = fold(search.value).split(" ").filter(Boolean);
   if (!words.length) return;
-  const best =
-    cards.find(({ card, name }) => !card.hidden && words.every((w) => name.includes(w))) ||
-    cards.find(({ card }) => !card.hidden && !card.classList.contains("soon"));
-  if (best) location.href = best.card.getAttribute("href");
+  const games = cards.flatMap((c) => (c.kids ? (c.card.hidden ? [] : c.kids) : [c])).filter((g) => g.href && !g.card.hidden);
+  const best = games.find((g) => words.every((w) => g.name.includes(w))) || games[0];
+  if (best) location.href = best.href;
 });
