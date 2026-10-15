@@ -93,6 +93,7 @@ const CS2_MAPS = [
       { name: "Long Car", at: [0.937, 0.262] },
       { name: "B Car", at: [0.199, 0.321] },
       { name: "T Ramp", at: [0.126, 0.819] },
+      { name: "Titanic", at: [0.259, 0.817] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
