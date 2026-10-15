@@ -80,7 +80,7 @@ const CS2_MAPS = [
       { name: "Short", at: [0.637, 0.293] },
       { name: "Catwalk", at: [0.55, 0.4] },
       { name: "Top Mid", at: [0.5, 0.63] },
-      { name: "Mid", at: [0.47, 0.47] },
+      { name: "Mid", at: [0.468, 0.515] },
       { name: "Xbox", at: [0.49, 0.41] },
       { name: "Mid Doors", at: [0.454, 0.355] },
       { name: "Lower Tunnels", at: [0.35, 0.4] },
@@ -94,6 +94,7 @@ const CS2_MAPS = [
       { name: "B Car", at: [0.199, 0.321] },
       { name: "T Ramp", at: [0.126, 0.819] },
       { name: "Titanic", at: [0.259, 0.817] },
+      { name: "Middle", at: [0.415, 0.187] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
