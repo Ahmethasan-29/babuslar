@@ -333,7 +333,7 @@ const CS2_MAPS = [
     radar: "radar/overpass.png",
     photo: "img/maps/overpass.jpg",
     summary: "Berlin'de kanal ve park. B'ye Monster ve Short'tan, A'ya Long ve Connector'dan girilir.",
-    spawns: { T: [0.66, 0.93], CT: [0.49, 0.2] },
+    spawns: { T: [0.652, 0.932], CT: [0.516, 0.211] },
     sites: { A: [0.46, 0.21], B: [0.72, 0.32] },
     callouts: [
       { name: "Back of A", at: [0.54, 0.12] },
@@ -350,7 +350,7 @@ const CS2_MAPS = [
       { name: "Canal", at: [0.814, 0.419] },
       { name: "Tunnels", at: [0.588, 0.68] },
       { name: "Alley", at: [0.79, 0.66] },
-      { name: "T Stairs", at: [0.74, 0.75] },
+      { name: "T Stairs", at: [0.759, 0.739] },
       { name: "Bank", at: [0.438, 0.116] },
     ],
     lineups: [
