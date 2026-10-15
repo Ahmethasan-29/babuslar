@@ -40,6 +40,8 @@ const CS2_MAPS = [
       { name: "B Apps", at: [0.34, 0.19] },
       { name: "Van", at: [0.19, 0.19] },
       { name: "Market", at: [0.24, 0.44] },
+      { name: "Bench", at: [0.136, 0.272] },
+      { name: "Under", at: [0.435, 0.357] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT (Ticket) smoke", yt: ["AKuqMLnB07U", 63, 77], by: "CS Tactics" },
