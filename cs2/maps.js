@@ -127,9 +127,8 @@ const CS2_MAPS = [
     spawns: { T: [0.1, 0.67], CT: [0.9, 0.35] },
     sites: { A: [0.81, 0.69], B: [0.49, 0.22] },
     callouts: [
-      { name: "T Ramp", at: [0.28, 0.69] },
-      { name: "Lower Mid", at: [0.38, 0.62] },
-      { name: "Second Mid", at: [0.46, 0.79] },
+      { name: "T Ramp", at: [0.394, 0.605] },
+      { name: "Second Mid", at: [0.532, 0.791] },
       { name: "Mid", at: [0.52, 0.66] },
       { name: "Apartments", at: [0.698, 0.833] },
       { name: "Balcony", at: [0.833, 0.83] },
@@ -143,6 +142,10 @@ const CS2_MAPS = [
       { name: "Boiler", at: [0.664, 0.707] },
       { name: "Long", at: [0.792, 0.554] },
       { name: "Moto", at: [0.913, 0.584] },
+      { name: "Bridge", at: [0.344, 0.796] },
+      { name: "Kitchen", at: [0.376, 0.747] },
+      { name: "Balcony", at: [0.425, 0.753] },
+      { name: "Pit", at: [0.476, 0.635] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "Arch smoke", yt: ["bCuck5TrjyU", 313, 330], by: "Tigerr" },
