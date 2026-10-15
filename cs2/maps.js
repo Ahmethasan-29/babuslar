@@ -74,7 +74,7 @@ const CS2_MAPS = [
     callouts: [
       { name: "Yellow Car", at: [0.697, 0.733] },
       { name: "Double Door", at: [0.69, 0.6] },
-      { name: "Long A", at: [0.81, 0.48] },
+      { name: "Long A", at: [0.793, 0.509] },
       { name: "Pit", at: [0.86, 0.61] },
       { name: "A Ramp", at: [0.88, 0.17] },
       { name: "Short", at: [0.637, 0.293] },
@@ -95,6 +95,8 @@ const CS2_MAPS = [
       { name: "T Ramp", at: [0.126, 0.819] },
       { name: "Titanic", at: [0.259, 0.817] },
       { name: "Middle", at: [0.415, 0.187] },
+      { name: "Ninja", at: [0.666, 0.111] },
+      { name: "Goose", at: [0.826, 0.055] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke", yt: ["Bc0WFG-fU4w", 36, 74], by: "CS Tactics" },
