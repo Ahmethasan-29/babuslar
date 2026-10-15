@@ -131,7 +131,6 @@ const CS2_MAPS = [
       { name: "Lower Mid", at: [0.38, 0.62] },
       { name: "Second Mid", at: [0.46, 0.79] },
       { name: "Mid", at: [0.52, 0.66] },
-      { name: "Top Mid", at: [0.68, 0.65] },
       { name: "Apartments", at: [0.698, 0.833] },
       { name: "Balcony", at: [0.833, 0.83] },
       { name: "Short", at: [0.758, 0.768] },
@@ -142,6 +141,8 @@ const CS2_MAPS = [
       { name: "Banana", at: [0.48, 0.401] },
       { name: "Ruins", at: [0.61, 0.14] },
       { name: "Boiler", at: [0.664, 0.707] },
+      { name: "Long", at: [0.792, 0.554] },
+      { name: "Moto", at: [0.913, 0.584] },
     ],
     lineups: [
       { site: "A", type: "smoke", name: "Arch smoke", yt: ["bCuck5TrjyU", 313, 330], by: "Tigerr" },
