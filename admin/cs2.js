@@ -23,13 +23,34 @@ let header; // dosyanın başındaki açıklama satırları
 let maps;
 let map;
 const edited = new Set(); // değişen haritaların adları (kayıt başlığı için)
+// Bilgisayardan seçilen, henüz yüklenmemiş videolar: "clips/dosya.mp4" → { file, url (önizleme), sent }
+const uploads = new Map();
+
+// Dosyayı base64'e çevirir (GitHub'a yüklemek için).
+const fileBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(",")[1]);
+    reader.onerror = () => reject(new Error(`${file.name} okunamadı`));
+    reader.readAsDataURL(file);
+  });
 
 const bar = saveBar({
   async onSave() {
     if (PANEL === "atislar") validateShots();
     const what = PANEL === "haritalar" ? "harita bilgileri" : "atış videoları";
     const title = `CS2: ${what} güncellendi (${[...edited].join(", ")})`;
-    const pr = await Panel.publish([{ path: PATH, text: serialize(), sha: source.sha }], title);
+    // Yalnızca hâlâ bir atışta kullanılan, daha önce gönderilmemiş videolar yüklenir (geri alınanlar atlanır).
+    const used = new Set(maps.flatMap((m) => m.lineups.map((s) => s.clip)).filter(Boolean));
+    const videos = [];
+    for (const [clip, up] of uploads) if (used.has(clip) && !up.sent) videos.push({ path: `cs2/${clip}`, base64: await fileBase64(up.file), clip });
+    // Kendi videosu olan atışlarda boş YouTube alanı dosyaya yazılmaz (ekrandaki veri değişmez).
+    const clean = JSON.parse(JSON.stringify(maps));
+    for (const m of clean) for (const s of m.lineups) if (s.clip && !s.yt?.[0]) delete s.yt;
+    const pr = await Panel.publish([...videos, { path: PATH, text: serialize(clean), sha: source.sha }], title);
+    for (const v of videos) uploads.get(v.clip).sent = true;
+    // Kartlardaki "kaydedince yüklenecek" yazıları güncellensin.
+    if (videos.length) setTimeout(render);
     source = await Panel.read(PATH);
     edited.clear();
     return pr;
@@ -48,7 +69,7 @@ function changed() {
   bar.changed();
 }
 
-const serialize = () => `${header}const CS2_MAPS = ${toJS(maps)};\n`;
+const serialize = (data = maps) => `${header}const CS2_MAPS = ${toJS(data)};\n`;
 
 init();
 
@@ -355,6 +376,49 @@ function shotEditor() {
       )
     );
 
+  // Kendi videosu: bilgisayardan seçilir, kaydedince cs2/clips/ klasörüne yüklenir ve YouTube yerine oynar.
+  function clipRow(s, onChange) {
+    const MAX_MB = 25;
+    const status = el("span", { class: "clip-status" });
+    const fileInput = el("input", { type: "file", accept: "video/mp4,video/webm", hidden: true });
+    const pick = el("button", { type: "button", class: "chip", onclick: () => fileInput.click() });
+    const remove = el("button", { type: "button", class: "chip", onclick: () => {
+      if (!confirm("Bu atıştaki kendi videon kaldırılsın mı? Atış YouTube bağlantısını kullanır.")) return;
+      delete s.clip;
+      changed();
+      draw();
+      onChange();
+    } }, "Videoyu kaldır");
+    function draw() {
+      const up = s.clip && uploads.get(s.clip);
+      status.textContent = !s.clip
+        ? "Kendi videon yok; YouTube bağlantısı kullanılıyor."
+        : up && !up.sent
+          ? `Seçildi: ${up.file.name} (${(up.file.size / 1048576).toFixed(1)} MB) — kaydedince yüklenecek.`
+          : `Kendi videosu: ${s.clip}`;
+      pick.textContent = s.clip ? "Başka video seç" : "Bilgisayardan video seç";
+      remove.hidden = !s.clip;
+    }
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      fileInput.value = "";
+      if (!file) return;
+      if (!/\.(mp4|webm)$/i.test(file.name)) return alert("Yalnızca MP4 ya da WebM video seçebilirsin.");
+      if (file.size > MAX_MB * 1048576) return alert(`Video çok büyük (${(file.size / 1048576).toFixed(1)} MB). En fazla ${MAX_MB} MB olabilir; 5–15 saniyelik, 720p bir kesit genelde 1–3 MB tutar.`);
+      // Dosya adı: harita-bölge-atış-adı-zaman.mp4 (Türkçe karakterler sadeleştirilir).
+      const slug = (t) => t.toLocaleLowerCase("tr").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const ext = file.name.split(".").pop().toLowerCase();
+      const clip = `clips/${[map.id, s.site, slug(s.name) || "atis"].map(slug).join("-")}-${Date.now().toString(36)}.${ext}`;
+      uploads.set(clip, { file, url: URL.createObjectURL(file), sent: false });
+      s.clip = clip;
+      changed();
+      draw();
+      onChange();
+    });
+    draw();
+    return el("div", { class: "clip-row" }, el("span", { class: "clip-label" }, "Kendi videon:"), pick, remove, fileInput, status);
+  }
+
   function card(s) {
     const select = (items, value, onchange) =>
       el("select", { onchange: (e) => onchange(e.target.value) }, items.map((i) => el("option", { value: i.id, selected: i.id === value }, i.label)));
@@ -422,6 +486,12 @@ function shotEditor() {
                 preview = null;
                 return;
               }
+              // Kendi videosu varsa o (yeni seçildiyse bilgisayardaki dosya), yoksa YouTube parçası.
+              if (s.clip) {
+                preview = el("video", { class: "preview", src: uploads.get(s.clip)?.url || `../cs2/${s.clip}`, controls: true, autoplay: true, muted: true, playsinline: true });
+                node.append(preview);
+                return;
+              }
               if (!s.yt?.[0]) return;
               preview = el("iframe", {
                 class: "preview",
@@ -449,9 +519,10 @@ function shotEditor() {
           "Sil"
         )
       ),
-      s.clip
-        ? el("p", { class: "hint", style: "grid-column:1/-1;margin:0" }, `Bu atış kendi kaydımızı kullanıyor (${s.clip}); YouTube bağlantısı yalnızca yedek.`)
-        : null,
+      clipRow(s, () => {
+        mark();
+        if (preview) (preview.remove(), (preview = null));
+      }),
       el("div", { class: "wide" }, video, start, end, input(s.by || "", "Kaynak (kanal adı)", (v) => {
         s.by = v || undefined;
         changed();
@@ -491,7 +562,7 @@ function shotEditor() {
     "div",
     {},
     el("div", { class: "editor-top" }, filter(SITES, siteFilter, (v) => (siteFilter = v)), filter(TYPES, typeFilter, (v) => (typeFilter = v))),
-    el("p", { class: "hint" }, `${map.name}: ${map.lineups.length} atış, ${visible().length} tanesi gösteriliyor. Süreleri 1:23 ya da saniye olarak yazabilirsin; YouTube bağlantısında ?t= varsa başlangıç kendiliğinden dolar.`),
+    el("p", { class: "hint" }, `${map.name}: ${map.lineups.length} atış, ${visible().length} tanesi gösteriliyor. Süreleri 1:23 ya da saniye olarak yazabilirsin; YouTube bağlantısında ?t= varsa başlangıç kendiliğinden dolar. Kendi çektiğin videoyu da "Bilgisayardan video seç" ile ekleyebilirsin (MP4/WebM, en fazla 25 MB); o zaman YouTube bağlantısı gerekmez.`),
     list,
     el("div", { style: "margin-top:14px" }, add)
   );

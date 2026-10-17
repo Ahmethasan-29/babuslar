@@ -235,3 +235,9 @@ a.admin-game:hover { transform: translateY(-3px); }
 .search-results .admin-sections { margin-bottom: 20px; }
 .admin-section small { color: var(--muted); margin-left: 8px; }
 a.admin-game[hidden] { display: none; }
+
+/* CS2 atışlarında kendi videosu */
+.clip-row { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.85rem; }
+.clip-label { color: var(--muted); }
+.clip-status { color: var(--muted); }
+.clip-row .chip[hidden] { display: none; }
