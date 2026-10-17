@@ -19,3 +19,8 @@ Bu klasördeki videolar YouTube parçalarının yerine oynar: reklam yok, tam is
 - 5–15 saniye: nişan alma noktası, atış ve granatın düştüğü yer
 - 1280×720, H.264 MP4, sessiz ya da kısık ses
 - Dosya başına 1–3 MB (GitHub Pages'ta hızlı açılsın)
+
+## Yönetim panelinden ekleme
+
+Panelde CS2 / Atış videoları bölümünde her atışın "Bilgisayardan video seç" düğmesi var. Seçilen video
+kaydedince bu klasöre yüklenir ve atışa `clip` olarak bağlanır (en fazla 25 MB; MP4 ya da WebM).

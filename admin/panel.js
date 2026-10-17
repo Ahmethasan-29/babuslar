@@ -86,7 +86,8 @@ const Panel = {
     return { text: new TextDecoder().decode(bytes), sha: file.sha };
   },
 
-  // files: [{ path, text, sha }] — sha, dosya okunduğundaki sürüm. Arada başkası değiştirdiyse kayıt durdurulur.
+  // files: [{ path, text, sha }] ya da video gibi ikili dosyalar için [{ path, base64 }]. sha, dosya okunduğundaki
+  // sürüm; arada başkası değiştirdiyse kayıt durdurulur.
   async publish(files, title) {
     const main = await Panel.api(`/repos/${REPO}/git/ref/heads/main`);
     const branch = `panel-${Date.now().toString(36)}`;
@@ -99,7 +100,7 @@ const Panel = {
         }
         await Panel.api(`/repos/${REPO}/contents/${file.path}`, {
           method: "PUT",
-          body: { message: title, content: toBase64(file.text), branch, ...(current ? { sha: current.sha } : {}) },
+          body: { message: title, content: file.base64 || toBase64(file.text), branch, ...(current ? { sha: current.sha } : {}) },
         });
       }
       const pr = await Panel.api(`/repos/${REPO}/pulls`, {
