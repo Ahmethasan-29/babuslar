@@ -5,6 +5,16 @@ const count = document.getElementById("count");
 const GROUPS = [...new Set(BF.maps.map((m) => m.group))];
 let group = "all";
 const mapGroup = (g) => (g === BF.game || /^base/i.test(g) ? L("Ana oyun", "Base game") : g);
+// Wikideki "All", "All, including …" gibi mod yazıları Türkçeleştirilir (mod adları oyundaki gibi kalır).
+const modeName = (x) =>
+  IS_EN
+    ? x
+    : x
+        .replace(/^All( Gametypes)?$/i, "Tüm modlar")
+        .replace(/^All;\s*/i, "Tüm modlar: ")
+        .replace(/^All,? including /i, "Tüm modlar, ayrıca ")
+        .replace(/^All base (game )?modes,?\s*(and )?/i, "Tüm temel modlar, ")
+        .replace(/,? and /g, " ve ");
 
 function card(m) {
   return el(
@@ -14,7 +24,7 @@ function card(m) {
     el("h3", {}, m.name),
     el("p", { class: "tile-sub" }, [mapGroup(m.group), m.place, m.date].filter(Boolean).join(" · ")),
     m.terrain ? el("p", { class: "tile-sub" }, el("strong", {}, L("Arazi: ", "Terrain: ")), m.terrain) : null,
-    m.modes.length ? el("div", { class: "tags" }, m.modes.map((x) => el("span", { class: "badge" }, x))) : null,
+    m.modes.length ? el("div", { class: "tags" }, m.modes.map((x) => el("span", { class: "badge" }, modeName(x)))) : null,
     m.desc ? el("details", { class: "dd-uses" }, el("summary", {}, L("Tanıtım (İngilizce)", "Description")), el("p", {}, m.desc)) : null
   );
 }

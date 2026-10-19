@@ -15,6 +15,8 @@ function Markup([string]$t) {
   if (-not $t) { return "" }
   $t = $t -replace '(?s)<!--.*?-->', ''
   $t = $t -replace '\{\{\s*StatIcon\s*\|\s*([^}|]+?)\s*\}\}', '⟨$1⟩'
+  # {{Color|color=green|text=12}} biçimini de {{Color|green|12}} gibi işle
+  $t = $t -replace '\{\{\s*Color\s*\|\s*color\s*=\s*([^|}]*?)\s*\|\s*text\s*=\s*([^{}]*)\}\}', '{{Color|$1|$2}}'
   $t = $t -replace '\{\{\s*Color\s*\|\s*green\s*\|([^{}]*)\}\}', '<b class="pos">$1</b>'
   $t = $t -replace '\{\{\s*Color\s*\|\s*red\s*\|([^{}]*)\}\}', '<b class="neg">$1</b>'
   $t = $t -replace '\{\{\s*Color\s*\|\s*(tier\d)\s*\|([^{}]*)\}\}', '<b class="$1">$2</b>'
