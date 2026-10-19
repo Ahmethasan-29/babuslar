@@ -534,7 +534,7 @@ const EN = {
   "Warband": "Warband",
   "Rehber": "Guide",
   "Krallıklar": "Factions",
-  "Birlikler": "Troops",
+  "Birlikler": "Units",
   "Yoldaşlar": "Companions",
   "Yerleşimler": "Settlements",
   "Calradia haritası": "Map of Calradia",

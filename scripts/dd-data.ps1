@@ -174,7 +174,21 @@ foreach ($h in $heroes) {
   foreach ($s in $h.skills) { foreach ($l in $s.levels) { $l.effect = X $l.effect; $l.self = X $l.self } }
   foreach ($c in $h.camp) { $c.target = X $c.target; $c.description = X $c.description }
 }
-foreach ($t in $trinkets) { $t.effect = X $t.effect; $t.notes = X $t.notes }
+# Notlardaki wiki tabloları (ör. Tinker Box'ın nadirlik şansları) "Common: 40%" satırlarına çevrilir;
+# yoksa sayfada 'align="center" |' gibi tablo artıkları görünür.
+function Flatten-Table([string]$s) {
+  if ($s -notmatch '<table') { return $s }
+  $s = $s -replace '^\s*(\w+="[^"]*"\s*)+\|\s*', ''
+  $s = [regex]::Replace($s, '(?s)<table[^>]*>(.*?)</table>', {
+      param($m)
+      $rows = [regex]::Matches($m.Groups[1].Value, '(?s)<tr[^>]*>(.*?)</tr>') | ForEach-Object {
+        (@([regex]::Matches($_.Groups[1].Value, '(?s)<t[dh][^>]*>(.*?)</t[dh]>') | ForEach-Object { $_.Groups[1].Value.Trim() }) -join ": ")
+      }
+      ($rows -join "<br>")
+    })
+  $s.Trim()
+}
+foreach ($t in $trinkets) { $t.effect = X $t.effect; $t.notes = Flatten-Table (X $t.notes) }
 foreach ($it in $items) { $it.effect = X $it.effect; $it.description = X $it.description; foreach ($u in $it.uses) { $u.text = X $u.text } }
 foreach ($b in $bosses) { foreach ($a in $b.abilities) { foreach ($at in $a.attacks) { $at.effect = X $at.effect; $at.self = X $at.self } } }
 

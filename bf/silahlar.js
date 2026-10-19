@@ -21,8 +21,8 @@ function card(w) {
       "dl",
       { class: "cp-stats bf-stats" },
       stat(L("Hasar", "Damage"), w.damage),
-      stat(L("Atış hızı", "Fire rate"), w.rof),
-      stat(L("Şarjör", "Magazine"), w.magazine),
+      stat(L("Atış hızı", "Fire rate"), /\d/.test(w.rof) ? w.rof : null), // wikide bazen "Total" gibi sayısız değer var
+      stat(L("Şarjör", "Magazine"), IS_EN ? w.magazine : w.magazine.replace(/\b(rounds?|shells?|rockets?)\b/gi, (x) => (/^rock/i.test(x) ? "roket" : /^shell/i.test(x) ? "fişek" : "mermi"))),
       stat(L("Mermi hızı", "Velocity"), w.velocity),
       stat(L("Atış modu", "Fire mode"), w.fire),
       stat(L("Mühimmat", "Ammo"), w.ammo),
