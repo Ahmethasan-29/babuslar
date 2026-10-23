@@ -791,6 +791,7 @@ const EN_PATTERNS = [
   [/^([\d.,]+) maç · (.+) tercih$/, "$1 games · $2 pick rate"],
   [/^([\d.,]+) maç$/, "$1 games"],
   [/^(.+) kazanma$/, "$1 win rate"],
+  [/^(.+) tercih$/, "$1 pick rate"],
   [/^(.+) için$/, "for $1"],
   [/^(.+) ile$/, "with $1"],
   [/^Seçenek (\d+)$/, "Option $1"],
