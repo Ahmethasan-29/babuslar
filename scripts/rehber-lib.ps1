@@ -249,3 +249,53 @@ function Thumb([string]$url, [int]$width) {
   if ($url -notmatch '/revision/latest') { return $url }
   $url -replace '/revision/latest(/scale-to-width-down/\d+)?', "/revision/latest/scale-to-width-down/$width"
 }
+
+# Metindeki tabloları tek tek ayırır: @{ heading = son == başlık ==; text = "{| … |}" }. İç içe tablolar dışarıdakinin parçası sayılır.
+function Split-WikiTables([string]$text) {
+  $out = @(); $heading = ''; $depth = 0; $buf = $null
+  foreach ($line in ($text -split "`n")) {
+    $l = $line.TrimEnd("`r")
+    if ($depth -eq 0 -and $l -match '^\s*(=+)\s*(.+?)\s*\1\s*$') { $heading = Clean-WikiText $Matches[2]; continue }
+    if ($l -match '^\s*\{\|') { if ($depth -eq 0) { $buf = New-Object Text.StringBuilder }; $depth++ }
+    if ($depth -gt 0) { [void]$buf.AppendLine($l) }
+    if ($l -match '^\s*\|\}') { $depth--; if ($depth -eq 0) { $out += [pscustomobject]@{ heading = $heading; text = $buf.ToString() } } }
+  }
+  $out
+}
+
+# Tablonun gövde satırları: her satır hücre metinleri dizisi. "rowspan=N" hücreler sonraki satırlara aynı sütunda taşınır;
+# başlık (!) hücreleri atlanır. Hücre öznitelikleri (style=…|) atılır.
+function Get-TableRows([string]$table) {
+  $rows = @(); $carry = @{}
+  $chunks = ($table -split '\n\s*\|-[^\n]*') | Select-Object -Skip 1
+  foreach ($chunk in $chunks) {
+    $cells = @(); $cur = $null
+    foreach ($line in ($chunk -split "`n")) {
+      $l = $line.TrimEnd("`r")
+      if ($l -match '^\s*\|\}') { break }
+      if ($l -match '^\s*!') { $cur = $null; continue }
+      if ($l -match '^\s*\|(?!\})') {
+        if ($null -ne $cur) { $cells += , $cur }
+        $parts = @(Split-Inline ($l -replace '^\s*\|', '') '||')
+        for ($k = 0; $k -lt $parts.Count - 1; $k++) { $cells += , $parts[$k] }
+        $cur = $parts[-1]
+      } elseif ($null -ne $cur) { $cur += "`n$l" }
+    }
+    if ($null -ne $cur) { $cells += , $cur }
+    if (-not $cells.Count) { continue }
+    # Öznitelikleri ayır, rowspan'ları uygula
+    $row = New-Object System.Collections.ArrayList
+    $col = 0
+    foreach ($c in $cells) {
+      while ($carry.ContainsKey($col)) { [void]$row.Add($carry[$col].text); $carry[$col].left -= 1; if ($carry[$col].left -le 0) { $carry.Remove($col) }; $col++ }
+      $sc = Split-Cell $c
+      $span = if ($sc.attrs -match 'rowspan\s*=\s*"?(\d+)') { [int]$Matches[1] } else { 1 }
+      [void]$row.Add($sc.text)
+      if ($span -gt 1) { $carry[$col] = @{ text = $sc.text; left = $span - 1 } }
+      $col++
+    }
+    while ($carry.ContainsKey($col)) { [void]$row.Add($carry[$col].text); $carry[$col].left -= 1; if ($carry[$col].left -le 0) { $carry.Remove($col) }; $col++ }
+    $rows += , @($row)
+  }
+  $rows
+}
