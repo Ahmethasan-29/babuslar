@@ -1626,3 +1626,34 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 /* Project Zomboid kartı: Steam kütüphane sayfası gibi, arkada kütüphane görseli, üstte oyunun logosu. */
 .game-card > .pz-card-img { object-position: left center; opacity: 0.5; }
 a.game-card:hover > .pz-card-img { opacity: 0.65; }
+
+/* Ortak oyun rehberi şablonu (assets/rehber.js): Risk of Rain, Bloons TD, Megabonk… */
+.rh-card { border-left: 3px solid var(--rh-color, var(--border)); }
+.rh-head { display: flex; gap: 12px; align-items: center; }
+.rh-head h3 { margin: 0 0 2px; }
+.rh-img { flex: none; border-radius: 8px; background: #16121a; }
+.rh-icon { width: 56px; height: 56px; object-fit: contain; padding: 4px; }
+.rh-noimg { width: 56px; height: 56px; border: 1px solid var(--border); }
+.rh-wide { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 10px; }
+.rh-portrait { display: block; width: 100%; height: 180px; object-fit: contain; margin-bottom: 10px; }
+.rh-group { color: var(--rh-color, var(--muted)); font-weight: 600; }
+.rh-quote { margin: 8px 0 0; font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.rh-desc { margin: 8px 0 0; font-size: 0.92rem; line-height: 1.45; }
+.rh-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; margin: 10px 0 0; }
+.rh-stats > div { padding: 4px 8px; border-radius: 8px; background: var(--bg-elev); }
+.rh-stats dt { font-size: 0.72rem; color: var(--muted); }
+.rh-stats dd { margin: 0; font-size: 0.9rem; font-weight: 600; }
+.rh-hl { font-weight: 600; }
+.rh-d { color: #f0a35e; }
+.rh-h { color: #8fd18f; }
+.rh-u { color: #c9a0ff; }
+.rh-s { color: var(--muted); font-weight: 400; }
+.rh-w { color: #ff6b6b; }
+.rh-k { color: #6ec6ff; }
+.rh-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--rh-color); margin-right: 6px; vertical-align: 1px; }
+.rh-guide { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; }
+.rh-guide h3 { margin: 0 0 6px; }
+.rh-guide p { margin: 0; line-height: 1.5; }
+.rh-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+.game-card > .rh-card-icon { object-fit: contain; object-position: right center; padding: 16px; }
+.rh-intro { color: var(--muted); max-width: 760px; margin: 0 0 8px; }

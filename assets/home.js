@@ -49,6 +49,12 @@ const ALIASES = {
   "aoe3/": "aoe aoe3 age empires 3 iii",
   "aom/": "aom age mythology retold tanri",
   "aoe4/": "aoe aoe4 age empires 4 iv",
+  "ror1/": "ror risk rain 1 2013",
+  "rorr/": "ror risk rain returns remake",
+  "ror2/": "ror ror2 risk rain 2",
+  "btd6/": "btd btd6 bloons tower defense balon",
+  "megabonk/": "megabonk bonk",
+  "ets2/": "ets ets2 euro truck simulator tir kamyon",
 };
 
 // Büyük/küçük harf ve Türkçe karakter farkı gözetmez ("sampiyon" = "Şampiyon").
