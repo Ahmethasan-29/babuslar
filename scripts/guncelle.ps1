@@ -17,6 +17,7 @@ $games = @(
   @{ name = "Age of Empires IV"; script = "aoe4-data.ps1"; dir = "aoe4"; const = "AOE4" }
   @{ name = "Risk of Rain 2"; script = "ror2-data.ps1"; dir = "ror2"; const = "REHBER" }
   @{ name = "Risk of Rain Returns"; script = "ror-classic-data.ps1"; args = @{ Game = "RORR" }; dir = "rorr"; const = "REHBER" }
+  @{ name = "Bloons TD Battles 2"; script = "btd-classic-data.ps1"; args = @{ Game = "BTDB2" }; dir = "btdb2"; const = "REHBER" }
   @{ name = "Bloons TD 6"; script = "btd6-data.ps1"; dir = "btd6"; const = "REHBER" }
   @{ name = "Megabonk"; script = "megabonk-data.ps1"; dir = "megabonk"; const = "REHBER" }
   @{ name = "Euro Truck Simulator 2"; script = "ets2-data.ps1"; dir = "ets2"; const = "REHBER" }
