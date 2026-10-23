@@ -38,10 +38,14 @@ const fileBase64 = (file) =>
 const bar = saveBar({
   async onSave() {
     if (PANEL === "atislar") validateShots();
+    else validateMaps();
     const what = PANEL === "haritalar" ? "harita bilgileri" : "atış videoları";
     const title = `CS2: ${what} güncellendi (${[...edited].join(", ")})`;
-    // Yalnızca hâlâ bir atışta kullanılan, daha önce gönderilmemiş videolar yüklenir (geri alınanlar atlanır).
-    const used = new Set(maps.flatMap((m) => m.lineups.map((s) => s.clip)).filter(Boolean));
+    // Yalnızca hâlâ kullanılan (bir atışta video, bir haritada radar/kapak), daha önce gönderilmemiş dosyalar
+    // yüklenir (geri alınanlar atlanır).
+    const used = new Set(
+      maps.flatMap((m) => [...m.lineups.map((s) => s.clip), m.radar, m.photo, ...(m.levels || []).map((l) => l.radar)]).filter(Boolean)
+    );
     const videos = [];
     for (const [clip, up] of uploads) if (used.has(clip) && !up.sent) videos.push({ path: `cs2/${clip}`, base64: await fileBase64(up.file), clip });
     // Kendi videosu olan atışlarda boş YouTube alanı dosyaya yazılmaz (ekrandaki veri değişmez).
@@ -58,7 +62,7 @@ const bar = saveBar({
   snapshot: () => JSON.stringify(maps),
   restore(state) {
     maps = JSON.parse(state);
-    map = maps.find((m) => m.id === map.id) || maps[0];
+    map = maps.find((m) => m.id === map?.id) || maps[0];
     selected = null;
     render();
   },
@@ -118,10 +122,86 @@ function render() {
           },
           m.name
         )
-      )
+      ),
+      PANEL === "haritalar" ? el("button", { type: "button", class: "chip", onclick: addMap }, "+ Yeni harita") : null
     )
   );
   app.replaceChildren(top, PANEL === "haritalar" ? mapEditor() : shotEditor(), bar.node);
+}
+
+// Sitedeki dosya yolu ("radar/x.png") ya da henüz yüklenmemiş, bilgisayardan seçilmiş dosyanın önizlemesi.
+const assetSrc = (rel) => uploads.get(rel)?.url || `../cs2/${rel}`;
+
+const slugify = (t) =>
+  t.toLocaleLowerCase("tr").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+// Yeni harita: adı sorulur; radar ve kapak resmi sonra bilgisayardan seçilir.
+function addMap() {
+  const name = prompt("Yeni haritanın adı (ör. Cache):")?.trim();
+  if (!name) return;
+  const id = slugify(name);
+  if (!id) return alert("Geçerli bir ad yaz.");
+  if (maps.some((m) => m.id === id)) return alert(`${name} zaten listede.`);
+  map = {
+    id,
+    name,
+    radar: "",
+    photo: "",
+    summary: "",
+    spawns: { T: [0.5, 0.9], CT: [0.5, 0.1] },
+    sites: { A: [0.3, 0.3], B: [0.7, 0.3] },
+    callouts: [],
+    lineups: [],
+  };
+  maps.push(map);
+  activeLevel = "upper";
+  selected = null;
+  changed();
+  history.replaceState(null, "", `cs2.html?panel=haritalar&harita=${id}`);
+  render();
+}
+
+// Kaydetmeden önce: her haritanın adı, radarı ve kapak resmi olmalı.
+function validateMaps() {
+  const bad = maps.find((m) => !m.name.trim() || !m.radar || !m.photo || (m.levels || []).some((l) => !l.radar));
+  if (!bad) return;
+  map = bad;
+  render();
+  throw new Error(`${bad.name || "Adsız harita"}: harita adı, radar resmi ve kapak resmi gerekli.`);
+}
+
+// Radar ya da kapak resmi seçme düğmesi. Dosya kaydedince cs2/<klasör>/ altına yüklenir.
+function imagePicker({ label, current, folder, base, onPick }) {
+  const MAX_MB = 8;
+  const input = el("input", { type: "file", accept: "image/png,image/jpeg,image/webp", hidden: true });
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    input.value = "";
+    if (!file) return;
+    if (!/\.(png|jpe?g|webp)$/i.test(file.name)) return alert("PNG, JPG ya da WebP resim seç.");
+    if (file.size > MAX_MB * 1048576) return alert(`Resim çok büyük (${(file.size / 1048576).toFixed(1)} MB). En fazla ${MAX_MB} MB olabilir.`);
+    // Aynı adla değiştirilen resim tarayıcı önbelleğinde eski haliyle kalmasın diye ada zaman eklenir.
+    const ext = file.name.split(".").pop().toLowerCase().replace("jpeg", "jpg");
+    const rel = `${folder}/${base}-${Date.now().toString(36)}.${ext}`;
+    uploads.set(rel, { file, url: URL.createObjectURL(file), sent: false });
+    onPick(rel);
+    changed();
+    render();
+  });
+  const pending = current && uploads.get(current) && !uploads.get(current).sent;
+  return el(
+    "div",
+    { class: "field" },
+    el("span", {}, label),
+    el(
+      "div",
+      { class: "image-pick" },
+      current ? el("img", { class: "thumb", src: assetSrc(current), alt: "" }) : el("span", { class: "hint" }, "Henüz resim yok."),
+      el("button", { type: "button", class: "chip", onclick: () => input.click() }, current ? "Değiştir" : "Bilgisayardan seç"),
+      input
+    ),
+    pending ? el("span", { class: "hint" }, "Kaydedince yüklenecek.") : null
+  );
 }
 
 // ---------------------------------------------------------------- Haritalar ve infolar
@@ -134,7 +214,14 @@ function mapEditor() {
   const onLevel = (c) => !map.levels || (c.level || "upper") === activeLevel;
   const level = map.levels?.find((l) => l.id === activeLevel);
 
-  const radar = el("div", { class: "radar-edit" }, el("img", { src: `../cs2/${level ? level.radar : map.radar}`, alt: `${map.name} radarı` }));
+  const radarFile = level ? level.radar : map.radar;
+  const radar = el(
+    "div",
+    { class: "radar-edit" },
+    radarFile
+      ? el("img", { src: assetSrc(radarFile), alt: `${map.name} radarı` })
+      : el("div", { class: "radar-empty" }, "Önce sağdan bu haritanın radar resmini seç.")
+  );
   const rows = el("div", { class: "rows" });
 
   const pins = new Map();
@@ -217,6 +304,7 @@ function mapEditor() {
   let draggingMarker = null;
   radar.addEventListener("pointerdown", (e) => {
     e.preventDefault();
+    if (!radarFile) return;
     if (e.target.target) {
       draggingMarker = e.target;
       radar.setPointerCapture(e.pointerId);
@@ -309,9 +397,77 @@ function mapEditor() {
       {},
       el("label", { class: "field" }, el("span", {}, "Harita adı"), name),
       el("label", { class: "field" }, el("span", {}, "Kısa açıklama"), summary),
-      el("div", { class: "field" }, el("span", {}, `İnfolar${map.levels ? ` (${level.label})` : ""}`), rows)
+      el("div", { class: "field" }, el("span", {}, `İnfolar${map.levels ? ` (${level.label})` : ""}`), rows),
+      el(
+        "details",
+        { class: "sub map-files", open: !map.radar || !map.photo ? true : null },
+        el("summary", {}, "Resimler, katlar ve harita silme"),
+        imagePicker({
+          label: map.levels ? "Üst kat radarı" : "Radar resmi (kare, üstten görünüm)",
+          current: map.radar,
+          folder: "radar",
+          base: map.id,
+          onPick: (rel) => {
+            map.radar = rel;
+            const upper = map.levels?.find((l) => l.id === "upper");
+            if (upper) upper.radar = rel;
+          },
+        }),
+        map.levels
+          ? imagePicker({
+              label: "Alt kat radarı",
+              current: map.levels.find((l) => l.id === "lower")?.radar,
+              folder: "radar",
+              base: `${map.id}_lower`,
+              onPick: (rel) => (map.levels.find((l) => l.id === "lower").radar = rel),
+            })
+          : null,
+        imagePicker({ label: "Kapak resmi (harita kartında ve başlıkta görünür)", current: map.photo, folder: "img/maps", base: map.id, onPick: (rel) => (map.photo = rel) }),
+        el(
+          "div",
+          { class: "chips" },
+          map.levels
+            ? el("button", { type: "button", class: "chip", onclick: removeLower }, "Alt katı kaldır")
+            : el("button", { type: "button", class: "chip", onclick: addLower }, "Alt kat ekle"),
+          el("button", { type: "button", class: "chip danger", onclick: removeMap }, "Haritayı sil")
+        ),
+        el("p", { class: "hint" }, "Alt kat: Nuke ve Vertigo gibi iki katlı haritalar için. Eklenince radarın üstünde Üst kat / Alt kat seçimi çıkar.")
+      )
     )
   );
+}
+
+function addLower() {
+  map.levels = [
+    { id: "upper", label: "Üst kat", radar: map.radar },
+    { id: "lower", label: "Alt kat", radar: "" },
+  ];
+  changed();
+  render();
+}
+
+function removeLower() {
+  const lower = map.callouts.filter((c) => c.level === "lower").length;
+  if (!confirm(`Alt kat kaldırılsın mı?${lower ? ` Alt kattaki ${lower} info da silinir.` : ""}`)) return;
+  map.callouts = map.callouts.filter((c) => c.level !== "lower");
+  for (const holder of [map.sites, map.spawns]) for (const key of Object.keys(holder || {})) holder[key] = holder[key].slice(0, 2);
+  delete map.levels;
+  activeLevel = "upper";
+  selected = null;
+  changed();
+  render();
+}
+
+function removeMap() {
+  if (maps.length === 1) return alert("Son harita silinemez.");
+  if (!confirm(`${map.name} sitedeki harita listesinden kaldırılsın mı? İnfoları ve ${map.lineups.length} atışı da silinir. (Kaydetmeden önce "Geri al" ile vazgeçebilirsin.)`)) return;
+  edited.add(`${map.name} silindi`);
+  maps.splice(maps.indexOf(map), 1);
+  map = maps[0];
+  selected = null;
+  bar.changed();
+  history.replaceState(null, "", `cs2.html?panel=haritalar&harita=${map.id}`);
+  render();
 }
 
 // ---------------------------------------------------------------- Atış videoları
