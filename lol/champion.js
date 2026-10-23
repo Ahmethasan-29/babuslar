@@ -499,6 +499,14 @@ function runeCard(state) {
       "div",
       { class: "build-head" },
       el("h3", {}, "Rünler"),
+      // Eşyalardaki gibi: bu rün sayfasıyla oynanan maç sayısı, kazanma ve tercih oranı.
+      rec.stat
+        ? [
+            el("span", { class: "badge" }, `${rec.stat.g.toLocaleString("tr-TR")} maç`),
+            el("span", { class: "badge" }, `${formatPercent(rec.stat.w, rec.stat.g)} kazanma`),
+            el("span", { class: "badge" }, `${formatPercent(rec.stat.g, rec.laneGames)} tercih`),
+          ]
+        : null,
       el(
         "div",
         { class: "spell-list" },
