@@ -29,7 +29,6 @@ const GAMES = [
     name: "League of Legends",
     sections: [{ label: "Editör eşya dizilimleri", file: "lol/editor-builds.json", list: "", kind: "json" }],
   },
-  { name: "Valorant", sections: [literalSection("valorant/videos.js", "ABILITY_VIDEOS", "", "Yetenek videoları")] },
   {
     name: "Dead by Daylight",
     sections: [
@@ -219,7 +218,6 @@ const GAME_INFO = {
   Site: { id: "site" },
   "Counter-Strike 2": { id: "cs2", image: "../cs2/img/hero.jpg" },
   "League of Legends": { id: "lol", image: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_0.jpg" },
-  Valorant: { id: "valorant", image: "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/fullportrait.png", top: true },
   "Dead by Daylight": { id: "dbd", image: `${WIKIA}/deadbydaylight_gamepedia_en/images/8/81/K01_TheTrapper_Portrait.png/revision/latest/scale-to-width-down/400`, top: true },
   "Darkest Dungeon": { id: "dd1", image: "https://darkestdungeon.wiki.gg/images/Crusader.png", top: true },
   "Darkest Dungeon II": { id: "dd2", image: "https://darkestdungeon.wiki.gg/images/Hwm_wiki.png", top: true },

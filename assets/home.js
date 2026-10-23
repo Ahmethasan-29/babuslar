@@ -25,7 +25,6 @@ document.addEventListener("keydown", (e) => {
 const ALIASES = {
   "lol/": "lol league",
   "cs2/": "cs cs2 csgo counter strike",
-  "valorant/": "valo",
   "dbd/": "dbd dead by daylight",
   "dd/": "dd dd1 dd2 darkest dungeon",
   "r6/": "r6 rainbow six siege",

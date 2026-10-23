@@ -1,5 +1,5 @@
 // Site dili: Türkçe (varsayılan) ya da İngilizce. Seçim tarayıcıda saklanır; ?lang=en / ?lang=tr ile de değiştirilebilir.
-// İngilizcede sayfadaki Türkçe yazılar aşağıdaki sözlükle çevrilir. Oyun verileri (LoL, Valorant) zaten İngilizce
+// İngilizcede sayfadaki Türkçe yazılar aşağıdaki sözlükle çevrilir. Oyun verileri (LoL) zaten İngilizce
 // olarak alınır (bkz. IS_EN), bu yüzden sözlükte yalnızca sitenin kendi yazıları bulunur.
 const LANG_KEY = "babuslar-lang";
 
@@ -106,14 +106,14 @@ const EN = {
   "Veriler ne kadar güncel?": "How up to date is the data?",
   "Anında": "Instant",
   "Haftalık": "Weekly",
-  "League of Legends ve Valorant: veriler sayfa her açıldığında resmi kaynaklardan çekilir, yeni yama geldiği gün site de güncellenir. LoL eşya dizilimleri her gece maç istatistiklerinden yeniden hesaplanır.": "League of Legends and Valorant: data is loaded from official sources every time a page opens, so the site is updated the day a new patch comes out. LoL item builds are recalculated every night from match statistics.",
+  "League of Legends: veriler sayfa her açıldığında resmi kaynaklardan çekilir, yeni yama geldiği gün site de güncellenir. LoL eşya dizilimleri her gece maç istatistiklerinden yeniden hesaplanır.": "League of Legends: data is loaded from official sources every time a page opens, so the site is updated the day a new patch comes out. LoL item builds are recalculated every night from match statistics.",
   "Hâlâ yama alan oyunlar (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II) her hafta wikilerden otomatik olarak yenilenir.": "Games that still get patches (Dead by Daylight, Rainbow Six Siege, Battlefield 6, Project Zomboid, Sea of Thieves, Brotato, Bannerlord, Darkest Dungeon II) are refreshed from their wikis automatically every week.",
   "Artık güncelleme almayan oyunların (Witcher 3, Darkest Dungeon, Warband, eski Battlefield'lar) bilgileri değişmez.": "Games that no longer get updates (Witcher 3, Darkest Dungeon, Warband, older Battlefields) keep fixed data.",
   "Bağlantılar": "Links",
   "E-posta": "Email",
   "Öneri, hata bildirimi ya da sadece selam vermek için:": "For suggestions, bug reports or just to say hi:",
   "Kaynaklar": "Sources",
-  "Veriler Riot Games (Data Dragon), valorant-api.com, dbd.tricky.lol ve oyunların topluluk wikilerinden (CC BY-SA) alınır. Oyunların ve görsellerin hakları sahiplerine aittir; ayrıntılar ana sayfanın altında yazar.": "Data comes from Riot Games (Data Dragon), valorant-api.com, dbd.tricky.lol and the games' community wikis (CC BY-SA). Games and images belong to their owners; details are at the bottom of the home page.",
+  "Veriler Riot Games (Data Dragon), dbd.tricky.lol ve oyunların topluluk wikilerinden (CC BY-SA) alınır. Oyunların ve görsellerin hakları sahiplerine aittir; ayrıntılar ana sayfanın altında yazar.": "Data comes from Riot Games (Data Dragon), dbd.tricky.lol and the games' community wikis (CC BY-SA). Games and images belong to their owners; details are at the bottom of the home page.",
   "Babuşlar, adı geçen oyunların yapımcıları ile bağlantılı değildir.": "Babuşlar is not affiliated with the makers of the games mentioned.",
   "Oyunlarını": "Discover your",
   "keşfet": "games",
@@ -157,10 +157,6 @@ const EN = {
     "League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc.",
   "Babuşlar, Valve Corporation ile bağlantılı değildir. Counter-Strike 2 ve harita görüntüleri Valve Corporation'a aittir.":
     "Babuşlar is not affiliated with Valve Corporation. Counter-Strike 2 and map images belong to Valve Corporation.",
-  "Valorant, Riot Games, Inc.'in ticari markasıdır. Valorant verileri valorant-api.com'dan alınır.":
-    "Valorant is a trademark of Riot Games, Inc. Valorant data comes from valorant-api.com.",
-  "Babuşlar, Riot Games tarafından onaylanmamıştır. Valorant ve Riot Games, Riot Games, Inc.'in ticari markalarıdır. Veriler valorant-api.com'dan alınır.":
-    "Babuşlar isn't endorsed by Riot Games. Valorant and Riot Games are trademarks of Riot Games, Inc. Data comes from valorant-api.com.",
   "Dead by Daylight, Behaviour Interactive Inc.'e aittir. DBD verileri dbd.tricky.lol ve Dead by Daylight Wiki'den alınır.":
     "Dead by Daylight belongs to Behaviour Interactive Inc. DBD data comes from dbd.tricky.lol and the Dead by Daylight Wiki.",
   "Babuşlar, Behaviour Interactive ile bağlantılı değildir. Dead by Daylight ve görselleri Behaviour Interactive Inc.'e aittir.":
@@ -333,16 +329,12 @@ const EN = {
   "Tüm ajanlar ve C, Q, E, X yetenekleri.": "Every agent and their C, Q, E, X abilities.",
   "Radar · İnfolar": "Radar · Callouts",
   "Rekabetçi haritalar ve infoları.": "Competitive maps and their callouts.",
-  "Valorant haritaları": "Valorant maps",
   "Bir harita seç; infoları radar üzerinde gör.": "Pick a map to see its callouts on the radar.",
   "Haritalar yükleniyor…": "Loading maps…",
   "Haritalar yüklenemedi. İnternet bağlantını kontrol edip sayfayı yenile.": "Couldn't load maps. Check your internet connection and refresh.",
   "Harita yüklenemedi. Bağlantını kontrol edip sayfayı yenile.": "Couldn't load the map. Check your connection and refresh.",
   "Orta (Mid)": "Mid",
   "Doğuş": "Spawns",
-  "Valorant ajanları: rolleri ve yetenekleri (C, Q, E, X).": "Valorant agents: roles and abilities (C, Q, E, X).",
-  "Valorant haritaları: radar üzerinde infolar (callout).": "Valorant maps: callouts on the radar.",
-  "Valorant: ajanların yetenekleri ve haritaların infoları.": "Valorant: agent abilities and map callouts.",
 
   // Dead by Daylight
   "Katiller": "Killers",
