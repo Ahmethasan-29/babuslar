@@ -59,7 +59,9 @@ function navLinks() {
   );
 }
 
+// image: "none" → bölümde resim yok (ör. ülke ve birlik tabloları), boş kutu da gösterilmez.
 function itemImage(item, style) {
+  if (style === "none") return null;
   if (!item.image) return style === "icon" ? el("div", { class: "rh-img rh-noimg" }) : null;
   return el("img", { class: `rh-img rh-${style || "icon"}`, referrerpolicy: "no-referrer", loading: "lazy", src: item.image, alt: "" });
 }
@@ -101,7 +103,7 @@ function sectionPage(section) {
   search.setAttribute("aria-label", search.placeholder);
 
   const params = new URLSearchParams(location.search);
-  const has = (list, id) => (list || []).some((g) => g.id === id);
+  const has = (list, id) => (Array.isArray(list) ? list : []).some((g) => g.id === id);
   let group = has(section.groups, params.get("grup")) ? params.get("grup") : "all";
   let tag = has(section.tags, params.get("etiket")) ? params.get("etiket") : "all";
   const groupBox = document.getElementById("groups");
@@ -112,7 +114,7 @@ function sectionPage(section) {
   const textOf = (x) => [x.name, plain(tx(x.desc)), x.quote, tx(x.sub), ...(x.tags || []), ...(x.stats || []).map(([, v]) => tx(v))].join(" ");
 
   const chips = (box, defs, current, set, test) => {
-    const used = (defs || []).filter((d) => items.some((x) => test(x, d.id)));
+    const used = (Array.isArray(defs) ? defs : []).filter((d) => items.some((x) => test(x, d.id)));
     box.hidden = used.length < 2;
     box.replaceChildren(
       ...[{ id: "all", label: ["Hepsi", "All"] }, ...used].map((d) =>
