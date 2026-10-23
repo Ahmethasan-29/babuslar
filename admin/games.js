@@ -226,7 +226,7 @@ const GAME_INFO = {
   "Mount & Blade: Warband": { id: "warband", image: `${WIKIA}/mountandblade/images/8/88/WarbandWorldMap.jpg/revision/latest/scale-to-width-down/800` },
   "The Witcher 3": { id: "witcher3", image: "../witcher3/maps/velen-small.jpg" },
   "Cyberpunk 2077": { id: "cp2077", image: `${WIKIA}/cyberpunk/images/4/42/Night_City_Map_2076_CEMK.jpg/revision/latest/scale-to-width-down/800` },
-  "Project Zomboid": { id: "pz", image: "https://pzwiki.net/w/images/1/18/Muldraughmap.png" },
+  "Project Zomboid": { id: "pz", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/library_hero.jpg" },
   "Sea of Thieves": { id: "sot", image: `${WIKIA}/seaofthieves_gamepedia/images/6/60/PlunderValley_Map.png/revision/latest/scale-to-width-down/800` },
   Brotato: { id: "brotato", image: "https://brotato.wiki.spellsandguns.com/images/f/fa/Brawler.png", top: true },
   "Battlefield 1": { id: "bf1", image: `${WIKIA}/battlefield/images/6/69/BF1_Amiens_Icon.png/revision/latest/scale-to-width-down/800` },
