@@ -11,6 +11,9 @@
 const dataSection = (file, name, list, label, auto = false) => ({ label, file, name, list, kind: "data", auto });
 const literalSection = (file, name, list, label) => ({ label, file, name, list, kind: "literal" });
 
+// Ortak rehber şablonu (assets/rehber.js) kullanan oyunlar: data.js içindeki REHBER.sections[i].items listeleri.
+const rehber = (name, dir, labels, auto = false) => ({ name, sections: labels.map((label, i) => dataSection(`${dir}/data.js`, "REHBER", `sections.${i}.items`, label, auto)) });
+
 const bf = (dir, name, auto) => ({
   name,
   sections: [dataSection(`${dir}/data.js`, "BF", "weapons", "Silahlar", auto), dataSection(`${dir}/data.js`, "BF", "maps", "Haritalar", auto)],
@@ -210,6 +213,12 @@ const GAMES = [
       dataSection("coh3/data.js", "COH", "maps", "Haritalar", true),
     ],
   },
+  rehber("Risk of Rain", "ror1", ["Eşyalar"]),
+  rehber("Risk of Rain Returns", "rorr", ["Eşyalar", "Karakterler", "Düşmanlar ve bosslar"], true),
+  rehber("Risk of Rain 2", "ror2", ["Eşyalar", "Ekipmanlar", "Karakterler", "Düşmanlar ve bosslar", "Haritalar", "Eserler"], true),
+  rehber("Bloons TD 6", "btd6", ["Kuleler ve yükseltmeler", "Kahramanlar", "Haritalar"], true),
+  rehber("Megabonk", "megabonk", ["Eşyalar", "Silahlar", "Kitaplar", "Karakterler", "Haritalar"], true),
+  rehber("Euro Truck Simulator 2", "ets2", ["Tırlar", "Bayiler", "Garajlar", "DLC'ler"], true),
 ];
 
 // Kart görselleri (sitenin ana sayfasındakilerle aynı) ve adreslerde kullanılan kısa adlar.
@@ -243,6 +252,12 @@ const GAME_INFO = {
   "Age of Empires III": { id: "aoe3", image: "https://static.wikia.nocookie.net/ageofempires/images/e/e6/AoE3-AD_art.jpg/revision/latest/scale-to-width-down/800" },
   "Age of Mythology": { id: "aom", image: "https://static.wikia.nocookie.net/ageofempires/images/5/5e/AoM_Retold_Greek_city_preview.png/revision/latest/scale-to-width-down/800" },
   "Age of Empires II": { id: "aoe2", image: "https://static.wikia.nocookie.net/ageofempires/images/d/db/Age-of-empires-ii_de_keyart.jpg/revision/latest/scale-to-width-down/800" },
+  "Risk of Rain": { id: "ror1", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/248820/library_hero.jpg" },
+  "Risk of Rain Returns": { id: "rorr", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1337520/library_hero.jpg" },
+  "Risk of Rain 2": { id: "ror2", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/632360/library_hero.jpg" },
+  "Bloons TD 6": { id: "btd6", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/960090/library_hero.jpg" },
+  Megabonk: { id: "megabonk", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3405340/library_hero.jpg" },
+  "Euro Truck Simulator 2": { id: "ets2", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/library_hero.jpg" },
   "Age of Empires IV": { id: "aoe4", image: "https://static.wikia.nocookie.net/ageofempires/images/b/b2/AoE4_Wallpaper_X1.jpg/revision/latest/scale-to-width-down/800" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
