@@ -21,6 +21,8 @@ $games = @(
   @{ name = "Bloons TD 6"; script = "btd6-data.ps1"; dir = "btd6"; const = "REHBER" }
   @{ name = "Megabonk"; script = "megabonk-data.ps1"; dir = "megabonk"; const = "REHBER" }
   @{ name = "Euro Truck Simulator 2"; script = "ets2-data.ps1"; dir = "ets2"; const = "REHBER" }
+  @{ name = "World of Tanks"; script = "wot-data.ps1"; dir = "wot"; const = "REHBER" }
+  @{ name = "Total War: Warhammer III"; script = "tww3-data.ps1"; dir = "tww3"; const = "REHBER" }
 )
 if ($Only) { $games = @($games | Where-Object { $Only -contains $_.dir }) }
 
