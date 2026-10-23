@@ -77,8 +77,13 @@ a.admin-section:hover { border-color: var(--accent); }
 .field textarea { min-height: 70px; resize: vertical; }
 
 /* Radar üzerinde info düzenleme */
-.radar-edit { container-type: inline-size; }
-.radar-edit { position: relative; border-radius: var(--radius); overflow: hidden; background: #000; cursor: crosshair; user-select: none; touch-action: none; }
+/* Yakınlaştırma penceresi: yazı boyutları (cqw) pencereye göre, radar içinde büyür */
+.radar-zoom { container-type: inline-size; position: relative; aspect-ratio: 1; overflow: auto; border-radius: var(--radius); background: #000; overscroll-behavior: contain; }
+.radar-zoom.panning, .radar-zoom.panning * { cursor: grabbing !important; }
+.zoom-bar { align-items: center; margin-bottom: 8px; }
+.zoom-bar .chip { min-width: 40px; justify-content: center; }
+.zoom-level { color: var(--muted); font-size: 0.85rem; min-width: 44px; text-align: center; }
+.radar-edit { position: relative; width: 100%; overflow: hidden; background: #000; cursor: crosshair; user-select: none; touch-action: none; }
 .radar-edit img { width: 100%; display: block; pointer-events: none; }
 .pin {
   position: absolute;

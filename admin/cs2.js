@@ -116,6 +116,7 @@ function render() {
             "aria-pressed": String(m === map),
             onclick: () => {
               map = m;
+              radarZoom = 1;
               history.replaceState(null, "", url(PANEL, m.id));
               render();
             },
@@ -207,6 +208,7 @@ function imagePicker({ label, current, folder, base, onPick }) {
 // ---------------------------------------------------------------- Haritalar ve infolar
 
 let activeLevel = "upper";
+let radarZoom = 1; // radar düzenleyicisinin yakınlaştırması (harita değişince sıfırlanır)
 let selected = null; // seçili info (nesne)
 
 function mapEditor() {
@@ -302,7 +304,57 @@ function mapEditor() {
   };
   let dragging = null;
   let draggingMarker = null;
+  // Yakınlaştırma: radar sabit boyutlu bir pencerenin içinde büyür (yazılar aynı boyutta kalır).
+  // Fare tekerleği imlecin olduğu yere yakınlaştırır; sağ ya da orta tuşla sürükleyince harita kayar.
+  const view = el("div", { class: "radar-zoom" }, radar);
+  const zoomLabel = el("span", { class: "zoom-level" });
+  const setZoom = (z, cx, cy) => {
+    const old = radarZoom;
+    radarZoom = Math.min(6, Math.max(1, Math.round(z * 100) / 100));
+    const vr = view.getBoundingClientRect();
+    // İmlecin (yoksa ortanın) altındaki nokta yerinde kalsın
+    const px = (cx ?? vr.left + vr.width / 2) - vr.left;
+    const py = (cy ?? vr.top + vr.height / 2) - vr.top;
+    const fx = (view.scrollLeft + px) / (vr.width * old);
+    const fy = (view.scrollTop + py) / (radar.offsetHeight || vr.width * old);
+    radar.style.width = `${radarZoom * 100}%`;
+    view.scrollLeft = fx * vr.width * radarZoom - px;
+    view.scrollTop = fy * radar.offsetHeight - py;
+    zoomLabel.textContent = `${Math.round(radarZoom * 100)}%`;
+  };
+  view.addEventListener("wheel", (e) => {
+    if (!radarFile) return;
+    e.preventDefault();
+    setZoom(radarZoom * (e.deltaY < 0 ? 1.25 : 0.8), e.clientX, e.clientY);
+  }, { passive: false });
+  view.addEventListener("contextmenu", (e) => e.preventDefault());
+  let panning = null;
+  view.addEventListener("pointerdown", (e) => {
+    if (e.button !== 1 && e.button !== 2) return;
+    e.preventDefault();
+    e.stopPropagation();
+    panning = { x: e.clientX, y: e.clientY, l: view.scrollLeft, t: view.scrollTop };
+    view.setPointerCapture(e.pointerId);
+    view.classList.add("panning");
+  }, true);
+  view.addEventListener("pointermove", (e) => {
+    if (!panning) return;
+    view.scrollLeft = panning.l - (e.clientX - panning.x);
+    view.scrollTop = panning.t - (e.clientY - panning.y);
+  });
+  view.addEventListener("pointerup", () => { panning = null; view.classList.remove("panning"); });
+  const zoomBar = el(
+    "div",
+    { class: "chips zoom-bar" },
+    el("button", { type: "button", class: "chip", title: "Uzaklaştır", onclick: () => setZoom(radarZoom / 1.5) }, "−"),
+    zoomLabel,
+    el("button", { type: "button", class: "chip", title: "Yakınlaştır", onclick: () => setZoom(radarZoom * 1.5) }, "+"),
+    el("button", { type: "button", class: "chip", onclick: () => setZoom(1) }, "Sığdır")
+  );
+  requestAnimationFrame(() => setZoom(radarZoom));
+
   radar.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
     e.preventDefault();
     if (!radarFile) return;
     if (e.target.target) {
@@ -389,8 +441,9 @@ function mapEditor() {
             )
           )
         : null,
-      radar,
-      el("p", { class: "hint" }, "Radarda boş bir yere tıkla: oraya yeni info eklenir. İnfoları, bomba bölgelerini (A, B) ve doğuşları (T, CT) sürükleyerek taşıyabilirsin; bunlar için ayrıca info eklemene gerek yok.")
+      zoomBar,
+      view,
+      el("p", { class: "hint" }, "Radarda boş bir yere tıkla: oraya yeni info eklenir. İnfoları, bomba bölgelerini (A, B) ve doğuşları (T, CT) sürükleyerek taşıyabilirsin; bunlar için ayrıca info eklemene gerek yok. Yakınlaştırmak için fare tekerleğini ya da + düğmesini kullan; yakınken haritayı sağ tuşla sürükleyerek kaydır.")
     ),
     el(
       "div",
