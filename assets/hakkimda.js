@@ -37,8 +37,8 @@ const HAKKIMDA = [
       {
         label: { tr: "Anında", en: "Instant" },
         text: {
-          tr: "League of Legends ve Valorant: veriler sayfa her açıldığında resmi kaynaklardan çekilir, yeni yama geldiği gün site de güncellenir. LoL eşya dizilimleri her gece maç istatistiklerinden yeniden hesaplanır.",
-          en: "League of Legends and Valorant: data is loaded from official sources every time a page opens, so the site is updated the day a new patch comes out. LoL item builds are recalculated every night from match statistics.",
+          tr: "League of Legends: veriler sayfa her açıldığında resmi kaynaklardan çekilir, yeni yama geldiği gün site de güncellenir. LoL eşya dizilimleri her gece maç istatistiklerinden yeniden hesaplanır.",
+          en: "League of Legends: data is loaded from official sources every time a page opens, so the site is updated the day a new patch comes out. LoL item builds are recalculated every night from match statistics.",
         },
       },
       {
@@ -72,8 +72,8 @@ const HAKKIMDA = [
     title: { tr: "Kaynaklar", en: "Sources" },
     text: [
       {
-        tr: "Veriler Riot Games (Data Dragon), valorant-api.com, dbd.tricky.lol ve oyunların topluluk wikilerinden (CC BY-SA) alınır. Oyunların ve görsellerin hakları sahiplerine aittir; ayrıntılar ana sayfanın altında yazar.",
-        en: "Data comes from Riot Games (Data Dragon), valorant-api.com, dbd.tricky.lol and the games' community wikis (CC BY-SA). Games and images belong to their owners; details are at the bottom of the home page.",
+        tr: "Veriler Riot Games (Data Dragon), dbd.tricky.lol ve oyunların topluluk wikilerinden (CC BY-SA) alınır. Oyunların ve görsellerin hakları sahiplerine aittir; ayrıntılar ana sayfanın altında yazar.",
+        en: "Data comes from Riot Games (Data Dragon), dbd.tricky.lol and the games' community wikis (CC BY-SA). Games and images belong to their owners; details are at the bottom of the home page.",
       },
     ],
     items: [],
