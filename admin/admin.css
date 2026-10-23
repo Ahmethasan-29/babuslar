@@ -241,3 +241,10 @@ a.admin-game[hidden] { display: none; }
 .clip-label { color: var(--muted); }
 .clip-status { color: var(--muted); }
 .clip-row .chip[hidden] { display: none; }
+
+/* CS2 harita dosyaları: radar / kapak resmi seçimi, alt kat, harita silme */
+.map-files { margin-top: 4px; }
+.map-files .chips { margin: 4px 0 6px; }
+.image-pick { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.radar-empty { aspect-ratio: 1; display: grid; place-items: center; padding: 20px; text-align: center; color: var(--muted); background: var(--bg-elev); }
+.chip.danger { color: var(--accent); border-color: var(--accent); }
