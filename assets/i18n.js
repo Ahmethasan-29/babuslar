@@ -177,8 +177,8 @@ const EN = {
   "Şampiyonlar · Eşyalar": "Champions · Items",
   "Tüm şampiyonların pasifleri, Q/W/E/R yetenekleri ve eşyalar.": "Every champion's passive, Q/W/E/R abilities and items.",
   "Haritalar · İnfolar · Smoke videoları": "Maps · Callouts · Smoke videos",
-  "9 rekabetçi harita: radar üzerinde infolar; A, B ve Orta için smoke, flash, molotof ve el bombası videoları.":
-    "9 competitive maps: callouts on the radar; smoke, flash, molotov and HE grenade videos for A, B and Mid.",
+  "10 harita (güncel havuzdaki Cache dahil): radar üzerinde infolar; A, B ve Orta için smoke, flash, molotof ve el bombası videoları.":
+    "10 maps (including Cache from the current pool): callouts on the radar; smoke, flash, molotov and HE grenade videos for A, B and Mid.",
   "Ajanlar · Haritalar · İnfolar": "Agents · Maps · Callouts",
   "Tüm ajanların yetenekleri ve rekabetçi haritalar: radar üzerinde infolar.": "Every agent's abilities and the competitive maps with callouts on the radar.",
   "Katiller · Survivor'lar · Perkler · Haritalar": "Killers · Survivors · Perks · Maps",
