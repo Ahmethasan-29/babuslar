@@ -225,6 +225,8 @@ const GAMES = [
   rehber("Hearts of Iron II", "hoi2", ["Ülkeler", "Birlikler"]),
   rehber("Hearts of Iron III", "hoi3", ["Ülkeler", "Birlikler", "Komutanlar"]),
   rehber("Hearts of Iron IV", "hoi4", ["Ülkeler (1936)", "Kara birlikleri", "Ekipman", "Başarımlar"]),
+  rehber("World of Tanks", "wot", ["Tanklar"], true),
+  rehber("Total War: Warhammer III", "tww3", ["Birimler ve lordlar"], true),
 ];
 
 // Kart görselleri (sitenin ana sayfasındakilerle aynı) ve adreslerde kullanılan kısa adlar.
@@ -270,6 +272,8 @@ const GAME_INFO = {
   "Hearts of Iron II": { id: "hoi2", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/22130/header.jpg" },
   "Hearts of Iron III": { id: "hoi3", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/25890/library_hero.jpg" },
   "Hearts of Iron IV": { id: "hoi4", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/394360/library_hero.jpg" },
+  "World of Tanks": { id: "wot", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1407200/library_hero.jpg" },
+  "Total War: Warhammer III": { id: "tww3", image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1142710/library_hero.jpg" },
   "Age of Empires IV": { id: "aoe4", image: "https://static.wikia.nocookie.net/ageofempires/images/b/b2/AoE4_Wallpaper_X1.jpg/revision/latest/scale-to-width-down/800" },
   "Company of Heroes 3": { id: "coh3", image: "https://cdn.coh3stats.com/export_flatten/paratroopers_us_wide.webp" },
 };
