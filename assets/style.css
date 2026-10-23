@@ -1622,3 +1622,7 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .series-games .game-card { min-height: 170px; padding: 18px; box-shadow: none; }
 .series-games .game-card h2 { font-size: 1.2rem; }
 .series-games .game-card[hidden] { display: none; }
+
+/* Project Zomboid kartı: Steam kütüphane sayfası gibi, arkada kütüphane görseli, üstte oyunun logosu. */
+.game-card > .pz-card-img { object-position: left center; opacity: 0.5; }
+a.game-card:hover > .pz-card-img { opacity: 0.65; }
