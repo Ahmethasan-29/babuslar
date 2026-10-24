@@ -715,6 +715,9 @@ function shotEditor() {
           },
           "Önizle"
         ),
+        // Sıralama: sitede aynı bölge + aynı tür birlikte gösterilir; atış o grubun içinde bir üste/alta kayar.
+        el("button", { type: "button", class: "icon-btn", title: "Yukarı taşı", "aria-label": "Yukarı taşı", disabled: !neighbor(s, -1), onclick: () => move(s, -1) }, "↑"),
+        el("button", { type: "button", class: "icon-btn", title: "Aşağı taşı", "aria-label": "Aşağı taşı", disabled: !neighbor(s, 1), onclick: () => move(s, 1) }, "↓"),
         el(
           "button",
           {
@@ -741,6 +744,21 @@ function shotEditor() {
     );
     mark();
     return node;
+  }
+
+  // Aynı bölge ve türdeki bir önceki / sonraki atış (sitede yan yana görünenler)
+  function neighbor(s, dir) {
+    const group = map.lineups.filter((x) => x.site === s.site && x.type === s.type);
+    return group[group.indexOf(s) + dir] || null;
+  }
+  function move(s, dir) {
+    const other = neighbor(s, dir);
+    if (!other) return;
+    const a = map.lineups.indexOf(s);
+    const b = map.lineups.indexOf(other);
+    [map.lineups[a], map.lineups[b]] = [map.lineups[b], map.lineups[a]];
+    changed();
+    render();
   }
 
   list.replaceChildren(...visible().map(card));
