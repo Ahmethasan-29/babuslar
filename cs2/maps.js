@@ -106,9 +106,9 @@ const CS2_MAPS = [
     ],
     lineups: [
       { site: "A", type: "smoke", name: "CT smoke 1", by: "CS Tactics", clip: "clips/dust2-a-ct-smoke-mvmvsdxz.mp4" },
+      { site: "A", type: "smoke", name: "CT SMOKE 2", clip: "clips/dust2-a-ct-smoke-2-mvmw5olm.mp4" },
       { site: "A", type: "smoke", name: "Long Cross smoke", yt: ["rKWeOfcTN44", 265, 299], by: "CS Tactics" },
       { site: "A", type: "smoke", name: "Long Corner smoke", yt: ["rKWeOfcTN44", 231, 265], by: "CS Tactics" },
-      { site: "A", type: "smoke", name: "Short smoke'ları", yt: ["Bc0WFG-fU4w", 74, 132], by: "CS Tactics" },
       { site: "A", type: "flash", name: "Long flash'ları", yt: ["rKWeOfcTN44", 546, 641], by: "CS Tactics" },
       { site: "A", type: "flash", name: "Short (Cat) flash'ları", yt: ["rKWeOfcTN44", 641, 728], by: "CS Tactics" },
       { site: "A", type: "molly", name: "Car molotofu", yt: ["rKWeOfcTN44", 800, 819], by: "CS Tactics" },
@@ -122,7 +122,7 @@ const CS2_MAPS = [
       { site: "Mid", type: "smoke", name: "Xbox smoke", yt: ["Bc0WFG-fU4w", 7, 22], by: "CS Tactics" },
       { site: "Mid", type: "smoke", name: "Mid to B smoke", yt: ["Bc0WFG-fU4w", 132, 155], by: "CS Tactics" },
       { site: "Mid", type: "flash", name: "Mid flash'ı", yt: ["rKWeOfcTN44", 728, 742], by: "CS Tactics" },
-      { site: "A", type: "smoke", name: "CT SMOKE 2", clip: "clips/dust2-a-ct-smoke-2-mvmw5olm.mp4" },
+      { site: "A", type: "smoke", name: "Short smoke'ları", yt: ["Bc0WFG-fU4w", 74, 132], by: "CS Tactics" },
     ],
   },
   {
