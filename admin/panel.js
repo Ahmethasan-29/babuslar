@@ -94,6 +94,16 @@ const Panel = {
     await Panel.api(`/repos/${REPO}/git/refs`, { method: "POST", body: { ref: `refs/heads/${branch}`, sha: main.object.sha } });
     try {
       for (const file of files) {
+        // Büyük ikili dosyalar (video) Git veri API'siyle gönderilir: blob → ağaç → commit (100 MB'a kadar).
+        if (file.base64) {
+          const head = await Panel.api(`/repos/${REPO}/git/ref/heads/${branch}`);
+          const parent = await Panel.api(`/repos/${REPO}/git/commits/${head.object.sha}`);
+          const blob = await Panel.api(`/repos/${REPO}/git/blobs`, { method: "POST", body: { content: file.base64, encoding: "base64" } });
+          const tree = await Panel.api(`/repos/${REPO}/git/trees`, { method: "POST", body: { base_tree: parent.tree.sha, tree: [{ path: file.path, mode: "100644", type: "blob", sha: blob.sha }] } });
+          const commit = await Panel.api(`/repos/${REPO}/git/commits`, { method: "POST", body: { message: title, tree: tree.sha, parents: [parent.sha] } });
+          await Panel.api(`/repos/${REPO}/git/refs/heads/${branch}`, { method: "PATCH", body: { sha: commit.sha } });
+          continue;
+        }
         const current = await Panel.api(`/repos/${REPO}/contents/${file.path}?ref=${branch}`).catch((e) => (e.status === 404 ? null : Promise.reject(e)));
         if (current && file.sha && current.sha !== file.sha) {
           throw new Error(`${file.path} sen düzenlerken başka biri tarafından değiştirildi. Sayfayı yenileyip tekrar dene.`);

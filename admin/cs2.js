@@ -587,7 +587,7 @@ function shotEditor() {
 
   // Kendi videosu: bilgisayardan seçilir, kaydedince cs2/clips/ klasörüne yüklenir ve YouTube yerine oynar.
   function clipRow(s, onChange) {
-    const MAX_MB = 25;
+    const MAX_MB = 95; // GitHub tek dosyada 100 MB üstünü kabul etmez
     const status = el("span", { class: "clip-status" });
     const fileInput = el("input", { type: "file", accept: "video/mp4,video/webm", hidden: true });
     const pick = el("button", { type: "button", class: "chip", onclick: () => fileInput.click() });
@@ -613,7 +613,7 @@ function shotEditor() {
       fileInput.value = "";
       if (!file) return;
       if (!/\.(mp4|webm)$/i.test(file.name)) return alert("Yalnızca MP4 ya da WebM video seçebilirsin.");
-      if (file.size > MAX_MB * 1048576) return alert(`Video çok büyük (${(file.size / 1048576).toFixed(1)} MB). En fazla ${MAX_MB} MB olabilir; 5–15 saniyelik, 720p bir kesit genelde 1–3 MB tutar.`);
+      if (file.size > MAX_MB * 1048576) return alert(`Video çok büyük (${(file.size / 1048576).toFixed(1)} MB). En fazla ${MAX_MB} MB olabilir (GitHub 100 MB üstü dosyayı kabul etmiyor). Videoyu kısaltırsan ya da 720p'ye düşürürsen küçülür.`);
       // Dosya adı: harita-bölge-atış-adı-zaman.mp4 (Türkçe karakterler sadeleştirilir).
       const slug = (t) => t.toLocaleLowerCase("tr").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       const ext = file.name.split(".").pop().toLowerCase();
@@ -771,7 +771,7 @@ function shotEditor() {
     "div",
     {},
     el("div", { class: "editor-top" }, filter(SITES, siteFilter, (v) => (siteFilter = v)), filter(TYPES, typeFilter, (v) => (typeFilter = v))),
-    el("p", { class: "hint" }, `${map.name}: ${map.lineups.length} atış, ${visible().length} tanesi gösteriliyor. Süreleri 1:23 ya da saniye olarak yazabilirsin; YouTube bağlantısında ?t= varsa başlangıç kendiliğinden dolar. Kendi çektiğin videoyu da "Bilgisayardan video seç" ile ekleyebilirsin (MP4/WebM, en fazla 25 MB); o zaman YouTube bağlantısı gerekmez.`),
+    el("p", { class: "hint" }, `${map.name}: ${map.lineups.length} atış, ${visible().length} tanesi gösteriliyor. Süreleri 1:23 ya da saniye olarak yazabilirsin; YouTube bağlantısında ?t= varsa başlangıç kendiliğinden dolar. Kendi çektiğin videoyu da "Bilgisayardan video seç" ile ekleyebilirsin (MP4/WebM, en fazla 95 MB); o zaman YouTube bağlantısı gerekmez.`),
     list,
     el("div", { style: "margin-top:14px" }, add)
   );
