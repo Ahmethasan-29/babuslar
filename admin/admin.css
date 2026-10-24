@@ -118,6 +118,7 @@ a.admin-section:hover { border-color: var(--accent); }
   cursor: pointer;
 }
 .icon-btn:hover { color: var(--text); border-color: var(--accent); }
+.icon-btn:disabled { opacity: 0.35; cursor: default; border-color: var(--border); }
 
 /* Atış kartları */
 .shots { display: grid; gap: 10px; }
