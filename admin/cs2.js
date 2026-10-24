@@ -589,7 +589,8 @@ function shotEditor() {
   function clipRow(s, onChange) {
     const MAX_MB = 95; // GitHub tek dosyada 100 MB üstünü kabul etmez
     const status = el("span", { class: "clip-status" });
-    const fileInput = el("input", { type: "file", accept: "video/mp4,video/webm", hidden: true });
+    // OBS'in varsayılan .mkv kayıtları da listede görünsün ki seçince ne yapılacağı söylenebilsin
+    const fileInput = el("input", { type: "file", accept: "video/mp4,video/webm,.mp4,.webm,.mkv,.mov,.flv", hidden: true });
     const pick = el("button", { type: "button", class: "chip", onclick: () => fileInput.click() });
     const remove = el("button", { type: "button", class: "chip", onclick: () => {
       if (!confirm("Bu atıştaki kendi videon kaldırılsın mı? Atış YouTube bağlantısını kullanır.")) return;
@@ -612,6 +613,7 @@ function shotEditor() {
       const file = fileInput.files[0];
       fileInput.value = "";
       if (!file) return;
+      if (/\.(mkv|mov|flv)$/i.test(file.name)) return alert("Bu video MKV/MOV/FLV biçiminde; tarayıcılar bunu oynatamıyor. OBS'te Dosya → Kayıtları Remux Et (File → Remux Recordings) ile MP4'e çevirip onu seç. Sonraki kayıtlar için: Ayarlar → Çıkış → Kayıt Biçimi → MP4 ya da Hybrid MP4.");
       if (!/\.(mp4|webm)$/i.test(file.name)) return alert("Yalnızca MP4 ya da WebM video seçebilirsin.");
       if (file.size > MAX_MB * 1048576) return alert(`Video çok büyük (${(file.size / 1048576).toFixed(1)} MB). En fazla ${MAX_MB} MB olabilir (GitHub 100 MB üstü dosyayı kabul etmiyor). Videoyu kısaltırsan ya da 720p'ye düşürürsen küçülür.`);
       // Dosya adı: harita-bölge-atış-adı-zaman.mp4 (Türkçe karakterler sadeleştirilir).
