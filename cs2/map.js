@@ -245,8 +245,9 @@ function lineupSections(lineups, onlyType = "all") {
 // Atış kartı. Video tıklanınca yüklenir; YouTube'da yalnızca atışın olduğu kısım oynar.
 function lineupCard(l) {
   const [videoId, start, end] = l.yt || [];
+  // Kendi videolarında önizleme, videonun 1. saniyesindeki kare (yalnızca baş kısmı indirilir).
   const poster = l.clip
-    ? null
+    ? el("video", { class: "thumb-video", src: `${l.clip}#t=1`, preload: "metadata", muted: "", playsinline: "", "aria-hidden": "true" })
     : el("img", { src: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`, alt: "", loading: "lazy" });
 
   const frame = el(

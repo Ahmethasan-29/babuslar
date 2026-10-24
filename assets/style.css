@@ -733,9 +733,9 @@ a.game-card:hover > .card-img { opacity: 0.55; }
 
 .video-thumb { position: relative; padding: 0; cursor: pointer; }
 
-.video-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity 0.15s; }
+.video-thumb img, .video-thumb .thumb-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity 0.15s; pointer-events: none; }
 
-.video-thumb:hover img { opacity: 1; }
+.video-thumb:hover img, .video-thumb:hover .thumb-video { opacity: 1; }
 
 .video-thumb .play {
   position: absolute;
@@ -752,7 +752,7 @@ a.game-card:hover > .card-img { opacity: 0.55; }
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
-.video-thumb img { filter: brightness(0.55); }
+.video-thumb img, .video-thumb .thumb-video { filter: brightness(0.55); }
 
 .video-name {
   position: absolute;
