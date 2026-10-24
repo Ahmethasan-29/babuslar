@@ -35,7 +35,8 @@
   </footer>
 
   <script src="../assets/common.js"></script>
-  <script src="maps.js"></script>
+  <!-- Panelden yapılan değişiklikler önbellekte takılı kalmasın: harita verisi dakikada bir yeniden alınır -->
+  <script>document.write('<script src="maps.js?t=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
   <script src="map.js"></script>
 </body>
 </html>
