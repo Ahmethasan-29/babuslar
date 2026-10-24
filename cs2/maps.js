@@ -122,6 +122,7 @@ const CS2_MAPS = [
       { site: "Mid", type: "smoke", name: "Xbox smoke", yt: ["Bc0WFG-fU4w", 7, 22], by: "CS Tactics" },
       { site: "Mid", type: "smoke", name: "Mid to B smoke", yt: ["Bc0WFG-fU4w", 132, 155], by: "CS Tactics" },
       { site: "Mid", type: "flash", name: "Mid flash'ı", yt: ["rKWeOfcTN44", 728, 742], by: "CS Tactics" },
+      { site: "A", type: "smoke", name: "CT SMOKE 2", clip: "clips/dust2-a-ct-smoke-2-mvmw5olm.mp4" },
     ],
   },
   {
