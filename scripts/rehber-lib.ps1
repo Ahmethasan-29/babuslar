@@ -165,17 +165,19 @@ function Convert-WikiMarkup([string]$t) {
         $text = if ($named['alttext']) { $named['alttext'] } elseif ($pos.Count) { $pos[-1] } else { '' }
         if ($name -match 'link$' -and $pos.Count) { $text = $(if ($named['alttext']) { $named['alttext'] } else { $pos[0] }) }
         if (-not $text.Trim()) { return $text }
-        if ($name -eq 'stack') { return "⟦s|$text⟧" }
+        # İşaretin içindeki ayraç ¦'dir; böylece dıştaki şablon "|" ile bölünürken iç işaret parçalanmaz.
+        if ($name -eq 'stack') { return "⟦s¦$text⟧" }
         if ($name -eq 'color' -or $name -eq 'keyword' -or $name -eq 'colour') {
           $c = $parts[1].Trim().ToLowerInvariant()
           $cls = if ($WIKI_COLORS.ContainsKey($c)) { $WIKI_COLORS[$c] } elseif ($c -match '^#') { 'w' } else { 'u' }
-          return "⟦$cls|$text⟧"
+          # İç içe işaretler desteklenmez: renkli metnin içindeki işaretin önü ve arkası ayrı renklenir.
+          return (($text -split '(⟦[^⟧]*⟧)') | ForEach-Object { if ($_ -match '^⟦' -or -not $_.Trim()) { $_ } else { "⟦$cls¦$_⟧" } }) -join ''
         }
         return $text
       })
   }
   $t = Clean-WikiText $t
-  ($t -replace '⟦', '[[' -replace '⟧', ']]' -replace '\[\[([a-z])\|\s*\]\]', '').Trim()
+  ($t -replace '⟦', '[[' -replace '⟧', ']]' -replace '¦', '|' -replace '\[\[([a-z])\|\s*\]\]', '').Trim()
 }
 
 # İki dilli değerler: [tr, en] (assets/rehber.js tx() ile seçer)

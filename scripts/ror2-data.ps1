@@ -31,6 +31,8 @@ $RARITY = [ordered]@{
   Hex = @('Hex', 'Hex', '#9b6bd6')
   Page = @('Sayfa (Page)', 'Page', '#b0a080')
 }
+# Stack artış biçimleri (kartlardaki gri parantez)
+$STACK_TR = [ordered]@{ linear = 'doğrusal'; hyperbolic = 'hiperbolik'; exponential = 'üstel'; reciprocal = 'ters orantılı'; special = 'özel'; none = 'artmaz'; stack = 'kopya' }
 $CATS = [ordered]@{ Damage = @('Hasar', 'Damage'); Healing = @('İyileşme', 'Healing'); Utility = @('Yardımcı', 'Utility') }
 
 $itemList = foreach ($name in $items.Keys) {
@@ -40,17 +42,21 @@ $itemList = foreach ($name in $items.Keys) {
   $stats = @(foreach ($s in @($it.Stats)) {
       if (-not $s -or -not $s.Stat -or $s.Stack -eq 'ProcCoeff') { continue }
       $v = [string]$s.Value
-      if ($s.Add) { $v += " [[s|($($s.Add) / $(if ($s.Stack) { $s.Stack.ToLowerInvariant() } else { 'stack' }))]]" }
-      , @($s.Stat, $v)
+      if ($s.Add) {
+        $st = if ($s.Stack) { $s.Stack.ToLowerInvariant() } else { 'stack' }
+        $stTr = if ($STACK_TR.Contains($st)) { $STACK_TR[$st] } else { $st }
+        $v = Bi "$v [[s|($($s.Add) / $stTr)]]" "$v [[s|($($s.Add) / $st)]]"
+      }
+      , @($s.Stat.Trim(), $v)
     })
-  $more = @()
-  if ($it.Unlock) { $more += "Unlock: $($it.Unlock)" }
-  if ($it.Corrupt) { $more += "Void: $($it.Corrupt)" }
+  $more = @(); $moreTr = @()
+  if ($it.Unlock) { $more += "Unlock: $($it.Unlock)"; $moreTr += "Açılış: $($it.Unlock)" }
+  if ($it.Corrupt) { $more += "Void: $($it.Corrupt)"; $moreTr += "Boşluk karşılığı: $($it.Corrupt)" }
   [ordered]@{
     id = Slug $name; name = $name; file = FileOf $name; group = [string]$it.Rarity; tags = $itemCats
     sub = @((($itemCats | ForEach-Object { $CATS["$_"][0] }) -join ' · '), (($itemCats | ForEach-Object { $CATS["$_"][1] }) -join ' · '))
     quote = Convert-WikiMarkup $it.Quote; desc = Convert-WikiMarkup $it.Desc; stats = $stats
-    more = $(if ($more) { $more -join ' · ' } else { $null })
+    more = $(if ($more) { Bi ($moreTr -join ' · ') ($more -join ' · ') } else { $null })
   }
 }
 
@@ -67,7 +73,7 @@ $eqList = foreach ($name in $equipment.Keys) {
   $stats = @()
   if ($e.Cooldown) { $stats += , @(@('Bekleme', 'Cooldown'), (Sec $e.Cooldown)) }
   if ($e.Duration) { $stats += , @(@('Süre', 'Duration'), (Sec $e.Duration)) }
-  [ordered]@{ id = Slug $name; name = $name; file = FileOf $name; group = $r; quote = Convert-WikiMarkup $e.Quote; desc = Convert-WikiMarkup $e.Desc; stats = $stats; more = $(if ($e.Unlock) { "Unlock: $($e.Unlock)" }) }
+  [ordered]@{ id = Slug $name; name = $name; file = FileOf $name; group = $r; quote = Convert-WikiMarkup $e.Quote; desc = Convert-WikiMarkup $e.Desc; stats = $stats; more = $(if ($e.Unlock) { Bi "Açılış: $($e.Unlock)" "Unlock: $($e.Unlock)" }) }
 }
 
 # --- Karakterler (yetenekleriyle)
@@ -160,7 +166,7 @@ $data = [ordered]@{
     [ordered]@{ id = 'eserler'; title = @('Eserler (Artifacts)', 'Artifacts'); noun = @('eser', 'artifacts'); badge = @('Oyun kuralları · Kod', 'Run modifiers · Codes'); text = @('{n} eser: oyunu değiştiren kurallar ve açma kodları.', '{n} artifacts: run modifiers and their unlock codes.'); image = 'icon'; items = @($artList) }
   )
   guide = @(
-    [ordered]@{ title = @('Stack mantığı', 'How stacking works'); text = @('Aynı eşyadan ikinci kez alınca etkisi artar. Kartlardaki gri parantez her ek kopyanın ne eklediğini gösterir. [[s|linear]] düz artar, [[s|hyperbolic]] her kopyada daha az artar (ör. Tougher Times %100''e hiç ulaşmaz).', 'Picking up another copy of an item boosts its effect. The grey brackets on the cards show what each extra copy adds. [[s|linear]] grows evenly, [[s|hyperbolic]] grows less each time (e.g. Tougher Times never reaches 100%).') }
+    [ordered]@{ title = @('Stack mantığı', 'How stacking works'); text = @('Aynı eşyadan ikinci kez alınca etkisi artar. Kartlardaki gri parantez her ek kopyanın ne eklediğini gösterir. [[s|doğrusal]] düz artar, [[s|hiperbolik]] her kopyada daha az artar (ör. Tougher Times %100''e hiç ulaşmaz).', 'Picking up another copy of an item boosts its effect. The grey brackets on the cards show what each extra copy adds. [[s|linear]] grows evenly, [[s|hyperbolic]] grows less each time (e.g. Tougher Times never reaches 100%).') }
     [ordered]@{ title = @('Teleporter''ı geciktirme', 'Don''t rush the teleporter'); text = @('Zorluk zamanla artar, ama ilk bölümlerde sandıkların çoğunu açmak sonraki bölümlerde güçlü kalmanı sağlar. Para biriktirip çok sandık açmak, hızlı geçmekten genelde daha iyidir.', 'Difficulty rises over time, but opening most chests on early stages keeps you strong later. Spending all your gold usually beats rushing.') }
     [ordered]@{ title = @('Ay (Lunar) eşyaları', 'Lunar items'); text = @('Mavi Lunar eşyalar güçlü ama bir bedeli var (ör. Shaped Glass hasarı ikiye katlar, canı yarıya indirir). Lunar Coin ile Lunar Pod''lardan ve Bazaar''dan alınır.', 'Blue Lunar items are powerful but come with a drawback (e.g. Shaped Glass doubles damage but halves health). Buy them with Lunar Coins from Lunar Pods and the Bazaar.') }
     [ordered]@{ title = @('Boşluk (Void) eşyaları', 'Void items'); text = @('Mor Void eşyaları, eşleştiği normal eşyanın tüm kopyalarını kendine çevirir. Kartın "Ayrıntılar" kısmında hangi eşyayı bozduğu yazar.', 'Purple Void items convert every copy of their paired normal item. The card''s Details show which item it corrupts.') }
