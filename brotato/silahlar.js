@@ -32,7 +32,7 @@ function card(w) {
         [L("Fiyat", "Price"), v(w.price)],
       ].map(([a, b]) => el("div", {}, el("dt", {}, a), el("dd", {}, b)))
     ),
-    w.special ? el("p", { class: "bro-special" }, richText(w.special)) : null,
+    w.special ? el("p", { class: "bro-special" }, richText(trStats(w.special))) : null,
     w.unlock && w.unlock !== "Default" ? el("p", { class: "tile-sub" }, el("strong", {}, L("Açılır: ", "Unlock: ")), w.unlock) : null
   );
 }

@@ -11,7 +11,7 @@ function card(c) {
     { class: "build-card bro-card bro-char" },
     el("div", { class: "bro-head" }, c.icon ? el("img", { class: "bro-icon big", src: c.icon, alt: "", loading: "lazy" }) : null, el("div", {}, el("h3", {}, c.name), c.dlc ? el("span", { class: "badge" }, "DLC") : null)),
     el("p", { class: "bro-special" }, richText(trStats(c.stats))),
-    c.wants ? el("p", { class: "tile-sub" }, el("strong", {}, L("Sevdiği statlar: ", "Wanted stats: ")), c.wants.split(/,\s*/).map((s) => (IS_EN ? s : BRO_TR.stats[s] || s)).join(", ")) : null,
+    c.wants ? el("p", { class: "tile-sub" }, el("strong", {}, L("Sevdiği statlar: ", "Wanted stats: ")), c.wants.split(/,\s*/).map((s) => (IS_EN ? s : BRO_TR.stats[s] || BRO_TR.tags[s] || s)).join(", ")) : null,
     c.weapons.length
       ? el(
           "div",
