@@ -21,8 +21,9 @@ document.documentElement.lang = SITE_LANG;
 // Anahtar İngilizce metnin kendisidir; haftalık güncellemede metin değişmezse çeviri kalır, değişirse İngilizce görünür.
 // Dosya sayfanın betiklerinden önce yüklenir; ortak şablon (rehber.js) veriyi çizerken, diğer sayfalarda metin düğümleri çevrilir.
 // Çevirisi olan oyun klasörleri ve önbellek sürümü (yeni çeviri eklenince sürüm artırılır).
-const CEVIRI_DIRS = ["megabonk/", "ets2/"];
-const CEVIRI_VERSION = "2";
+// Klasör → yüklenecek sözlük klasörleri (aynı metinleri paylaşan oyunlar birbirinin sözlüğünü de kullanır).
+const CEVIRI_DIRS = { "megabonk/": ["megabonk/"], "ets2/": ["ets2/"], "ror1/": ["ror1/"], "rorr/": ["ror1/", "rorr/"] };
+const CEVIRI_VERSION = "4";
 const TR_MAP = new Map();
 const trKey = (s) => String(s).replace(/\s+/g, " ").trim();
 function CEVIRI(dict) {
@@ -38,7 +39,7 @@ function trText(text) {
 if (!IS_EN && document.currentScript) {
   const base = document.currentScript.src.replace(/assets\/i18n\.js.*$/, "");
   const dir = location.href.startsWith(base) ? location.href.slice(base.length).replace(/[^/]*([?#].*)?$/, "") : "";
-  if (CEVIRI_DIRS.includes(dir)) document.write(`<script src="${base}${dir}ceviri.js?v=${CEVIRI_VERSION}"><\/script>`);
+  for (const d of CEVIRI_DIRS[dir] || []) document.write(`<script src="${base}${d}ceviri.js?v=${CEVIRI_VERSION}"><\/script>`);
 }
 
 // Türkçe → İngilizce. Anahtarlar sayfada göründüğü haliyle (baştaki/sondaki boşluklar hariç).
