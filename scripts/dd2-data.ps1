@@ -113,7 +113,7 @@ function Parse-ItemTemplate([string]$w, [string]$tplName) {
   for ($i = 1; $i -lt 40; $i++) {
     if (-not $t["trinket$i"]) { continue }
     $head = $t["trinket$i"]
-    $nm = if ($head -match "item-nameline-dd2[^>]*>\s*'''(.+?)'''") { $Matches[1] } else { Strip $head }
+    $nm = if ($head -match "item-nameline-dd2[^>]*>\s*'''(.+?)'''") { $Matches[1] } elseif ($head -match '\{\{color\|\{\{Item Name\}\}\|([^}]+)\}\}') { $Matches[1] } else { Strip $head }
     $rarity = if ($head -match 'class="trinket-([a-z]+)-dd2"[^>]*>([^<]+)<') { $Matches[2].Trim() } else { "" }
     $cost = if ($head -match '\{\{(Bauble|Relic)\|(\d+)\}\}') { "$($Matches[2]) $($Matches[1])" } elseif ($head -match "'''(\d+)'''\s*\{\{(Bauble|Relic)") { "$($Matches[1]) $($Matches[2])" } else { "" }
     $stack = if ($head -match 'Stacks (\d+)') { $Matches[1] } else { "" }
