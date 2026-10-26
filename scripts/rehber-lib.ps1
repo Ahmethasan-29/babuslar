@@ -299,3 +299,15 @@ function Get-TableRows([string]$table) {
   }
   $rows
 }
+
+# İngilizce tarihleri Türkçeye çevirir: "October 19th, 2012" / "19 October 2012" / "Oct 19, 2012" → "19 Ekim 2012";
+# yaygın ekler de çevrilir ("(launch release)" → "(çıkışla birlikte)", "(as X)" → "(X olarak)").
+$TR_MONTHS = @{ jan = 'Ocak'; feb = 'Şubat'; mar = 'Mart'; apr = 'Nisan'; may = 'Mayıs'; jun = 'Haziran'; jul = 'Temmuz'; aug = 'Ağustos'; sep = 'Eylül'; oct = 'Ekim'; nov = 'Kasım'; dec = 'Aralık' }
+function TrDate([string]$t) {
+  if (-not $t) { return $t }
+  $m = '(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?'
+  $mon = { param($x) $TR_MONTHS[$x.Substring(0, 3).ToLowerInvariant()] }
+  $t = [regex]::Replace($t, "$m\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})", { param($x) "$($x.Groups[2].Value) $(& $mon $x.Groups[1].Value) $($x.Groups[3].Value)" })
+  $t = [regex]::Replace($t, "(\d{1,2})(?:st|nd|rd|th)?\s+$m,?\s+(\d{4})", { param($x) "$($x.Groups[1].Value) $(& $mon $x.Groups[2].Value) $($x.Groups[3].Value)" })
+  $t -replace '\(launch release\)', '(çıkışla birlikte)' -replace '\(as ([^)]+)\)', '($1 olarak)'
+}

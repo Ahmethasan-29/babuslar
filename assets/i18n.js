@@ -21,8 +21,8 @@ document.documentElement.lang = SITE_LANG;
 // Anahtar İngilizce metnin kendisidir; haftalık güncellemede metin değişmezse çeviri kalır, değişirse İngilizce görünür.
 // Dosya sayfanın betiklerinden önce yüklenir; ortak şablon (rehber.js) veriyi çizerken, diğer sayfalarda metin düğümleri çevrilir.
 // Çevirisi olan oyun klasörleri ve önbellek sürümü (yeni çeviri eklenince sürüm artırılır).
-const CEVIRI_DIRS = ["megabonk/"];
-const CEVIRI_VERSION = "1";
+const CEVIRI_DIRS = ["megabonk/", "ets2/"];
+const CEVIRI_VERSION = "2";
 const TR_MAP = new Map();
 const trKey = (s) => String(s).replace(/\s+/g, " ").trim();
 function CEVIRI(dict) {
