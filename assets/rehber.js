@@ -29,7 +29,8 @@
 // }
 
 const L = (tr, en) => (IS_EN ? en : tr);
-const tx = (v) => (Array.isArray(v) ? L(v[0], v[1] ?? v[0]) : v ?? "");
+// Tek dilli (İngilizce) metinler Türkçe modda oyunun ceviri.js sözlüğünden çevrilir (assets/i18n.js trText).
+const tx = (v) => (Array.isArray(v) ? L(v[0], v[1] ?? v[0]) : trText(v ?? ""));
 const SECTION_ID = document.body.dataset.section || "home";
 const SECTION = REHBER.sections.find((s) => s.id === SECTION_ID);
 
@@ -85,7 +86,7 @@ function itemCard(item, section) {
     { class: "build-card rh-card", id: item.id, style: group?.color ? `--rh-color:${group.color}` : null },
     style !== "icon" ? itemImage(item, style) : null,
     head,
-    item.quote && item.quote !== plain(tx(item.desc)) ? el("p", { class: "rh-quote" }, item.quote) : null,
+    item.quote && item.quote !== plain(String(item.desc ?? "")) ? el("p", { class: "rh-quote" }, tx(item.quote)) : null,
     item.desc ? el("p", { class: "rh-desc" }, richText(tx(item.desc))) : null,
     item.stats?.length
       ? el("dl", { class: "rh-stats" }, item.stats.map(([k, v]) => el("div", {}, el("dt", {}, tx(k)), el("dd", {}, richText(String(tx(v)))))))

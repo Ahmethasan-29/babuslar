@@ -16,6 +16,31 @@ const SITE_LANG = (() => {
 const IS_EN = SITE_LANG === "en";
 document.documentElement.lang = SITE_LANG;
 
+// --- İngilizce oyun verisinin Türkçesi (yalnızca Türkçe modda)
+// Wikilerden İngilizce gelen açıklamaların çevirileri oyun klasöründeki ceviri.js'te: CEVIRI({ "English text": "Türkçe metin" }).
+// Anahtar İngilizce metnin kendisidir; haftalık güncellemede metin değişmezse çeviri kalır, değişirse İngilizce görünür.
+// Dosya sayfanın betiklerinden önce yüklenir; ortak şablon (rehber.js) veriyi çizerken, diğer sayfalarda metin düğümleri çevrilir.
+// Çevirisi olan oyun klasörleri ve önbellek sürümü (yeni çeviri eklenince sürüm artırılır).
+const CEVIRI_DIRS = ["megabonk/"];
+const CEVIRI_VERSION = "1";
+const TR_MAP = new Map();
+const trKey = (s) => String(s).replace(/\s+/g, " ").trim();
+function CEVIRI(dict) {
+  for (const [en, tr] of Object.entries(dict)) if (tr) TR_MAP.set(trKey(en), tr);
+}
+// İngilizce metne Türkçe karşılık (yoksa metnin kendisi). Baştaki/sondaki boşluklar korunur.
+function trText(text) {
+  if (IS_EN || !TR_MAP.size || typeof text !== "string") return text;
+  const key = trKey(text);
+  const tr = key && TR_MAP.get(key);
+  return tr ? text.replace(text.trim(), tr) : text;
+}
+if (!IS_EN && document.currentScript) {
+  const base = document.currentScript.src.replace(/assets\/i18n\.js.*$/, "");
+  const dir = location.href.startsWith(base) ? location.href.slice(base.length).replace(/[^/]*([?#].*)?$/, "") : "";
+  if (CEVIRI_DIRS.includes(dir)) document.write(`<script src="${base}${dir}ceviri.js?v=${CEVIRI_VERSION}"><\/script>`);
+}
+
 // Türkçe → İngilizce. Anahtarlar sayfada göründüğü haliyle (baştaki/sondaki boşluklar hariç).
 const EN = {
   // Genel
@@ -833,6 +858,8 @@ const EN_PATTERNS = [
 ];
 
 function translateText(text) {
+  // Türkçe modda yalnızca oyun verisinin çevirisi (ceviri.js) uygulanır
+  if (!IS_EN) return trText(text);
   const key = text.trim();
   if (!key) return text;
   let out = EN[key];
@@ -906,7 +933,7 @@ function addLanguageToggle() {
 
 document.addEventListener("DOMContentLoaded", () => {
   addLanguageToggle();
-  if (!IS_EN) return;
+  if (!IS_EN && !TR_MAP.size) return;
   translateTree(document.documentElement);
   // Sonradan eklenen yazılar (betiklerin oluşturduğu kartlar, listeler) da çevrilir.
   new MutationObserver((mutations) => {
