@@ -8,7 +8,7 @@
 $script:LuaTokenRx = New-Object regex '(?s)--\[(=*)\[.*?\]\1\]|--[^\n]*|\[(=*)\[(.*?)\]\2\]|"((?:\\.|[^"\\])*)"|''((?:\\.|[^''\\])*)''|0[xX][0-9a-fA-F]+|\d+\.?\d*(?:[eE][+-]?\d+)?|\.\d+|[A-Za-z_][A-Za-z0-9_]*|\.\.\.|\.\.|==|~=|<=|>=|\S'
 
 function Unescape-Lua([string]$s) {
-  $s -replace '\\n', "`n" -replace '\\t', "`t" -replace '\\"', '"' -replace "\\'", "'" -replace '\\\\', '\'
+  $s -replace '\\r', '' -replace '\\n', "`n" -replace '\\t', "`t" -replace '\\"', '"' -replace "\\'", "'" -replace '\\\\', '\'
 }
 
 function ConvertFrom-Lua([string]$text) {

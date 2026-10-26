@@ -22,8 +22,8 @@ document.documentElement.lang = SITE_LANG;
 // Dosya sayfanın betiklerinden önce yüklenir; ortak şablon (rehber.js) veriyi çizerken, diğer sayfalarda metin düğümleri çevrilir.
 // Çevirisi olan oyun klasörleri ve önbellek sürümü (yeni çeviri eklenince sürüm artırılır).
 // Klasör → yüklenecek sözlük klasörleri (aynı metinleri paylaşan oyunlar birbirinin sözlüğünü de kullanır).
-const CEVIRI_DIRS = { "megabonk/": ["megabonk/"], "ets2/": ["ets2/"], "ror1/": ["ror1/"], "rorr/": ["ror1/", "rorr/"] };
-const CEVIRI_VERSION = "4";
+const CEVIRI_DIRS = { "megabonk/": ["megabonk/"], "ets2/": ["ets2/"], "ror1/": ["ror1/"], "rorr/": ["ror1/", "rorr/"], "ror2/": ["ror1/", "rorr/", "ror2/"] };
+const CEVIRI_VERSION = "5";
 const TR_MAP = new Map();
 const trKey = (s) => String(s).replace(/\s+/g, " ").trim();
 function CEVIRI(dict) {
