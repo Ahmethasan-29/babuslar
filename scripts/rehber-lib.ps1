@@ -159,7 +159,11 @@ function Convert-WikiMarkup([string]$t) {
         param($m)
         $parts = $m.Groups[1].Value -split '\|'
         $name = $parts[0].Trim().ToLowerInvariant()
-        $text = $parts[-1]
+        # Adlı parametreler (displayName=false, altText=…) metin sayılmaz; altText varsa gösterilen ad odur.
+        $named = @{}; $pos = @()
+        foreach ($p in ($parts | Select-Object -Skip 1)) { if ($p -match '^\s*(\w+)\s*=(.*)$') { $named[$Matches[1].ToLowerInvariant()] = $Matches[2] } else { $pos += $p } }
+        $text = if ($named['alttext']) { $named['alttext'] } elseif ($pos.Count) { $pos[-1] } else { '' }
+        if ($name -match 'link$' -and $pos.Count) { $text = $(if ($named['alttext']) { $named['alttext'] } else { $pos[0] }) }
         if (-not $text.Trim()) { return $text }
         if ($name -eq 'stack') { return "⟦s|$text⟧" }
         if ($name -eq 'color' -or $name -eq 'keyword' -or $name -eq 'colour') {

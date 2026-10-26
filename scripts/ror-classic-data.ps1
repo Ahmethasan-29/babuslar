@@ -29,8 +29,8 @@ $itemList = foreach ($name in $items.Keys) {
   $stats = @()
   if ($it.Cooldown) { $stats += , @(@('Bekleme', 'Cooldown'), (Sec $it.Cooldown)) }
   $more = @()
-  if ($it.Unlock) { $more += "Unlock: $(Clean-WikiText $it.Unlock)" }
-  if ($it.From) { $more += "From: $(Clean-WikiText $it.From)" }
+  if ($it.Unlock) { $more += "Unlock: $(Convert-WikiMarkup $it.Unlock)" }
+  if ($it.From) { $more += "From: $(Convert-WikiMarkup $it.From)" }
   [ordered]@{
     id = Slug $name; name = $name; file = @("$name Icon.png", $it.Icon, "$name.png"); group = [string]$it.Rarity; tags = $itemCats
     sub = @((($itemCats | ForEach-Object { $CATS[$_][0] }) -join ' · '), (($itemCats | ForEach-Object { $CATS[$_][1] }) -join ' · '))
