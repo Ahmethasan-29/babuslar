@@ -44,7 +44,7 @@ $truckList = foreach ($page in $truckPages.Keys) {
   [void]$files.Add($img)
   $stats = @()
   if ($ib['engine']) { $stats += , @(@('Motor gücü', 'Engine power'), (Clean-WikiText $ib['engine'])) }
-  if ($ib['date_added']) { $stats += , @(@('Oyuna geldiği tarih', 'Added'), (Clean-WikiText ($ib['date_added'] -replace '<sup>.*?</sup>', ''))) }
+  if ($ib['date_added']) { $en = Clean-WikiText ($ib['date_added'] -replace '<sup>.*?</sup>', ''); $stats += , @(@('Oyuna geldiği tarih', 'Added'), (Bi (TrDate $en) $en)) }
   # Yükseltme tabloları: Cabin / Chassis / Engine / Transmission (ad, fiyat, açılma seviyesi)
   $lists = @(); $min = 0; $complete = $true
   $tables = Get-WikiTables $text
@@ -67,14 +67,23 @@ $truckList = foreach ($page in $truckPages.Keys) {
 }
 
 # --- Bayiler (marka marka)
-$dealerList = foreach ($t in (Get-WikiTables $main['Euro Truck Simulator 2 Truck Dealers'])) {
-  $brandName = Clean-WikiText $t.section
+# Tablolar marka başlıklarının altında; sütunlar: Ülke | Şehir | Boyut | Şart. Ülke hücresi birkaç satıra yayılabildiği için
+# satır yayılmasını bilen Get-TableRows kullanılır.
+$dealerList = foreach ($t in (Split-WikiTables $main['Euro Truck Simulator 2 Truck Dealers'])) {
+  $brandName = Clean-WikiText $t.heading
   $b = Brand-Of ($brandName -replace 'Volvo Trucks', 'Volvo' -replace 'Renault Trucks', 'Renault')
   if (-not $b) { continue }
-  $ci = [Array]::IndexOf($t.columns, 'City'); $si = [Array]::IndexOf($t.columns, 'Size'); $ri = [Array]::IndexOf($t.columns, 'Requirement'); $ki = [Array]::IndexOf($t.columns, 'Country')
-  $lines = $t.rows | ForEach-Object {
-    $req = Clean-WikiText $_[$ri]
-    "$(Clean-WikiText $_[$ci]), $(Clean-WikiText $_[$ki])" + $(if ($_[$si]) { " [[s|($(Clean-WikiText $_[$si]))]]" } else { '' }) + $(if ($req -and $req -ne '-') { " [[k|$req]]" } else { '' })
+  $ki = 0; $ci = 1; $si = 2; $ri = 3
+  # Hücrelerdeki dipnotlar (<ref>…</ref>) ve bayrak şablonları ({{Estonian}}) atılır; boyut iki dilli yazılır.
+  $cellText = { param($c) Clean-WikiText (($c -replace '(?s)<ref[^>]*>.*?</ref>', '' -replace '<ref[^>]*/>', '') -replace '\{\{[^{}]*\}\}', '') }
+  $SIZE_NAMES = @{ Small = @('Küçük', 'Small'); Large = @('Büyük', 'Large'); Medium = @('Orta', 'Medium') }
+  $lines = Get-TableRows $t.text | Where-Object { $_.Count -ge 3 } | ForEach-Object {
+    $req = & $cellText $_[$ri]
+    $base = "$(& $cellText $_[$ci]), $(& $cellText $_[$ki])"
+    $size = & $cellText $_[$si]
+    $tail = $(if ($req -and $req -ne '-') { " [[k|$req]]" } else { '' })
+    if ($SIZE_NAMES[$size]) { Bi "$base [[s|($($SIZE_NAMES[$size][0]))]]$tail" "$base [[s|($($SIZE_NAMES[$size][1]))]]$tail" }
+    else { "$base$(if ($size -and $size -ne '-') { " [[s|($size)]]" })$tail" }
   }
   [ordered]@{ id = "bayi-$(Slug $b)"; name = $BRANDS[$b][0]; group = $b; stats = @(, @(@('Bayi sayısı', 'Dealers'), "$(@($lines).Count)")); lists = @([ordered]@{ title = @('Şehirler', 'Cities'); items = @($lines) }) }
 }
@@ -112,7 +121,7 @@ $dlcList = foreach ($r in $d.rows) {
   [ordered]@{
     id = "dlc-$(Slug $name)"; name = ($name -replace '^Euro Truck Simulator 2: ', ''); group = $grp; sub = $cat
     desc = Clean-WikiText $r[(& $col 'Contents')]
-    stats = @(, @(@('Fiyat', 'Price'), (Clean-WikiText $r[(& $col 'Price (EUR)')])), , @(@('Çıkış', 'Released'), (Clean-WikiText $r[(& $col 'Release Date')])))
+    stats = @(, @(@('Fiyat', 'Price'), (Clean-WikiText $r[(& $col 'Price (EUR)')])), , @(@('Çıkış', 'Released'), (& { $rd = Clean-WikiText $r[(& $col 'Release Date')]; Bi (TrDate $rd) $rd })))
   }
 }
 
