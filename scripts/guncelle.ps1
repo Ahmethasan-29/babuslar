@@ -23,6 +23,7 @@ $games = @(
   @{ name = "Euro Truck Simulator 2"; script = "ets2-data.ps1"; dir = "ets2"; const = "REHBER" }
   @{ name = "World of Tanks"; script = "wot-data.ps1"; dir = "wot"; const = "REHBER" }
   @{ name = "Total War: Warhammer III"; script = "tww3-data.ps1"; dir = "tww3"; const = "REHBER" }
+  @{ name = "Ana sayfa arka plan videoları"; script = "arkaplan-data.ps1"; dir = "assets/arkaplan"; const = "ARKAPLAN" }
 )
 if ($Only) { $games = @($games | Where-Object { $Only -contains $_.dir }) }
 

@@ -36,6 +36,27 @@ body {
 
 a { color: inherit; }
 
+/* Ana sayfa arka plan videoları (assets/arkaplan/arkaplan.js) */
+.bg-video { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.bg-video video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity 1.2s ease; filter: saturate(1.1);
+}
+.bg-video video.on { opacity: 0.42; }
+.bg-video::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(255, 79, 163, 0.18), transparent 60%),
+    linear-gradient(180deg, rgba(14, 9, 16, 0.55) 0%, rgba(14, 9, 16, 0.75) 45%, rgba(14, 9, 16, 0.95) 100%);
+}
+.bg-video-label {
+  position: fixed; right: 16px; bottom: 16px; z-index: 5;
+  padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; text-decoration: none;
+  color: var(--muted); background: rgba(14, 9, 16, 0.7); border: 1px solid var(--border); backdrop-filter: blur(6px);
+}
+.bg-video-label::before { content: "▶ "; color: var(--accent); }
+.bg-video-label:hover { color: var(--text); }
+
 img { max-width: 100%; display: block; }
 
 .container {
