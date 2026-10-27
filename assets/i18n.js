@@ -49,7 +49,7 @@ const EN = {
   "Ana menü": "Main menu",
   "Oyunlar": "Games",
   "Oyun ara…": "Search games…",
-  "Arka planda oynayan videolar, oyunların Steam'deki resmi fragmanlarından alınır.": "The videos playing in the background come from the games' official Steam trailers.",
+  "Arka planda oynayan videolar, oyunların Steam ve YouTube'daki resmi tanıtım fragmanlarından alınır.": "The videos playing in the background come from the games' official trailers on Steam and YouTube.",
   "Birlik ara…": "Search units…",
   "2 oyun": "2 games",
   "3 oyun": "3 games",
