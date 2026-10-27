@@ -1,7 +1,7 @@
 // Ana sayfa arka planı: oyunların resmi fragmanlarından birkaç saniyelik kesitler sırayla, sessizce oynar.
 // Kesitler assets/arkaplan/data.js'te (ARKAPLAN). Steam fragmanları HLS akışıdır: Safari kendisi oynatır,
 // diğer tarayıcılar için hls.js gerektiğinde yüklenir. Steam'de olmayan oyunlar ({ file }) yayıncının sitesindeki düz video dosyasıdır.
-// Hareketi azalt ayarı, veri tasarrufu ya da dar ekranda (telefon) hiç çalışmaz; yalnızca sabit arka plan kalır.
+// Hareketi azalt ayarı ya da veri tasarrufu açıksa hiç çalışmaz; yalnızca sabit arka plan kalır.
 
 (() => {
   const CLIP_SECONDS = 8;
@@ -11,7 +11,6 @@
   if (typeof ARKAPLAN === "undefined" || !ARKAPLAN.length) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   if (navigator.connection?.saveData) return;
-  if (!matchMedia("(min-width: 760px)").matches) return;
 
   const probe = document.createElement("video");
   const nativeHls = !!probe.canPlayType("application/vnd.apple.mpegurl");
