@@ -125,7 +125,33 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.3px;
 }
 
-/* Logo: BABUŞ yazısı (sekmedeki küçük simge assets/logo.svg). */
+/* Ana sayfanın üst ortasındaki logo: büyük BABUŞ yazısı, iki yanında ince altın çizgiler. */
+.hero-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: clamp(3rem, 11vw, 5.5rem);
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+.hero-logo::before, .hero-logo::after {
+  content: "";
+  width: clamp(28px, 8vw, 90px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+.hero-logo::after { transform: scaleX(-1); }
+.hero-logo {
+  background: linear-gradient(180deg, #ffe08a 0%, var(--accent) 55%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Başlıktaki logo yazısı: BABUŞLAR (sekmedeki küçük simge assets/logo.svg). */
 .brand .wordmark {
   font-weight: 700;
   font-size: 1.35rem;
