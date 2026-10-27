@@ -269,25 +269,7 @@ const ARKAPLAN = [
     {
         "game":  "League of Legends",
         "href":  "lol/",
-        "yt":  "-3aes7Vh8cc",
-        "start":  25
-    },
-    {
-        "game":  "Battlefield 2",
-        "href":  "bf2/",
-        "yt":  "h8W5TGUVK1A",
-        "start":  40
-    },
-    {
-        "game":  "Bloons TD 4",
-        "href":  "btd4/",
-        "yt":  "37Ho754hd0M",
-        "start":  20
-    },
-    {
-        "game":  "Hearts of Iron II",
-        "href":  "hoi2/",
-        "yt":  "Syg381LnHEk",
-        "start":  40
+        "file":  "https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/1f5b2cf01a1cf2afa1ce61febee6e2e900808347.mp4",
+        "start":  0
     }
 ];

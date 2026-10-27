@@ -6,7 +6,7 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
 
-# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4, HOI2) aşağıda YouTube'dan.
+# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4, HOI2) aşağıda.
 $GAMES = @(
   @("cs2", 730, "Counter-Strike 2"),
   @("dbd", 381210, "Dead by Daylight"),
@@ -48,14 +48,12 @@ $GAMES = @(
   @("tww3", 1142710, "Total War: Warhammer III")
 )
 
-# Steam'de olmayan oyunlar: resmi tanıtım fragmanı YouTube'dan (sessiz, gömülü oynar). [klasör, video no, adı, başlangıç sn]
-$YOUTUBE = @(
-  @("lol", "-3aes7Vh8cc", "League of Legends", 25),       # League of Legends | Official Gameplay Trailer (Riot)
-  @("bf2", "h8W5TGUVK1A", "Battlefield 2", 40),           # Battlefield 10th Anniversary: Battlefield 2 (resmi Battlefield kanalı)
-  @("btd4", "37Ho754hd0M", "Bloons TD 4", 20),            # Bloons TD 4 Trailer
-  @("hoi2", "Syg381LnHEk", "Hearts of Iron II", 40)       # Hearts of Iron 2 (Trailer)
+# Steam'de olmayan oyunlar: yayıncının kendi sitesindeki resmi tanıtım videosu (YouTube kullanılmaz). [klasör, adres, adı, başlangıç sn]
+# LoL: leagueoflegends.com ana sayfasındaki oyun tanıtım videosu ("A free-for-all war for supremacy"). BF2, BTD4 ve HOI2'nin
+# YouTube dışında resmi videosu yok, onlar arka planda yer almıyor.
+$FILES = @(
+  ,@("lol", "https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/1f5b2cf01a1cf2afa1ce61febee6e2e900808347.mp4", "League of Legends", 0)
 )
-
 $clips = @()
 foreach ($g in $GAMES) {
   $dir, $app, $name = $g
@@ -89,11 +87,11 @@ foreach ($g in $GAMES) {
   }
 }
 
-foreach ($y in $YOUTUBE) {
-  $dir, $id, $name, $start = $y
-  $clips += [ordered]@{ game = $name; href = "$dir/"; yt = $id; start = $start }
+foreach ($f in $FILES) {
+  $dir, $url, $name, $start = $f
+  if ((curl.exe -s -o NUL -w "%{http_code}" -r 0-0 $url) -notmatch '^20') { Write-Warning "$name videosu açılmıyor: $url"; continue }
+  $clips += [ordered]@{ game = $name; href = "$dir/"; file = $url; start = $start }
 }
-
 $out = "// scripts/arkaplan-data.ps1 tarafından üretildi: Steam'deki resmi fragmanlardan kesitler.`nconst ARKAPLAN = " + (ConvertTo-Json @($clips) -Depth 4) + ";`n"
 [IO.File]::WriteAllText((Join-Path $root "assets/arkaplan/data.js"), $out, (New-Object Text.UTF8Encoding $false))
 Write-Host "$($clips.Count) kesit yazıldı."
