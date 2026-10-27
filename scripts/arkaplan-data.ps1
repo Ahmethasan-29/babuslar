@@ -6,7 +6,7 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
 
-# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4, HOI2) yok.
+# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4, HOI2) aşağıda YouTube'dan.
 $GAMES = @(
   @("cs2", 730, "Counter-Strike 2"),
   @("dbd", 381210, "Dead by Daylight"),
@@ -48,6 +48,14 @@ $GAMES = @(
   @("tww3", 1142710, "Total War: Warhammer III")
 )
 
+# Steam'de olmayan oyunlar: resmi tanıtım fragmanı YouTube'dan (sessiz, gömülü oynar). [klasör, video no, adı, başlangıç sn]
+$YOUTUBE = @(
+  @("lol", "-3aes7Vh8cc", "League of Legends", 25),       # League of Legends | Official Gameplay Trailer (Riot)
+  @("bf2", "h8W5TGUVK1A", "Battlefield 2", 40),           # Battlefield 10th Anniversary: Battlefield 2 (resmi Battlefield kanalı)
+  @("btd4", "37Ho754hd0M", "Bloons TD 4", 20),            # Bloons TD 4 Trailer
+  @("hoi2", "Syg381LnHEk", "Hearts of Iron II", 40)       # Hearts of Iron 2 (Trailer)
+)
+
 $clips = @()
 foreach ($g in $GAMES) {
   $dir, $app, $name = $g
@@ -79,6 +87,11 @@ foreach ($g in $GAMES) {
     poster = ($movie.thumbnail -replace '\?.*$', '')
     start = [math]::Round($duration * 0.35)
   }
+}
+
+foreach ($y in $YOUTUBE) {
+  $dir, $id, $name, $start = $y
+  $clips += [ordered]@{ game = $name; href = "$dir/"; yt = $id; start = $start }
 }
 
 $out = "// scripts/arkaplan-data.ps1 tarafından üretildi: Steam'deki resmi fragmanlardan kesitler.`nconst ARKAPLAN = " + (ConvertTo-Json @($clips) -Depth 4) + ";`n"

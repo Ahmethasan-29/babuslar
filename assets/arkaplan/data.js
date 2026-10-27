@@ -265,5 +265,29 @@ const ARKAPLAN = [
         "src":  "https://video.akamai.steamstatic.com/store_trailers/1142710/539677/e598079c9bc92ad089825060102465987d361027/1750627141/hls_264_2_video.m3u8",
         "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256930877/movie.293x165.jpg",
         "start":  64
+    },
+    {
+        "game":  "League of Legends",
+        "href":  "lol/",
+        "yt":  "-3aes7Vh8cc",
+        "start":  25
+    },
+    {
+        "game":  "Battlefield 2",
+        "href":  "bf2/",
+        "yt":  "h8W5TGUVK1A",
+        "start":  40
+    },
+    {
+        "game":  "Bloons TD 4",
+        "href":  "btd4/",
+        "yt":  "37Ho754hd0M",
+        "start":  20
+    },
+    {
+        "game":  "Hearts of Iron II",
+        "href":  "hoi2/",
+        "yt":  "Syg381LnHEk",
+        "start":  40
     }
 ];
