@@ -56,6 +56,9 @@ a { color: inherit; }
 }
 .bg-video-label::before { content: "▶ "; color: var(--accent); }
 .bg-video-label:hover { color: var(--text); }
+@media (max-width: 600px) {
+  .bg-video-label { right: 10px; bottom: 10px; padding: 4px 10px; font-size: 0.72rem; opacity: 0.85; }
+}
 
 img { max-width: 100%; display: block; }
 
