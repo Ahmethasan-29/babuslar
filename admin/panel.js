@@ -1,10 +1,11 @@
-// Yönetim paneli ortak kodu: GitHub ile giriş, depodan dosya okuma ve değişiklikleri yayına alma.
-// Site sabit dosyalardan oluştuğu için panel, değişiklikleri doğrudan GitHub deposuna yazar:
-// her kayıt yeni bir dal + PR olur ve hemen birleştirilir; GitHub Pages birkaç dakikada yayına alır.
+// Yönetim paneli ortak kodu: kullanıcı adı/şifre ile giriş, depodan dosya okuma ve değişiklikleri yayına alma.
+// Site sabit dosyalardan oluştuğu için panel, değişiklikleri GitHub deposuna yazar: her kayıt yeni bir dal + PR olur
+// ve hemen birleştirilir; GitHub Pages birkaç dakikada yayına alır. GitHub anahtarı panelde değil, Cloudflare
+// Worker'da (worker/panel-worker.js) durur; panel GitHub'a o Worker üzerinden ulaşır.
 
 const REPO = "Ahmethasan-29/babuslar";
-const API = "https://api.github.com";
-const TOKEN_KEY = "babuslar-admin-token";
+const WORKER = "https://babuslar-panel.ahmet-bfgv.workers.dev";
+const TOKEN_KEY = "babuslar-panel-session";
 
 const Panel = {
   user: null,
@@ -24,33 +25,46 @@ const Panel = {
     } catch {}
   },
 
-  async api(path, { method = "GET", body } = {}) {
-    const response = await fetch(API + path, {
-      method,
-      cache: "no-store",
-      headers: {
-        Authorization: `Bearer ${Panel.token()}`,
-        Accept: "application/vnd.github+json",
-        ...(body ? { "Content-Type": "application/json" } : {}),
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
+  // Worker'a istek (giriş, kullanıcılar). GitHub istekleri için api().
+  async call(path, { method = "GET", body } = {}) {
+    let response;
+    try {
+      response = await fetch(WORKER + path, {
+        method,
+        cache: "no-store",
+        headers: {
+          ...(Panel.token() ? { Authorization: `Bearer ${Panel.token()}` } : {}),
+          ...(body ? { "Content-Type": "application/json" } : {}),
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+    } catch {
+      throw new Error("Panel sunucusuna ulaşılamadı. İnternet bağlantını kontrol et.");
+    }
     if (response.status === 204) return null;
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const error = new Error(data.message || `GitHub hatası (${response.status})`);
+      const error = new Error(data.message || `Sunucu hatası (${response.status})`);
       error.status = response.status;
       throw error;
     }
     return data;
   },
 
-  // Anahtarın sahibi depoya yazabiliyor mu? Yazamıyorsa panel açılmaz.
+  api(path, options) {
+    return Panel.call("/gh" + path, options);
+  },
+
+  // Oturum hâlâ geçerli mi? Geçerliyse kullanıcıyı ({ login, name, owner }) döndürür.
   async login() {
     if (!Panel.token()) throw new Error("Giriş yapılmadı.");
-    const user = await Panel.api("/user");
-    const repo = await Panel.api(`/repos/${REPO}`);
-    if (!repo.permissions?.push) throw new Error(`${user.login} hesabının bu sitede düzenleme yetkisi yok.`);
+    Panel.user = await Panel.call("/me");
+    return Panel.user;
+  },
+
+  async signIn(username, password) {
+    const { token, user } = await Panel.call("/login", { method: "POST", body: { username, password } });
+    Panel.setToken(token);
     Panel.user = user;
     return user;
   },
@@ -66,15 +80,15 @@ const Panel = {
     const who = document.getElementById("who");
     if (who) {
       who.replaceChildren(
-        el("img", { src: Panel.user.avatar_url, alt: "" }),
-        el("span", {}, Panel.user.login),
+        el("a", { href: "./?hesap", title: "Hesabım" }, Panel.user.name),
         el("button", { type: "button", class: "chip", onclick: Panel.logout }, "Çıkış")
       );
     }
     return true;
   },
 
-  logout() {
+  async logout() {
+    await Panel.call("/logout", { method: "POST" }).catch(() => {});
     Panel.setToken(null);
     location.href = "./";
   },
@@ -115,7 +129,7 @@ const Panel = {
       }
       const pr = await Panel.api(`/repos/${REPO}/pulls`, {
         method: "POST",
-        body: { title, head: branch, base: "main", body: `Yönetim panelinden ${Panel.user.login} tarafından yapıldı.` },
+        body: { title, head: branch, base: "main", body: `Yönetim panelinden ${Panel.user.name} tarafından yapıldı.` },
       });
       await Panel.api(`/repos/${REPO}/pulls/${pr.number}/merge`, { method: "PUT", body: { merge_method: "merge" } });
       return pr;
