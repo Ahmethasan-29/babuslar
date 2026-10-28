@@ -6,6 +6,7 @@
 //   - KV ad alanı oluşturulup Worker'a USERS adıyla bağlanır (Bindings → KV namespace).
 //   - Settings → Variables and Secrets → Secret: GITHUB_TOKEN = depoya yazabilen fine-grained anahtar
 //     (yalnızca babuslar deposu; Contents + Pull requests: Read and write).
+//   - Panelde ilk açılan hesap site sahibi olur (kullanıcı ekleyip silebilen tek kişi).
 //
 // KV'de tutulanlar:
 //   owner          site sahibinin kullanıcı adı
@@ -14,7 +15,6 @@
 //   fail:<ad>      başarısız giriş sayısı (15 dk)
 
 const REPO = "Ahmethasan-29/babuslar";
-const OWNER = "Ahmethasan-29"; // GitHub'daki depo sahibi; ilk kurulumu ve şifre sıfırlamayı yalnızca o yapabilir
 const ORIGINS = ["https://ahmethasan-29.github.io", "http://localhost", "http://127.0.0.1"];
 const SESSION_TTL = 60 * 60 * 24 * 30;
 const MAX_FAILS = 10;
@@ -95,7 +95,7 @@ async function route(request, env) {
       } else {
         if (!existing) fail(404, "Böyle bir kullanıcı yok.");
         user = JSON.parse(existing);
-        if (user.owner) fail(403, "Site sahibinin şifresi Hesabım'dan ya da ilk kurulum ekranından değişir.");
+        if (user.owner) fail(403, "Site sahibinin şifresi Hesabım sayfasından değişir.");
       }
       await savePassword(env, user, password);
       return json(publicUser(user));
@@ -132,25 +132,17 @@ async function login({ username, password }, env) {
   return json({ token, user: publicUser(user) });
 }
 
-// Site sahibi hesabını açar (ya da şifresini sıfırlar). Kimlik, GitHub anahtarıyla kanıtlanır.
-async function setup({ githubToken, username, password }, env) {
-  if (!githubToken) fail(400, "GitHub anahtarı gerekli.");
-  const response = await fetch("https://api.github.com/user", {
-    headers: { Authorization: `Bearer ${githubToken}`, Accept: "application/vnd.github+json", "User-Agent": "babuslar-panel" },
-  });
-  const who = await response.json().catch(() => ({}));
-  if (!response.ok) fail(401, "GitHub anahtarı geçersiz.");
-  if (String(who.login).toLowerCase() !== OWNER.toLowerCase()) fail(403, `Kurulumu yalnızca ${OWNER} yapabilir.`);
-
-  // Sahip kullanıcı adını kendisi seçer; ad değişirse eski sahip hesabı silinir.
+// İlk kurulum: henüz site sahibi yoksa açılan ilk hesap sahip olur. Sahip bir kez belirlendikten sonra kapanır.
+// Sahip şifresini unutursa Cloudflare'de KV'den "owner" anahtarı silinir; kurulum yeniden açılır ve aynı adla
+// yeni şifre konabilir.
+async function setup({ username, password }, env) {
+  if (await env.USERS.get("owner")) fail(403, "Kurulum zaten yapılmış. Kullanıcı adın ve şifrenle giriş yap.");
   const name = cleanName(username);
-  const previous = await env.USERS.get("owner");
   const raw = await env.USERS.get(`user:${name}`);
   const user = raw ? JSON.parse(raw) : { name, display: String(username).trim().slice(0, 40) };
   if (raw && !user.owner) fail(409, `"${name}" kullanıcı adı başka birinde. Başka bir ad seç.`);
   user.owner = true;
   await savePassword(env, user, password);
-  if (previous && previous !== name) await env.USERS.delete(`user:${previous}`);
   await env.USERS.put("owner", name);
   return json(publicUser(user));
 }

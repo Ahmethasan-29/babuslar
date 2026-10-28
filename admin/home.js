@@ -8,7 +8,6 @@ start();
 
 async function start() {
   const params = new URLSearchParams(location.search);
-  if (params.has("kurulum")) return showSetup();
   if (!Panel.token()) {
     // Sahip hesabı henüz açılmadıysa ilk kurulum ekranı gelir.
     const status = await Panel.call("/").catch(() => null);
@@ -39,8 +38,7 @@ function showLogin(error) {
     username,
     password,
     el("button", { type: "submit", class: "btn-primary" }, "Giriş yap"),
-    message,
-    el("p", { class: "hint" }, el("a", { href: "?kurulum" }, "Site sahibiysen: ilk kurulum / şifremi unuttum"))
+    message
   );
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -56,27 +54,24 @@ function showLogin(error) {
   form.username.focus();
 }
 
-// Site sahibinin hesabı: GitHub anahtarıyla kimliğini kanıtlar, kullanıcı adı ve şifre seçer.
-// Anahtar yalnızca bir kez kontrol için Worker'a gider, hiçbir yerde saklanmaz.
+// İlk kurulum: henüz site sahibi yoksa gelir; burada açılan hesap site sahibi olur (bir kez).
 function showSetup() {
   const message = el("p", { class: "form-error" });
   const form = el(
     "form",
     { class: "login-card" },
     el("h1", { class: "page-title" }, "Site sahibi hesabı"),
-    el("p", { class: "page-sub" }, "Panelde kullanıcıları yalnızca sen ekleyip silebilirsin. Kim olduğunu GitHub erişim anahtarınla doğrula, sonra kendine kullanıcı adı ve şifre seç. Şifreni unutursan buradan yenisini koyabilirsin."),
-    field("GitHub erişim anahtarı", { name: "githubToken", type: "password", placeholder: "github_pat_…", autocomplete: "off", required: true }),
+    el("p", { class: "page-sub" }, "Panel ilk kez açılıyor. Kendine kullanıcı adı ve şifre seç; bu hesap site sahibi olur ve kullanıcıları yalnızca o ekleyip silebilir."),
     field("Kullanıcı adı", { name: "username", autocomplete: "username", required: true, autocapitalize: "off" }),
     field("Şifre (en az 8 karakter)", { name: "password", type: "password", autocomplete: "new-password", minlength: 8, required: true }),
     el("button", { type: "submit", class: "btn-primary" }, "Hesabı kaydet"),
-    message,
-    el("p", { class: "hint" }, el("a", { href: "./" }, "← Giriş ekranına dön"))
+    message
   );
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     message.textContent = "Kontrol ediliyor…";
     try {
-      await Panel.call("/setup", { method: "POST", body: { githubToken: form.githubToken.value.trim(), username: form.username.value, password: form.password.value } });
+      await Panel.call("/setup", { method: "POST", body: { username: form.username.value, password: form.password.value } });
       await Panel.signIn(form.username.value, form.password.value);
       location.href = "?hesap";
     } catch (err) {
