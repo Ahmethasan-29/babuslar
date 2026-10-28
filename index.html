@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Babuşlar</title>
   <meta name="description" content="Babuşlar: oyun karakterlerinin, yeteneklerinin ve eşyalarının ne işe yaradığını anlatan Türkçe rehber.">
@@ -11,7 +12,7 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="./"><span>Babuşlar</span></a>
+      <a class="brand" href="./" aria-label="Babuşlar"><span class="wordmark">BABUŞLAR</span></a>
       <nav class="nav" aria-label="Ana menü">
         <a href="./" aria-current="page">Ana sayfa</a>
         <div class="nav-menu">
@@ -69,6 +70,7 @@
   <main>
     <div class="container">
       <section class="hero">
+        <div class="hero-logo" aria-hidden="true">BABUŞ</div>
         <h1>Oyunlarını <span>keşfet</span></h1>
         <p>Şampiyonlar, rünler ve eşya dizilimleri; haritalar, infolar ve smoke videoları. Hepsi tek yerde, Türkçe.</p>
         <input type="search" class="game-search" id="game-search" placeholder="Oyun ara…" aria-label="Oyun ara" autocomplete="off">
@@ -428,9 +430,12 @@
       <p>Company of Heroes oyunları Relic Entertainment ve SEGA'ya aittir. Company of Heroes verileri Company of Heroes Wiki'den (CC BY-SA), Company of Heroes 2 verileri cohstats/coh2stats'tan (MIT), Company of Heroes 3 verileri cohstats/coh3-data'dan (oyun dosyaları, MIT) alınır.</p>
       <p>Elden Ring, FromSoftware ve Bandai Namco'ya aittir. Elden Ring verileri Elden Ring Fan API'den (eldenring.fanapis.com) alınır.</p>
       <p>Age of Empires oyunları Microsoft ve World's Edge'e aittir. Age of Empires II verileri SiegeEngineers/aoe2techtree'den (MIT), Age of Empires IV verileri aoe4world/data'dan; Age of Empires, Age of Empires III ve Age of Mythology bilgileri Age of Empires Wiki'den (CC BY-SA) alınır.</p>
+      <p>Arka planda oynayan videolar, oyunların Steam'deki resmi tanıtım fragmanlarından ve yayıncıların kendi sitelerinden alınır.</p>
       <p>Risk of Rain oyunları Hopoo Games'e aittir; veriler Risk of Rain wikilerinden (wiki.gg, CC BY-NC-SA) alınır. Bloons TD oyunları Ninja Kiwi'ye, Megabonk vedinad'a, Euro Truck Simulator 2 SCS Software'a aittir; bu oyunların verileri topluluk wikilerinden (CC BY-SA) alınır. Hearts of Iron oyunları Paradox Interactive'e aittir; verileri Paradox wikilerinden (CC BY-SA) alınır. World of Tanks Wargaming'e aittir (değerler tanks.gg'den); Total War: Warhammer III Creative Assembly, SEGA ve Games Workshop'a aittir (veriler Total War: Warhammer Wiki'den, CC BY-SA).</p>
     </div>
   </footer>
   <script src="assets/home.js"></script>
+  <script src="assets/arkaplan/data.js"></script>
+  <script src="assets/arkaplan/arkaplan.js"></script>
 </body>
 </html>

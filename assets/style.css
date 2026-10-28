@@ -1,7 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
 
+/* Renk temaları. Varsayılan: lacivert-altın. Eski pembe-mor tema aşağıda duruyor; geri dönmek için
+   <html> etiketine data-tema="pembe" eklemek ya da iki bloğun renklerini yer değiştirmek yeter.
+   *-rgb değerleri yarı saydam renkler içindir: rgb(var(--accent-rgb) / 0.3). */
 :root {
+  --bg: #0b0d18;
+  --bg-rgb: 11 13 24;
+  --bg-elev: #121528;
+  --card: #171a2e;
+  --card-hover: #20243c;
+  --border: #2a2e48;
+  --text: #f3f1ea;
+  --muted: #aaa7b9;
+  --accent: #f5c542;
+  --accent-rgb: 245 197 66;
+  --accent-soft: rgb(var(--accent-rgb) / 0.14);
+  --accent-2: #e0913a;
+  --accent-2-rgb: 224 145 58;
+  --on-accent: #1d1606;
+}
+
+:root[data-tema="pembe"] {
   --bg: #0e0910;
+  --bg-rgb: 14 9 16;
   --bg-elev: #170f1b;
   --card: #1e1424;
   --card-hover: #281a30;
@@ -9,8 +30,14 @@
   --text: #f5eaf2;
   --muted: #b39ab2;
   --accent: #ff4fa3;
-  --accent-soft: rgba(255, 79, 163, 0.14);
+  --accent-rgb: 255 79 163;
+  --accent-soft: rgb(var(--accent-rgb) / 0.14);
   --accent-2: #b14bff;
+  --accent-2-rgb: 177 75 255;
+  --on-accent: #fff;
+}
+
+:root {
   --radius: 14px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
@@ -27,14 +54,38 @@ body {
   font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(900px 500px at 10% -10%, rgba(255, 79, 163, 0.22), transparent 60%),
-    radial-gradient(800px 500px at 100% 20%, rgba(177, 75, 255, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 10% -10%, rgb(var(--accent-rgb) / 0.22), transparent 60%),
+    radial-gradient(800px 500px at 100% 20%, rgb(var(--accent-2-rgb) / 0.16), transparent 60%),
     var(--bg);
   background-attachment: fixed;
   line-height: 1.55;
 }
 
 a { color: inherit; }
+
+/* Ana sayfa arka plan videoları (assets/arkaplan/arkaplan.js) */
+.bg-video { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.bg-video video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity 1.2s ease; filter: saturate(1.1);
+}
+.bg-video video.on { opacity: 0.42; }
+.bg-video::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgb(var(--accent-rgb) / 0.18), transparent 60%),
+    linear-gradient(180deg, rgb(var(--bg-rgb) / 0.55) 0%, rgb(var(--bg-rgb) / 0.75) 45%, rgb(var(--bg-rgb) / 0.95) 100%);
+}
+.bg-video-label {
+  position: fixed; right: 16px; bottom: 16px; z-index: 5;
+  padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; text-decoration: none;
+  color: var(--muted); background: rgb(var(--bg-rgb) / 0.7); border: 1px solid var(--border); backdrop-filter: blur(6px);
+}
+.bg-video-label::before { content: "▶ "; color: var(--accent); }
+.bg-video-label:hover { color: var(--text); }
+@media (max-width: 600px) {
+  .bg-video-label { right: 10px; bottom: 10px; padding: 4px 10px; font-size: 0.72rem; opacity: 0.85; }
+}
 
 img { max-width: 100%; display: block; }
 
@@ -50,7 +101,7 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(14, 9, 16, 0.8);
+  background: rgb(var(--bg-rgb) / 0.8);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -65,11 +116,54 @@ img { max-width: 100%; display: block; }
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 700;
   font-size: 1.25rem;
   text-decoration: none;
   letter-spacing: 0.3px;
 }
+
+/* Ana sayfanın üst ortasındaki logo: büyük BABUŞ yazısı, iki yanında ince altın çizgiler. */
+.hero-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 0 0 18px;
+  font-weight: 700;
+  font-size: clamp(3rem, 11vw, 5.5rem);
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+.hero-logo::before, .hero-logo::after {
+  content: "";
+  width: clamp(28px, 8vw, 90px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+.hero-logo::after { transform: scaleX(-1); }
+.hero-logo {
+  background: linear-gradient(180deg, #ffe08a 0%, var(--accent) 55%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Başlıktaki logo yazısı: BABUŞLAR (sekmedeki küçük simge assets/logo.svg). */
+.brand .wordmark {
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  padding: 2px 0 3px;
+  background: linear-gradient(180deg, #ffe08a 0%, var(--accent) 50%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  border-bottom: 2px solid rgb(var(--accent-rgb) / 0.55);
+}
+:root[data-tema="pembe"] .brand .wordmark { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; }
 
 .brand span {
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
@@ -107,7 +201,7 @@ img { max-width: 100%; display: block; }
   transition: color 0.15s, background 0.15s;
 }
 
-.lang-toggle:hover { color: #fff; background: var(--accent); }
+.lang-toggle:hover { color: var(--on-accent); background: var(--accent); }
 
 /* Ana sayfa üst menüsü: "Oyunlar" açılır menüsü */
 .nav-menu { position: relative; }
@@ -199,7 +293,7 @@ main { flex: 1; padding: 32px 0 56px; }
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(255, 79, 163, 0.35);
+  border: 1px solid rgb(var(--accent-rgb) / 0.35);
 }
 
 /* Ana sayfa */
@@ -256,7 +350,7 @@ main { flex: 1; padding: 32px 0 56px; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 20%, rgba(14, 9, 16, 0.95));
+  background: linear-gradient(180deg, transparent 20%, rgb(var(--bg-rgb) / 0.95));
 }
 
 .game-card > * { position: relative; z-index: 1; }
@@ -304,7 +398,7 @@ a.game-card:hover::before { opacity: 0.6; }
 
 .chip:hover { color: var(--text); border-color: var(--accent); }
 
-.chip[aria-pressed="true"] { color: #fff; background: var(--accent); border-color: var(--accent); }
+.chip[aria-pressed="true"] { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
 
 .count { color: var(--muted); font-size: 0.9rem; margin: 0; }
 
@@ -359,7 +453,7 @@ a.game-card:hover::before { opacity: 0.6; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 9, 16, 0.1) 30%, rgba(14, 9, 16, 0.96));
+  background: linear-gradient(180deg, rgb(var(--bg-rgb) / 0.1) 30%, rgb(var(--bg-rgb) / 0.96));
 }
 
 .champ-hero-body { position: relative; z-index: 1; padding: 24px; }
@@ -399,7 +493,7 @@ a.game-card:hover::before { opacity: 0.6; }
   font-size: 0.75rem;
   font-weight: 700;
   text-align: center;
-  color: #fff;
+  color: var(--on-accent);
   background: var(--accent);
   border-radius: 8px;
   border: 2px solid var(--card);
@@ -433,7 +527,7 @@ a.game-card:hover::before { opacity: 0.6; }
   padding: 12px 16px;
   color: #f3dbe9;
   background: var(--accent-soft);
-  border: 1px solid rgba(255, 79, 163, 0.35);
+  border: 1px solid rgb(var(--accent-rgb) / 0.35);
   border-radius: var(--radius);
 }
 
@@ -497,7 +591,7 @@ a.game-card:hover::before { opacity: 0.6; }
   place-items: center;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--on-accent);
   background: var(--accent);
   border-radius: 50%;
 }
@@ -746,7 +840,7 @@ a.game-card:hover > .card-img { opacity: 0.55; }
   display: grid;
   place-items: center;
   font-size: 1.6rem;
-  color: #fff;
+  color: var(--on-accent);
   background: var(--accent);
   border-radius: 50%;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
@@ -930,7 +1024,7 @@ a.game-card:hover > .val-art { opacity: 0.75; }
 /* Dead by Daylight */
 .dbd-hero { min-height: 280px; background: linear-gradient(135deg, #3a0d12, #120a0e 70%); }
 
-.dbd-hero::after { background: linear-gradient(90deg, rgba(14, 9, 16, 0.95) 40%, rgba(14, 9, 16, 0.1)); }
+.dbd-hero::after { background: linear-gradient(90deg, rgb(var(--bg-rgb) / 0.95) 40%, rgb(var(--bg-rgb) / 0.1)); }
 
 .dbd-portrait { position: absolute; right: 16px; bottom: 0; z-index: 0; height: 100%; max-width: 45%; object-fit: contain; object-position: bottom right; }
 
@@ -1011,7 +1105,7 @@ a.perk-owner:hover { text-decoration: underline; }
   border-radius: 999px;
 }
 
-.gen-tag.sure { color: #fff; background: var(--accent); border-color: var(--accent); }
+.gen-tag.sure { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
 
 /* Dead by Daylight kartı: katillerin portreleri, koyu kan kırmızısı üzerinde. */
 .game-card > .dbd-art { background: radial-gradient(ellipse at 50% 30%, #8a1020 0%, #3a0710 55%, #0e0609 100%); opacity: 0.7; }
@@ -1242,7 +1336,7 @@ dialog.video-dialog { width: min(1100px, calc(100vw - 32px)); padding: 16px; }
 .mbmap-img { display: block; width: 100%; height: 100%; pointer-events: none; }
 .mbmap-layer { position: absolute; inset: 0; }
 .mbmap-tools { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
-.mbmap-tools .chip { background: rgba(14, 9, 16, 0.85); min-width: 36px; }
+.mbmap-tools .chip { background: rgb(var(--bg-rgb) / 0.85); min-width: 36px; }
 .mbmap-marker { position: absolute; transform: translate(-50%, -50%) scale(var(--inv, 1)); display: flex; align-items: center; gap: 4px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; }
 .mbmap-marker .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); border: 2px solid #111; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7); }
 .mbmap-marker.castle .dot { width: 10px; height: 10px; border-radius: 2px; transform: rotate(45deg); }
