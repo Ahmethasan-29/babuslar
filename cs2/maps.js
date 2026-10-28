@@ -105,7 +105,7 @@ const CS2_MAPS = [
       { name: "Under A", at: [0.743, 0.232] },
     ],
     lineups: [
-      { site: "A", type: "smoke", name: "CT smoke 1", by: "CS Tactics", clip: "clips/dust2-a-ct-smoke-mvmvsdxz.mp4" },
+      { site: "A", type: "smoke", name: "CT smoke 1.", by: "CS Tactics", clip: "clips/dust2-a-ct-smoke-mvmvsdxz.mp4" },
       { site: "A", type: "smoke", name: "CT SMOKE 2", clip: "clips/dust2-a-ct-smoke-2-mvmw5olm.mp4" },
       { site: "A", type: "smoke", name: "Long Cross smoke", yt: ["rKWeOfcTN44", 265, 299], by: "CS Tactics" },
       { site: "A", type: "smoke", name: "Long Corner smoke", yt: ["rKWeOfcTN44", 231, 265], by: "CS Tactics" },
