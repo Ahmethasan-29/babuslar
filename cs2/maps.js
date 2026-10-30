@@ -38,7 +38,7 @@ const CS2_MAPS = [
       { name: "Short", at: [0.476, 0.329] },
       { name: "Back Alley", at: [0.55, 0.21] },
       { name: "B Apps", at: [0.34, 0.19] },
-      { name: "Van", at: [0.19, 0.19] },
+      { name: "Car", at: [0.192, 0.187] },
       { name: "Market", at: [0.24, 0.44] },
       { name: "Bench", at: [0.136, 0.272] },
       { name: "Under", at: [0.439, 0.39] },
