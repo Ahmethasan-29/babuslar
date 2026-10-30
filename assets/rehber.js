@@ -1,4 +1,4 @@
-// Ortak oyun rehberi şablonu (Risk of Rain, Bloons TD, Megabonk, ETS2, Hearts of Iron, World of Tanks, Total War…).
+// Ortak oyun rehberi şablonu (Risk of Rain, Bloons TD, Megabonk, ETS2, World of Tanks, Total War…).
 // Her oyunun klasöründe yalnızca data.js (const REHBER = {...}) ve scripts/rehber-lib.ps1'in yazdığı HTML sayfaları bulunur;
 // sayfaların tüm içeriği bu dosyada, REHBER verisinden çizilir.
 //

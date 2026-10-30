@@ -58,9 +58,6 @@ const ALIASES = {
   "btd6/": "btd btd6 bloons tower defense balon",
   "megabonk/": "megabonk bonk",
   "ets2/": "ets ets2 euro truck simulator tir kamyon",
-  "hoi2/": "hoi hoi2 hearts iron 2 ii",
-  "hoi3/": "hoi hoi3 hearts iron 3 iii",
-  "hoi4/": "hoi hoi4 hearts iron 4 iv",
   "wot/": "wot world tanks tank",
   "tww3/": "tw tww3 total war warhammer 3 iii",
 };

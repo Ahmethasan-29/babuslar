@@ -1,4 +1,4 @@
-﻿# Ana sayfanın arka planında oynayan kesitler: her oyunun Steam'deki resmi fragmanından birkaç saniye.
+# Ana sayfanın arka planında oynayan kesitler: her oyunun Steam'deki resmi fragmanından birkaç saniye.
 # Steam fragmanları HLS olarak verir (CORS açık); sesi olmayan 480p video akışı kullanılır, tarayıcıda hls.js oynatır.
 # Çıktı: assets/arkaplan/data.js (const ARKAPLAN). Fragman adresleri zamanla değiştiği için haftalık güncellemede de çalışır.
 #   powershell -File scripts/arkaplan-data.ps1
@@ -6,7 +6,7 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
 
-# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4, HOI2) aşağıda.
+# [klasör, Steam uygulama no, adı]. Steam'de olmayanlar (LoL, BF2, BTD4) aşağıda.
 $GAMES = @(
   @("cs2", 730, "Counter-Strike 2"),
   @("dbd", 381210, "Dead by Daylight"),
@@ -42,14 +42,12 @@ $GAMES = @(
   @("btd6", 960090, "Bloons TD 6"),
   @("megabonk", 3405340, "Megabonk"),
   @("ets2", 227300, "Euro Truck Simulator 2"),
-  @("hoi3", 25890, "Hearts of Iron III"),
-  @("hoi4", 394360, "Hearts of Iron IV"),
   @("wot", 1407200, "World of Tanks"),
   @("tww3", 1142710, "Total War: Warhammer III")
 )
 
 # Steam'de olmayan oyunlar: yayıncının kendi sitesindeki resmi tanıtım videosu (YouTube kullanılmaz). [klasör, adres, adı, başlangıç sn]
-# LoL: leagueoflegends.com ana sayfasındaki oyun tanıtım videosu ("A free-for-all war for supremacy"). BF2, BTD4 ve HOI2'nin
+# LoL: leagueoflegends.com ana sayfasındaki oyun tanıtım videosu ("A free-for-all war for supremacy"). BF2 ve BTD4'ün
 # YouTube dışında resmi videosu yok, onlar arka planda yer almıyor.
 $FILES = @(
   ,@("lol", "https://cmsassets.rgpub.io/sanity/files/dsfx7636/news/1f5b2cf01a1cf2afa1ce61febee6e2e900808347.mp4", "League of Legends", 0)

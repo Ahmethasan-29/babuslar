@@ -22,7 +22,7 @@ document.documentElement.lang = SITE_LANG;
 // Dosya sayfanın betiklerinden önce yüklenir; ortak şablon (rehber.js) veriyi çizerken, diğer sayfalarda metin düğümleri çevrilir.
 // Çevirisi olan oyun klasörleri ve önbellek sürümü (yeni çeviri eklenince sürüm artırılır).
 // Klasör → yüklenecek sözlük klasörleri (aynı metinleri paylaşan oyunlar birbirinin sözlüğünü de kullanır).
-const CEVIRI_DIRS = { "megabonk/": ["megabonk/"], "ets2/": ["ets2/"], "ror1/": ["ror1/"], "rorr/": ["ror1/", "rorr/"], "ror2/": ["ror1/", "rorr/", "ror2/"], "btd4/": ["btd4/"], "btd5/": ["btd5/"], "btdb2/": ["btdb2/"], "btd6/": ["btd6/"], "dd/1/": ["dd/1/"], "dd/2/": ["dd/2/"], "pz/": ["pz/"], "hoi4/": ["hoi4/"], "brotato/": ["brotato/"], "bf1/": ["bf/"], "bf2/": ["bf/"], "bf3/": ["bf/"], "bf4/": ["bf/"], "bfv/": ["bf/"], "bf6/": ["bf/"] };
+const CEVIRI_DIRS = { "megabonk/": ["megabonk/"], "ets2/": ["ets2/"], "ror1/": ["ror1/"], "rorr/": ["ror1/", "rorr/"], "ror2/": ["ror1/", "rorr/", "ror2/"], "btd4/": ["btd4/"], "btd5/": ["btd5/"], "btdb2/": ["btdb2/"], "btd6/": ["btd6/"], "dd/1/": ["dd/1/"], "dd/2/": ["dd/2/"], "pz/": ["pz/"], "brotato/": ["brotato/"], "bf1/": ["bf/"], "bf2/": ["bf/"], "bf3/": ["bf/"], "bf4/": ["bf/"], "bfv/": ["bf/"], "bf6/": ["bf/"] };
 const CEVIRI_VERSION = "10";
 const TR_MAP = new Map();
 const trKey = (s) => String(s).replace(/\s+/g, " ").trim();
@@ -78,16 +78,14 @@ const EN = {
   "Medeniyetler · Özel birlikler": "Civilizations · Unique units",
   "24 medeniyetin bonusları, özel birlik ve binaları, ana şehirleri ve devrimleri.": "Bonuses, unique units and buildings, home cities and revolutions of 24 civilizations.",
   "Tanrılar · Tanrı güçleri · Kahramanlar": "Gods · God powers · Heroes",
-  "Risk of Rain oyunları Hopoo Games'e aittir; veriler Risk of Rain wikilerinden (wiki.gg, CC BY-NC-SA) alınır. Bloons TD oyunları Ninja Kiwi'ye, Megabonk vedinad'a, Euro Truck Simulator 2 SCS Software'a aittir; bu oyunların verileri topluluk wikilerinden (CC BY-SA) alınır. Hearts of Iron oyunları Paradox Interactive'e aittir; verileri Paradox wikilerinden (CC BY-SA) alınır. World of Tanks Wargaming'e aittir (değerler tanks.gg'den); Total War: Warhammer III Creative Assembly, SEGA ve Games Workshop'a aittir (veriler Total War: Warhammer Wiki'den, CC BY-SA).": "Risk of Rain games belong to Hopoo Games; data comes from the Risk of Rain wikis (wiki.gg, CC BY-NC-SA). Bloons TD games belong to Ninja Kiwi, Megabonk to vedinad, Euro Truck Simulator 2 to SCS Software; their data comes from community wikis (CC BY-SA). Hearts of Iron games belong to Paradox Interactive; their data comes from the Paradox wikis (CC BY-SA). World of Tanks belongs to Wargaming (stats from tanks.gg); Total War: Warhammer III belongs to Creative Assembly, SEGA and Games Workshop (data from the Total War: Warhammer Wiki, CC BY-SA).",
+  "Risk of Rain oyunları Hopoo Games'e aittir; veriler Risk of Rain wikilerinden (wiki.gg, CC BY-NC-SA) alınır. Bloons TD oyunları Ninja Kiwi'ye, Megabonk vedinad'a, Euro Truck Simulator 2 SCS Software'a aittir; bu oyunların verileri topluluk wikilerinden (CC BY-SA) alınır. World of Tanks Wargaming'e aittir (değerler tanks.gg'den); Total War: Warhammer III Creative Assembly, SEGA ve Games Workshop'a aittir (veriler Total War: Warhammer Wiki'den, CC BY-SA).": "Risk of Rain games belong to Hopoo Games; data comes from the Risk of Rain wikis (wiki.gg, CC BY-NC-SA). Bloons TD games belong to Ninja Kiwi, Megabonk to vedinad, Euro Truck Simulator 2 to SCS Software; their data comes from community wikis (CC BY-SA). World of Tanks belongs to Wargaming (stats from tanks.gg); Total War: Warhammer III belongs to Creative Assembly, SEGA and Games Workshop (data from the Total War: Warhammer Wiki, CC BY-SA).",
   "Risk of Rain serisi": "Risk of Rain series",
   "4 oyun": "4 games",
   "Bloons TD serisi": "Bloons TD series",
-  "Hearts of Iron serisi": "Hearts of Iron series",
   "Tanklar · Zırh · Delme · DPM": "Tanks · Armor · Penetration · DPM",
   "Teknoloji ağacındaki tüm tanklar: ülke, sınıf ve seviyeye göre can, zırh, hız, hasar, delme ve dakikada hasar.": "Every tech-tree tank by nation, class and tier: HP, armor, speed, damage, penetration and DPM.",
   "Irklar · Birimler · Efsanevi lordlar": "Races · Units · Legendary lords",
   "Tüm ırkların birimleri ve efsanevi lordları: maliyet, bakım, can, liderlik ve yakın dövüş değerleri.": "Every race's units and legendary lords: cost, upkeep, health, leadership and melee stats.",
-  "Hearts of Iron II, III ve IV: ülkeler, birlikler, ekipman, komutanlar ve başarımlar.": "Hearts of Iron II, III and IV: countries, units, equipment, commanders and achievements.",
   "Ülkeler · Birlikler": "Countries · Units",
   "Tüm ülkeler (1936-1944 tarafları) ve kara, hava, deniz birliklerinin modelleri.": "Every country (alignment 1936–1944) and all land, air and naval unit models.",
   "Ülkeler · Birlikler · Komutanlar": "Countries · Units · Commanders",

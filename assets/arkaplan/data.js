@@ -239,20 +239,6 @@ const ARKAPLAN = [
         "start":  54
     },
     {
-        "game":  "Hearts of Iron III",
-        "href":  "hoi3/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/25890/1892/e703544ddc164d151e9e59c967f1fb6dc2f5c6d3/1750484985/hls_264_0_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5244/movie.jpg",
-        "start":  35
-    },
-    {
-        "game":  "Hearts of Iron IV",
-        "href":  "hoi4/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/394360/682731/bd7bbea629ccbef568dd3c4d8552ba6e05b3c0ed/1750525316/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257012977/movie.293x165.jpg",
-        "start":  27
-    },
-    {
         "game":  "World of Tanks",
         "href":  "wot/",
         "src":  "https://video.akamai.steamstatic.com/store_trailers/1407200/1608086189/95fdbde1ee98c4bbd647ce1a75c4addf1ed44560/1750685624/hls_264_2_video.m3u8",
