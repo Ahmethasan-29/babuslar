@@ -1,4 +1,4 @@
-// scripts/arkaplan-data.ps1 tarafından üretildi: Steam'deki resmi fragmanlardan kesitler.
+// scripts/arkaplan-data.ps1 tarafÄ±ndan Ã¼retildi: Steam'deki resmi fragmanlardan kesitler.
 const ARKAPLAN = [
     {
         "game":  "Counter-Strike 2",
@@ -52,15 +52,15 @@ const ARKAPLAN = [
     {
         "game":  "The Witcher 3",
         "href":  "witcher3/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/292030/1018852715/bf5e4c4a6409b1714754e691e778ae9f66ab9907/1790683068/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257439641/32f72964eceaa2ea37c3ab03dff903a45414a89b/movie_600x337.jpg",
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/292030/511051216/5bbe135e5caf9dce45b1fb09a9d76373fb8977b8/1790683068/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257439639/32f72964eceaa2ea37c3ab03dff903a45414a89b/movie_600x337.jpg",
         "start":  42
     },
     {
         "game":  "Cyberpunk 2077",
         "href":  "cp2077/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/1091500/512843956/7ddc0c953816d19d719b299eb76b1ce188e17225/1792676918/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257474177/d3648c90317ee936369fd886a02a0f54c0a86395/movie_600x337.jpg",
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/1091500/319068602/a0e7ceceecf759bf446feac0658b6fe58a970b94/1792676918/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257474176/d3648c90317ee936369fd886a02a0f54c0a86395/movie_600x337.jpg",
         "start":  28
     },
     {
@@ -122,16 +122,16 @@ const ARKAPLAN = [
     {
         "game":  "Company of Heroes",
         "href":  "coh1/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/228200/127388/40dd66105db24f88ae7c0b3d981d62d582b4a5de/1750493771/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256697740/movie.293x165.jpg",
-        "start":  51
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/228200/127387/31204698648070daabb0b3394bf585c7ee15657f/1750493768/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256697739/movie.293x165.jpg",
+        "start":  52
     },
     {
         "game":  "Company of Heroes 2",
         "href":  "coh2/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/231430/42191/9bbbe9536736a1fda24400dc2a69da310f8e697a/1750495251/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256656131/movie.293x165.jpg",
-        "start":  40
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/231430/41940/97d586afcd3e1066495b651828f23c5902f081f9/1750495230/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256656017/movie.293x165.jpg",
+        "start":  41
     },
     {
         "game":  "Company of Heroes 3",
@@ -143,8 +143,8 @@ const ARKAPLAN = [
     {
         "game":  "Elden Ring",
         "href":  "eldenring/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/1245620/468149/7d588828f80907ca97efdcb1e6ef72b4ce2b1d0d/1750650511/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256889456/movie.293x165.jpg",
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/1245620/468143/7a6be00f78fb0fd8b419e92cea72cc4a19ec45f8/1750650501/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/256889452/movie.293x165.jpg",
         "start":  10
     },
     {
