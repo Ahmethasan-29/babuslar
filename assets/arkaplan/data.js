@@ -115,9 +115,9 @@ const ARKAPLAN = [
     {
         "game":  "Battlefield 6",
         "href":  "bf6/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/2807960/1874905565/6237f694851e71f764b448a6f93d27e9316fc1db/1791915875/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257459845/e063eea41b1c0fc5d02e305346d86afb582eac3e/movie_600x337.jpg",
-        "start":  30
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/2807960/15833556/e04e636ac7abb500db278ccaffdae6da8d3821a8/1794333051/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257500770/6ef087c5618702114738bd16a13dbac0ea49cf99/movie_600x337.jpg",
+        "start":  36
     },
     {
         "game":  "Company of Heroes",
@@ -136,9 +136,9 @@ const ARKAPLAN = [
     {
         "game":  "Company of Heroes 3",
         "href":  "coh3/",
-        "src":  "https://video.akamai.steamstatic.com/store_trailers/1677280/1389550022/55bd2dcf8c59498d83de3eb58eb6421e3c074af5/1792183979/hls_264_2_video.m3u8",
-        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257465154/8af11b20de9df826239d46d2bf9da6060c0ad5d2/movie_600x337.jpg",
-        "start":  109
+        "src":  "https://video.akamai.steamstatic.com/store_trailers/1677280/1422315669/cf003afc0fa3d211d2be7511f0e660740a65e1e7/1793818440/hls_264_2_video.m3u8",
+        "poster":  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257491964/9588af29c08251bf64298798db236f94e53d4535/movie_600x337.jpg",
+        "start":  37
     },
     {
         "game":  "Elden Ring",
